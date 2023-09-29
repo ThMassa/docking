@@ -6,5 +6,8 @@ La solution principale dont on peut s'inspirer est celle du projet Surcouf :
 ![da](imgs/rade-lorient-projet-surcouf.jpeg)
 ![da](imgs/drone-base-lorient.jpeg)
 
-
-
+Autres concepts :
+- US Marine :
+![da](imgs/USmarine.jpg)
+- Naval Group :
+![da](imgs/NavalGroup.jpg)
