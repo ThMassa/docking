@@ -1,0 +1,4 @@
+Migration : https://docs.ros.org/en/foxy/The-ROS2-Project/Contributing/Migration-Guide.html#prerequisites
+
+ROS2 vs ROS : https://www.generationrobots.com/blog/fr/ros2-quest-ce-qui-change-par-rapport-a-ros/
+	      https://design.ros2.org/articles/changes.html
