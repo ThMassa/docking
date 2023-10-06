@@ -2,6 +2,14 @@ FROM ubuntu:18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+ENV SIMPLE_USER=newubu
+ENV UID=1000
+ENV GID=1000
+RUN groupadd -g $GID $SIMPLE_USER
+RUN useradd -rm -d /home/$SIMPLE_USER -s /bin/bash -g $SIMPLE_USER -G sudo -u $UID $SIMPLE_USER
+RUN echo $SIMPLE_USER':pswd!!' | chpasswd
+RUN echo "newubu ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 RUN apt update && apt install locales
 RUN locale-gen en_US en_US.UTF-8
 RUN update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
