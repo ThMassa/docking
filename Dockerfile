@@ -12,10 +12,9 @@ RUN add-apt-repository universe
 RUN apt update && apt-get install curl -y && apt-get install wget -y
 RUN apt install nano -y
 
-RUN add-apt-repository universe
 RUN apt update
-RUN apt install python2 -y
-RUN apt install libpython2.7 -y
+RUN apt-get install python2 -y
+RUN apt-get install libpython2.7 -y
 RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py -y
 RUN python2 get-pip.py
 
@@ -23,7 +22,7 @@ RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main"
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
 
 RUN apt update
-RUN apt install ros-melodic-desktop-full -y
+RUN apt-get install ros-melodic-desktop-full -y
 RUN apt-get source
 
 RUN source /opt/ros/melodic/setup.bash
