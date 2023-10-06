@@ -15,6 +15,9 @@ RUN apt install nano -y
 
 RUN apt update
 RUN apt install python2.7 -y
+RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+RUN python2.7 get-pip.py
+RUN rm get-pip.py
 
 
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
