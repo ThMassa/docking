@@ -13,10 +13,8 @@ RUN apt update && apt-get install curl -y && apt-get install wget -y
 RUN apt install nano -y
 
 RUN apt update
-RUN apt-get install python2 -y
-RUN apt-get install libpython2.7 -y
-RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py -y
-RUN python2 get-pip.py
+RUN apt install python2 -y
+
 
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
