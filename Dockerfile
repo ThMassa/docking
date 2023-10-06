@@ -7,13 +7,14 @@ RUN locale-gen en_US en_US.UTF-8
 RUN update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 RUN export LANG=en_US.UTF-8
 
-RUN apt install software-properties-common -y
-RUN add-apt-repository universe
+RUN apt install -y software-properties-common
+RUN add-apt-repository ppa:deadsnakes/ppa 
+
 RUN apt update && apt-get install curl -y && apt-get install wget -y
 RUN apt install nano -y
 
 RUN apt update
-RUN apt install python2 -y
+RUN apt install python2.7 -y
 
 
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
