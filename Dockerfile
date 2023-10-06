@@ -42,7 +42,7 @@ RUN apt-get install git -y
 
 WORKDIR /home/Guerledan
 RUN git clone https://github.com/ThMassa/docking.git
-
+RUN cd docking
 
 # Launch commands (replace "name" by image image name)
 # xhost +
