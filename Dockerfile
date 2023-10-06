@@ -25,7 +25,6 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt
 
 RUN apt update
 RUN apt-get install ros-melodic-desktop-full -y
-RUN apt-get source -y
 
 RUN source /opt/ros/melodic/setup.bash
 RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
