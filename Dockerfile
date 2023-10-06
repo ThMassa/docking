@@ -26,9 +26,7 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt
 RUN apt update
 RUN apt-get install ros-melodic-desktop-full -y
 
-RUN source /opt/ros/melodic/setup.bash
 RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
-RUN source ~/.bashrc
 
 RUN apt-get install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential -y
 RUN apt install python-rosdep -y
