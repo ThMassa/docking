@@ -45,4 +45,6 @@ RUN git clone https://github.com/ThMassa/docking.git
 WORKDIR /docking
 
 
-
+# Launch commands (replace "name" by image image name)
+# xhost +
+# docker run --gpus all -it --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --rm "name":latest
