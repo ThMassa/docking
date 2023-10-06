@@ -1,5 +1,7 @@
 # Explications GPS RTK (réseau centipede)
 
+[How RTK works (Youtube video)](https://youtu.be/ieearzWTCZw?si=xBmvPip02qQzkm8R)
+
 Le GPS (Global Positioning System) est un système permettant de se localiser avec plus ou moins de précision en utilisant plusieurs satellites pour trianguler sa position. En se référencant uniquement avec les satellites, il est possible d'obtenir une précision de quelques mètres, ce qui est suffisant dans beaucoup de cas.
 
 ![GPS](imgs/GPS.jpg)
@@ -25,3 +27,13 @@ Le fonctionnement du RTK repose sur la comparaison des signaux reçus par deux r
 
     Calcul de la position précise :
         Le récepteur mobile utilise les signaux corrigés pour calculer sa position en temps réel avec une précision élevée, généralement de l'ordre du centimètre.
+
+## Calculs importants
+
+Pour avoir une précision centimétrique du positionnement GPS à l'aide de la correction RTK, il faut évidemment un récepteur GPS mobile et une base GPS fixe. Mais ça n'est pas suffisant pour avoir la précision que l'on souhaite (cm). 
+
+Il faut : 
+* estimer la distance entre le satellite et le récepteur en utilisant la formule d = c(Tr - Te) (pseudo-range measurements). Pas hyper précis.
+* estimer la distance entre le satellite et le récepteur en utilisant un répérage de phase du signal reçu. d = N*T + phase . Plus précis.
+
+Ces deux calculs sont nécessaires et effectué par le récepteur. 
