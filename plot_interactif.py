@@ -47,19 +47,19 @@ def obstacleRepulsif(obstacles, X,Y):
     #         y += -(x2 - o2) / (n ** 3) * kobst
 
     def field(x1, x2):
-        kobst = 25
+        kobst = 40
         x, y = np.zeros(X.shape), np.zeros(X.shape)
         for obstacle in obstacles:
             n = np.sqrt((x1-obstacle[0])**2+(x2-obstacle[1])**2)
-            x += -(x1-obstacle[0])/(n**2)*kobst
-            y += -(x2-obstacle[1])/(n**2)*kobst
+            x += -(x1-obstacle[0])/(n**3)*kobst
+            y += -(x2-obstacle[1])/(n**3)*kobst
         return -x, -y
     return field(X, Y)
 
 def pointAttractif(obstacles, X,Y):
 
     def field(x1, x2):
-        kobst = 25
+        kobst = 40
         x, y = np.zeros(X.shape), np.zeros(X.shape)
         for obstacle in obstacles:
             n = np.sqrt((x1-obstacle[0])**2+(x2-obstacle[1])**2)
