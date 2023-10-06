@@ -1,4 +1,5 @@
-FROM ubuntu:18.04
+# Docker image avec Ubuntu 20.04, VSCode, ROS noetic et le rep git
+FROM ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -12,36 +13,28 @@ RUN add-apt-repository universe
 RUN apt update && apt-get install curl -y && apt-get install wget -y
 RUN apt install nano -y
 
-RUN add-apt-repository universe
-RUN apt update
-RUN apt install python2 -y
-RUN apt install libpython2.7 -y
-RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py -y
-RUN python2 get-pip.py
-
-RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
-
-RUN apt update
-RUN apt install ros-melodic-desktop-full -y
-RUN apt-get source
-
-RUN source /opt/ros/melodic/setup.bash
-RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
-RUN source ~/.bashrc
-
-RUN apt-get install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential -y
-RUN apt install python-rosdep -y
-RUN rosdep init
-RUN rosdep update
-
 RUN apt install software-properties-common apt-transport-https wget -y
 RUN wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add -
 RUN add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
 RUN apt-get install code -y
 
-RUN apt-get install git -y
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
 
+RUN apt update
+RUN apt install ros-noetic-desktop-full -y
+RUN apt-get source
+
+RUN source /opt/ros/noetic/setup.bash
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+RUN source ~/.bashrc
+
+RUN apt install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential -y
+RUN apt install python3-rosdep -y
+RUN rosdep init
+RUN rosdep update
+
+RUN apt-get install git -y
 WORKDIR /home/Guerledan
 RUN git clone https://github.com/ThMassa/docking.git
 WORKDIR /docking
