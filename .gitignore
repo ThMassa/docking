@@ -1,2 +1,6 @@
 __pycache__
 .idea
+
+ros_ws/devel
+ros_ws/build
+ros_ws/log
