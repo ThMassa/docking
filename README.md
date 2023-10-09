@@ -31,3 +31,8 @@ Pour lancer un node, dans un terminal :
 Dans un autre
 
     rosrun docking <node_name>
+
+### Doc des drivers
+La doc pour la centrale inertielle SBG peut se trouver [ici](https://github.com/SBG-Systems/sbg_ros_driver)
+
+La doc pour le driver GPS sur le dock peut se trouver [ici](https://github.com/KumarRobotics/ublox)
