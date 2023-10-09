@@ -10,3 +10,7 @@ Hugo & Guillaume :
 
 Kévin & Théo
 - Prise en main de la Jetson Nano, installation des drivers de la centrale inertielle, mise en place du GPS, debugage de l'installation ROS (préciser *ROS_LOCALHOST=localhost* et *ROS_MASTERID=qqchose*)
+
+Guillaume & Kevin
+- Installation d'Ubuntu 18.04 sur la Raspberry Pi et installation des drivers GPS
+- 
