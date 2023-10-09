@@ -4,3 +4,6 @@ __pycache__
 ros_ws/devel
 ros_ws/build
 ros_ws/log
+
+catkin_ws/build
+catkin_ws/devel
