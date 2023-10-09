@@ -1,18 +1,32 @@
 #!/usr/bin/env python
-
+# coding: latin-1
 import rospy
 from std_msgs.msg import String
-from hello_world.srv import HelloWorld, HelloWorldResponse
 
-def handle_hello_world(req):
-    print("Received a request from the client")
-    return HelloWorldResponse("Hello, ROS World!")
+def publisher_node():
+    # Initialisation du noeud ROS
+    rospy.init_node('mon_publisher', anonymous=True)
 
-def hello_server():
-    rospy.init_node('hello_server')
-    rospy.Service('hello_world', HelloWorld, handle_hello_world)
-    print("Ready to respond to client requests.")
-    rospy.spin()
+    # Création d'un objet Publisher qui publie des messages sur le topic "mon_topic"
+    mon_publisher = rospy.Publisher('mon_topic', String, queue_size=10)
 
-if __name__ == "__main__":
-    hello_server()
+    # Taux de publication en Hz
+    rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
+
+    while not rospy.is_shutdown():
+        # Crée un message de type String
+        message = String()
+        message.data = "Hello, ROS!"
+
+        # Publie le message sur le topic
+        mon_publisher.publish(message)
+
+        # Attend jusqu'à ce que le taux de publication soit atteint
+        rate.sleep()
+
+if __name__ == '__main__':
+    try:
+        publisher_node()
+    except rospy.ROSInterruptException:
+        pass
+
