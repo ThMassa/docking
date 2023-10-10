@@ -25,3 +25,6 @@ Hugo & Théo
 
 Kevin & Guillaume
 - Pour avoir la correction RTK. aller sur le site de [centipède](https://docs.centipede.fr/docs/base/). L'idée est de leur fournir un log de 24h d'acquisition de données GPS de notre base, et ils vont calculer la position RTK au centimètre près. Attention à bien brancher l'usb sur le port "Power+GPS" du module GPS et pas sur le port "Power+Xbee"
+
+Guillaume
+- J'ai suivi les indications d'installation de centipède. Pour l'instant je n'ai fait que les étapes installation logiciel et paramétrage. A ce stade, la base GPS reçoit des signaux satellites et commence un enregistrement continu de données. Un archivage est fait tous les jours à 4h des dernières 24h de données. Il nous faut donc attendre jeudi matin pour disposer de notre position avec la meilleure position (ce qui se fait avec les dernières étapes données par centipède qui restent à faire). Attention, lors de l'installation de la base, il faut flasher la carte micro SD à chaque fois avant d'alimenter une nouvelle fois la raspberry. De plus, il faut connecter le module GPS en USB à la raspberry et non pas au PC réseau (apparemment).
