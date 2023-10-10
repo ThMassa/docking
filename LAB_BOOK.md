@@ -24,4 +24,4 @@ Hugo & Théo
 - Création node de rassemblement et publication des datas, création roslaunch, tests capteurs. roslaunch complet crée pour le dock, reste a gerer les logs et les nodes sur le bateau.
 
 Kevin & Guillaume
-- Pour avoir la correction RTK. aller sur le site de [centipède](https://docs.centipede.fr/docs/base/). L'idée est de leur fournir un log de 24h d'acquisition de données GPS de notre base, et ils vont calculer la position RTK au centimètre près. 
+- Pour avoir la correction RTK. aller sur le site de [centipède](https://docs.centipede.fr/docs/base/). L'idée est de leur fournir un log de 24h d'acquisition de données GPS de notre base, et ils vont calculer la position RTK au centimètre près. Attention à bien brancher l'usb sur le port "Power+GPS" du module GPS et pas sur le port "Power+Xbee"
