@@ -17,4 +17,8 @@ Kévin & Théo
 
 Guillaume & Kevin
 - Installation d'Ubuntu 18.04 sur la Raspberry Pi et installation des drivers GPS
-- 
+
+### Mardi
+
+Hugo & Théo
+- Création node de rassemblement et publication des datas, création roslaunch, test
