@@ -37,10 +37,12 @@ def unpack_data(data_string):
 def gps_callback(data):
     global gps_data
     gps_data = data
+    print(gps_data.latitude,gps_data.longitude)
 
 def imu_callback(data):
     global imu_data
     imu_data = data
+    print(imu_data.angle)
 
 def broadcast_node():
     global gps_data,imu_data
