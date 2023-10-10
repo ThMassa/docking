@@ -23,18 +23,6 @@ def concatenate_data(gps_data, imu_angles):
     
     return data
 
-def unpack_data(data_string):
-    if data_string[0] != "$":
-        print("##### ERROR, WRONG DATA FORMAT #####")
-        return
-    data_elements = data_string[1:].split(";")
-    gps, angles = data_elements
-    # timestamp = float(timestamp)
-    x, y, z, = [float(val) for val in gps.split(",")]
-    phi, theta, psi = [float(val) for val in angles.split(",")]
-    return x, y, z, phi, theta, psi
-
-
 def euler_from_quaternion(quat):
     """
     Convert quaternion (w in last place) to euler roll, pitch, yaw.
