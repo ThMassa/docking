@@ -15,4 +15,5 @@ Pour lancer un conteneur qui exécute l'image de travail, on exécute les comman
     xhost +
     docker run -it --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --rm name:latest
 
+
 La commande "xhost +" permet au conteneur d'accéder aux ressources de l'ordinateur hôte. Ensuite il faut remplacer "_name_" par le nom de l'image de travail. Il est important de placer le répertoire _/tmp_ dans les fichiers partagés avec le conteneur.
