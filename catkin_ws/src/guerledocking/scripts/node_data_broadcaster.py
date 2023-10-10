@@ -57,7 +57,6 @@ def euler_from_quaternion(quat):
 def gps_callback(data):
     global gps_data
     gps_data = data
-    print(gps_data.latitude,gps_data.longitude)
 
 def imu_callback(data):
     global imu_data
