@@ -2,8 +2,9 @@
 
 <launch>
   <!-- Inclure le launch du package GPS -->
-  <arg name="param_file_name"     doc="name of param file, e.g. rover" />
-  <arg name="param_file_dir"      doc="directory to look for $(arg param_file_name).yaml"
+  <arg name="param_file_name"     doc="name of param file, e.g. rover" 
+                                  default="zed_f9p" />
+  <arg name="param_file_dir"      doc="directory to look $(arg param_file_name).yaml"
                                   default="$(find ublox_gps)/config" />
   <arg name="node_name"           doc="name of this node"
                                   default="ublox" />
@@ -18,7 +19,7 @@
         respawn="$(arg respawn)"
         respawn_delay="$(arg respawn_delay)">
     <rosparam command="load"
-              file="$(arg param_file_dir)/zed_f9p.yaml" />
+              file="$(arg param_file_dir)/$(arg param_file_name).yaml" />
   </node>
 
   <!-- Inclure le launch de l'IMU -->
