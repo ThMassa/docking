@@ -7,6 +7,13 @@ import numpy as np
 
 gps_data = None
 imu_data = None
+lat_dock = None
+long_dock = None
+psi_dock = None
+theta_dock = None
+psi_dock = None
+
+rho = 6371E3
 
 def unpack_data(data_string):
     if data_string[0] != "$":
@@ -19,8 +26,13 @@ def unpack_data(data_string):
     phi, theta, psi = [float(val) for val in angles.split(",")]
     return lat,long, phi, theta, psi
 
+def conv_ll2xy():
+    lat, long = x[0,0], x[1,0]
+    return rho*(long-long_dock)*np.pi/180, rho*np.cos(long*np.pi/180)*(lat-lat_dock)*np.pi/180
+
+
 def boat_node():
-    global gps_data,imu_data
+    global gps_data,imu_data, lat_dock,long_dock, phi_dock, theta_dock, psi_dock
     # Initialisation du noeud ROS
     rospy.init_node('boat')
     
@@ -38,7 +50,10 @@ def boat_node():
     while not rospy.is_shutdown():
         # Attendez de recevoir des données UDP
         data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
-        lat,long, phi, theta, psi = unpack_data(data)
+        lat_dock,long_dock, phi_dock, theta_dock, psi_dock = unpack_data(data)
+        
+        x,y = conv_ll2xy()
+        
         rate.sleep()
     
 if __name__ == '__main__':
