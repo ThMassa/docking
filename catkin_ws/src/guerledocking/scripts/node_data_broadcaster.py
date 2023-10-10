@@ -29,7 +29,7 @@ def unpack_data(data_string):
         return
     data_elements = data_string[1:].split(";")
     gps, angles = data_elements
-    timestamp = float(timestamp)
+    # timestamp = float(timestamp)
     x, y, z, = [float(val) for val in gps.split(",")]
     phi, theta, psi = [float(val) for val in angles.split(",")]
     return x, y, z, phi, theta, psi
