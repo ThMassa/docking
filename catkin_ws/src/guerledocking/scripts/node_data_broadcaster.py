@@ -69,3 +69,9 @@ def broadcast_node():
             mon_publisher.publish(ros_msg)
 
         rate.sleep()
+
+if __name__ == '__main__':
+    try:
+        broadcast_node()
+    except rospy.ROSInterruptException:
+        pass
