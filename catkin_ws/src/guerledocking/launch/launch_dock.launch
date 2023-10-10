@@ -35,7 +35,7 @@
   </node>
 
    <node pkg="rosbag" type="record" name="rosbag_record_dock"
-       args="record -o /ublox/fix /sbg/ekf_quat"
+       args="record -o /home/nvidia/guerlelogs/dock.bag /ublox/fix /sbg/ekf_quat"
        if="$(arg record_dock)" />
 
 </launch>
