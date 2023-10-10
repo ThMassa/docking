@@ -7,3 +7,7 @@
     ![test1](imgs/basic_test_standalone.png)
     2. On teste ensuite la connexion avec un ping à l'aide d'un PC connecté en ethernet à l'un des deux modems:
     ![test2](imgs/basic_test_laptop.png)
+
+
+IP du dock : 192.168.0.12
+

@@ -22,7 +22,7 @@ def concatenate_data(gps_data, imu_angles):
     
     return data
 
-def unpack_data(data_string: str):
+def unpack_data(data_string):
     if data_string[0] != "$":
         print("##### ERROR, WRONG DATA FORMAT #####")
         return
