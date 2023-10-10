@@ -1,11 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <launch>
   <!-- Inclure le launch du package GPS -->
-  <node name="ublox_launch" pkg="roslaunch" type="roslaunch" args="ublox_gps ublox_device.launch param_file_name:=zed_f9p"/>
+  <arg name="param_file_name"     doc="name of param file, e.g. rover" />
+  <arg name="param_file_dir"      doc="directory to look for $(arg param_file_name).yaml"
+                                  default="$(find ublox_gps)/config" />
+  <arg name="node_name"           doc="name of this node"
+                                  default="ublox" />
+  <arg name="output"              default="screen" />
+  <arg name="respawn"             default="true" />
+  <arg name="respawn_delay"       default="30" />
+  <arg name="clear_params"        default="true" />
+
+  <node pkg="ublox_gps" type="ublox_gps" name="$(arg node_name)"
+        output="$(arg output)"
+        clear_params="$(arg clear_params)"
+        respawn="$(arg respawn)"
+        respawn_delay="$(arg respawn_delay)">
+    <rosparam command="load"
+              file="$(arg param_file_dir)/zed_f9p.yaml" />
+  </node>
+
   <!-- Inclure le launch de l'IMU -->
-  <node name="sbg_launch" pkg="roslaunch" type="roslaunch" args="sbg_driver sbg_device.launch"/>
+  <node name="sbg_device" pkg="sbg_driver" type="sbg_device" output="screen">
+  	<rosparam command="load" file="$(find sbg_driver)/config/sbg_device_uart_default.yaml" />
+  </node>
 
   <!-- Lancez le nœud "mon_node.py" de votre package "package" -->
-  <node name="broadcast_node" pkg="docking" type="node_data_broadcaster.py" output="screen">
+  <node name="broadcast_node" pkg="guerledocking" type="node_data_broadcaster.py" output="screen">
   <!-- Ajoutez ici des arguments ou des paramètres si nécessaire -->
   </node>
 </launch>
