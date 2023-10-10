@@ -445,7 +445,7 @@ def draw_box(ax,x1,x2,y1,y2,col):
     rect.set_facecolor(col)    
 
 
-def draw_polygon(ax,P,col):
+def draw_polygon(ax, P, col):
     patches = []
     patches.append(Polygon(P, True))
     p = PatchCollection(patches, cmap=matplotlib.cm.jet, alpha=0.4, color=col)
