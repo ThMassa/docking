@@ -18,7 +18,10 @@ Kévin & Théo
 Guillaume & Kevin
 - Installation d'Ubuntu 18.04 sur la Raspberry Pi et installation des drivers GPS
 
-### Mardi
+### Mardi 10
 
 Hugo & Théo
 - Création node de rassemblement et publication des datas, création roslaunch, test
+
+Kevin & Guillaume
+- Pour avoir la correction RTK. aller sur le site de centipède. L'idée est de leur fournir un log de 24h d'acquisition de données GPS de notre base, et ils vont calculer la position RTK au centimètre près.
