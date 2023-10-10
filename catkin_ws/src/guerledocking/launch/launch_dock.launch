@@ -1,12 +1,11 @@
 <launch>
-    <!-- Inclure le launch du package GPS -->
-    <node name="ublox_launch" pkg="roslaunch" type="roslaunch" args="ublox_gps ublox_device.launch param_file_name:=zed_f9p"/>
-    
-    <!-- Inclure le launch de l'IMU -->
-    <rosparam command="load" file="$(find sbg_driver)/launch/sbg_device.launch" />
+  <!-- Inclure le launch du package GPS -->
+  <node name="ublox_launch" pkg="roslaunch" type="roslaunch" args="ublox_gps ublox_device.launch param_file_name:=zed_f9p"/>
+  <!-- Inclure le launch de l'IMU -->
+  <rosparam command="load" file="$(find sbg_driver)/launch/sbg_device.launch" />
 
-    <!-- Lancez le nœud "mon_node.py" de votre package "package" -->
-    <node name="broadcast_node" pkg="docking" type="node_data_broadcaster.py" output="screen">
-        <!-- Ajoutez ici des arguments ou des paramètres si nécessaire -->
-    </node>
+  <!-- Lancez le nœud "mon_node.py" de votre package "package" -->
+  <node name="broadcast_node" pkg="docking" type="node_data_broadcaster.py" output="screen">
+  <!-- Ajoutez ici des arguments ou des paramètres si nécessaire -->
+  </node>
 </launch>
