@@ -13,6 +13,8 @@
   <arg name="respawn_delay"       default="30" />
   <arg name="clear_params"        default="true" />
 
+  <arg name="record_dock" default="true" />
+
   <node pkg="ublox_gps" type="ublox_gps" name="$(arg node_name)"
         output="$(arg output)"
         clear_params="$(arg clear_params)"
@@ -31,4 +33,9 @@
   <node name="broadcast_node" pkg="guerledocking" type="node_data_broadcaster.py" output="screen">
   <!-- Ajoutez ici des arguments ou des paramètres si nécessaire -->
   </node>
+
+   <node pkg="rosbag" type="record" name="rosbag_record_dock"
+       args="record -o /ublox/fix /sbg/ekf_quat"
+       if="$(arg record_dock)" />
+
 </launch>
