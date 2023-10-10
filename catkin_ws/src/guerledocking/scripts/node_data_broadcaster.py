@@ -47,7 +47,7 @@ def broadcast_node():
     # Initialisation du noeud ROS
     rospy.init_node('data_broadcaster')
     
-    rospy.Subscriber('/ublox/', NavSatFix, gps_callback)
+    rospy.Subscriber('/ublox/fix', NavSatFix, gps_callback)
     rospy.Subscriber('/sbg/ekf_euler', SbgEkfEuler, imu_callback) ## ou (sbg/imu_data, SbgImuData
 
     mon_publisher = rospy.Publisher('string_data', String, queue_size=10)
