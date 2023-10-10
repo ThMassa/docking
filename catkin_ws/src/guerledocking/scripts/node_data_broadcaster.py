@@ -42,7 +42,7 @@ def gps_callback(data):
 def imu_callback(data):
     global imu_data
     imu_data = data
-    print(imu_data.angle)
+    print(imu_data.angle.x,imu_data.angle.y,imu_data.angle.z)
 
 def broadcast_node():
     global gps_data,imu_data
