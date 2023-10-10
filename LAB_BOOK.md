@@ -13,7 +13,7 @@ Kevin & Guillaume
 Guillaume
 - J'ai suivi les indications d'installation de centipède. Pour l'instant je n'ai fait que les étapes installation logiciel et paramétrage. A ce stade, la base GPS reçoit des signaux satellites et commence un enregistrement continu de données. Un archivage est fait tous les jours à 4h des dernières 24h de données. Il nous faut donc attendre jeudi matin pour disposer de notre position avec la meilleure position (ce qui se fait avec les dernières étapes données par centipède qui restent à faire). Attention, lors de l'installation de la base, il faut flasher la carte micro SD à chaque fois avant d'alimenter une nouvelle fois la raspberry. De plus, il faut connecter le module GPS en USB à la raspberry et non pas au PC réseau (apparemment).
 
-  ### Lundi 9
+### Lundi 9
 
 Hugo & Guillaume : 
 - Tests des modems *Simpulse* : connexions master/slave et pings entre différents ordinateurs connectés sur le réseau. Il faut configurer manuellement l'adresse IP de son ordinateur de sorte à pouvoir se connecter :
