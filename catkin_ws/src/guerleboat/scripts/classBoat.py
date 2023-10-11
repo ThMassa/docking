@@ -24,10 +24,10 @@ class Boat:
         c21, c22 = 10, 5  # constantes pour les champs de potentiels
         u = np.array([[0], [0]])
         k_ = 1
-        unit = array([[cos(theta)], [sin(theta)]])
+        unit = np.array([[cos(theta)], [sin(theta)]])
         n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
         phat0 = phat + marge*unit
-        if unit.T@(self.x[:2] - phat) < self.__value and self.__start:
+        if np.dot(unit.T, self.x[:2] - phat) < self.__value and self.__start:
             vbar = c21 * (self.x[:2]-phat)/norm(self.x[:2]-phat)**3 + c22 * unit
             if self.__value == 0:
                 self.__value = 3
@@ -36,8 +36,9 @@ class Boat:
             if self.__value == 3:
                 self.__scap = 0
                 self.__value = 0
-            k_ = -sign(unit.T@(phat-self.x[:2]))[0, 0]
-            vbar = -c11*n@n.T@(self.x[:2]-phat) + c12*np.array([[cos(theta+pi)], [sin(theta+pi)]])
+            k_ = -sign(np.dot(unit.T, (phat-self.x[:2])))[0, 0]
+            nn = np.dot(n, n.T)
+            vbar = -c11*np.dot(nn, self.x[:2]-phat) + c12*np.array([[cos(theta+pi)], [sin(theta+pi)]])
 
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
