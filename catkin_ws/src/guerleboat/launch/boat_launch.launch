@@ -1,68 +1,16 @@
 <launch>
-    <arg name="use_rosbot" default="true" />
-    <arg name="fcu_url" default="udp://:14551@" />
-    <arg name="gcs_url" default="" />
-    <arg name="tgt_system" default="1" />
-    <arg name="tgt_component" default="1" />
-    <arg name="log_output" default="screen" />
-    <arg name="mavros_output" default="log" />
-    <arg name="fcu_protocol" default="v2.0" />
-    <arg name="respawn_mavros" default="false" />
-    <arg name="pluginlists_yaml" default="$(find mavros)/launch/apm_pluginlists.yaml" />
-    <arg name="config_yaml" default="$(find aion_control)/config/apm_config.yaml" />
-    <arg name="use_bt_joystick" default="false" />
-    <arg name="use_mavros" default="true" />
-    <arg name="use_cloudwatch" default="false" />
-    <arg name="use_realsense" default="false" />
 
-    <node
-        name="tf_footprint_base"
-        pkg="tf"
-        type="static_transform_publisher"
-        args="0 0 0 0 0 0 base_link base_footprint 40">
-    </node>
-   
-    <node
-        name="tf_top_link"
-        pkg="tf"
-        type="static_transform_publisher"
-        args="0 0 0.114485752303901 0 0 0 base_link top_link 40">
+    <node name="boat_node" pkg="guerleboat" type="node_boat.py" output="screen">
     </node>
 
-    <node name="robot_pose_publisher"
-        pkg="robot_pose_publisher"
-        type="robot_pose_publisher"
-        respawn="false"
-        output="screen">
-    </node>
-
-    <node name="base_to_fcu_broadcaster"
-        pkg="tf"
-        type="static_transform_publisher"
-        args="0 0 0 0 0 0 base_link fcu 100">
+    <node name="control_node" pkg="guerleboat" type="node_control.py" output="screen">
     </node>
     
-    <node if="$(arg use_mavros)" pkg="mavros" type="mavros_node" name="mavros" required="$(eval not respawn_mavros)" clear_params="true" output="$(arg mavros_output)" respawn="$(arg respawn_mavros)">
-        <param name="fcu_url" value="$(arg fcu_url)" />
-        <param name="gcs_url" value="$(arg gcs_url)" />
-        <param name="target_system_id" value="$(arg tgt_system)" />
-        <param name="target_component_id" value="$(arg tgt_component)" />
-        <param name="fcu_protocol" value="$(arg fcu_protocol)" />
-        <param name="system_id" value="1" />
-        <param name="component_id" value="254" />
-
-        <!-- load blacklist, config -->
-        <rosparam command="load" file="$(arg pluginlists_yaml)" />
-        <rosparam command="load" file="$(arg config_yaml)" />
-        
+    <node pkg="mavros" type="mavros_node" name="mavros" clear_params="true" output="log">
+        <param name="fcu_url" value="tcp://10.0.11.130:4003" />
         <!-- Topic Remaps for use on ROS -->
-        <remap from="/mavros/vision_pose/pose" to="/robot_pose" />
         <remap from="/mavros/setpoint_velocity/cmd_vel_unstamped" to="/cmd_vel" />
-        <!-- Needs MAVROS changes -->
-        <remap from="/mavros/obstacle/send" to="/scan" />
     </node>
-
-    <remap from="/pose" to="/robot_pose" />
   
     
 </launch>
