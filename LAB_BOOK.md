@@ -4,7 +4,8 @@
 
 ### Mercredi 11
 
-
+Guillaume
+- J'ai récupéré les 5h de logs GPS et je les ai mis sur clé usb. Le mot de passe pour se connecter à http://basegnss.local (sur Windows) est "admin". J'ai soudé des connecteurs sur la carte ardusimple du module GPS pour essayer de streamer les données sur mon PC.
 
 ### Mardi 10
 
