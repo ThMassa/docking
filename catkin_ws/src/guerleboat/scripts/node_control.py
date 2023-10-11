@@ -26,10 +26,8 @@ def controller(x, phat, theta, value=0, start=True):
     Utilisation : u, value, start = controller(x, phat, theta, value, start)
     """
     
-    dt = 0.05  # à déterminer
-    vmax = 5
-    vhat = array([[0], [0]])
     
+    vmax = 5
     phat = array([phat[0], phat[1]])
     u = np.array([[0], [0]])
     k_ = 1
@@ -41,16 +39,14 @@ def controller(x, phat, theta, value=0, start=True):
         vbar = c21 * (x[:2]-phat)/norm(x[:2]-phat)**3 + c22 * unit 
         if value == 0:
             value = 3
-            sum = 0
     else:
         if value == 3:
-            sum = 0
             value = 0
         k_ = -sign(unit.T@(phat-x[:2]))
         vbar = -c11*n@n.T@(x[:2]-phat) + c12*np.array([[cos(theta+pi)], [sin(theta+pi)]])
 
     thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
-    vbar = min(norm(vbar), k_*norm(phat0 - x[:2]))
+    vbar = min(norm(vbar), k_*vmax*norm(phat0 - x[:2]))
     
     if norm(phat - x[:2]) < .1:
         start = False
