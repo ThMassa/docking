@@ -11,3 +11,15 @@
 
 IP du dock : 192.168.0.12
 
+Tests de bande passante avec *iPerf* :
+- sur un premier node (ex: le dock):
+
+    ```bash
+    iperf3 -s
+    ```
+    Pour initialiser le serveur
+- sur un deuxième node (ex: PC de test / bateau) :
+    ```bash
+    iperf3 -c ADDRESSE_IP_SERVEUR -u
+    ```
+
