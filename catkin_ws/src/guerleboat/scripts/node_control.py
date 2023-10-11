@@ -2,7 +2,7 @@
 # coding: latin-1
 
 import rospy
-import numpy as np
+from classBoat import *
 from geometry_msgs.msg import TwistStamped, PoseStamped
 from mavros_msgs.msg import AttitudeTarget
 from tf.transformations import quaternion_from_euler
@@ -19,6 +19,8 @@ c21, c22 = 10, 5  # constantes pour les champs de potentiels
 Xb = np.zeros((5,1))    #Pose du bateau (x,y,roll,pitch,yaw)
 Xd = np.zeros((5,1))    #Pose du dock   (x,y,roll,pitch,yaw)
 
+u = np.array([[0,0]]).T
+boat = Boat(np.array([Xb[0,0],Xb[1,0],u[0,0],Xb[-1]]))
 
 def controller(x, phat, theta, value=0, start=True):
     """
@@ -29,6 +31,8 @@ def controller(x, phat, theta, value=0, start=True):
     
     Controleur pour via les champs de potentiels.
     Utilisation : u, value, start = controller(x, phat, theta, value, start)
+    
+    return : commande u = [v, thetadot]
     """
     
     
@@ -55,6 +59,8 @@ def controller(x, phat, theta, value=0, start=True):
     
     if norm(phat - x[:2]) < .1:
         start = False
+        
+    
     u[0,0] = vbar
     u[1,0] = thetabar
     return u, value, start
@@ -82,8 +88,7 @@ def control_node():
     rospy.Subscriber('/boat_pose', PoseStamped, boat_pose_cb)
     rospy.Subscriber('/dock_pose', PoseStamped, dock_pose_cb)
 
-    vel_publisher = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel', TwistStamped, queue_size=10)
-    orientation_publisher = rospy.Publisher('/mavros/setpoint_raw/attitude', AttitudeTarget, queue_size=10)
+    vel_publisher = rospy.Publisher('/cmd_vel', TwistStamped, queue_size=10)
 
     rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
 
@@ -92,26 +97,16 @@ def control_node():
     u = np.array([[0,0]]).T
 
     while not rospy.is_shutdown():
-        x = np.array([Xb[0,0],Xb[1,0],u[0,0],Xb[-1]])
+        boat.x = np.array([Xb[0,0],Xb[1,0],u[0,0],Xb[-1]])
         phat = Xd[:2]
         theta = Xd[-1,0]
-        u,value,start = controller(x,phat,theta,value,start)
+        u = boat.controller(phat,theta)
 
         vel_msg = TwistStamped()
-        vel_msg.twist.linear.x = u[0]
-
-        orientation_msg = AttitudeTarget()
-        orientation_msg.type_mask = AttitudeTarget.IGNORE_PITCH_RATE | AttitudeTarget.IGNORE_ROLL_RATE
-        quat = quaternion_from_euler(Xb[2,0],Xb[3,0],u[1])
-        orientation_msg.orientation.x = quat[0]
-        orientation_msg.orientation.y = quat[1]
-        orientation_msg.orientation.z = quat[2]
-        orientation_msg.orientation.w = quat[3]
+        vel_msg.twist.linear.x = u[0,0]
+        vel_msg.twist.angular.z = u[1,0]
 
         vel_publisher.publish(vel_msg)
-        orientation_publisher.publish(orientation_msg)
-
-
 
         rate.sleep()
     

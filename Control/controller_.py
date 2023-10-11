@@ -1,6 +1,8 @@
-from roblib import *  # available at https://www.ensta-bretagne.fr/jaulin/roblib.py
+from test import Boat
+from roblib import * # available at https://www.ensta-bretagne.fr/jaulin/roblib.py
 
-
+c11, c12 = 5, 1  # constantes pour les champs de potentiels
+c21, c22 = 10, 5  # constantes pour les champs de potentiels
 def draw_dock(xdock, theta):
     L, l = 1.2, 1
     P = array([[-L/3, L, L, 0], [0, 0, l, l]])
@@ -84,23 +86,25 @@ def controller(x, phat, theta, e, sum=0, value=0, start=True):
     return u, e, sum, value , start
     
 
-if __name__=="__main__":
-    s = 10
-    theta = pi/4
-    ax = init_figure(-s, s, -s, s)
-    e = array([0])
-    sum = 0
-    value = 3
-    start = True
-    x = array([[-3, -3, 1, 2]]).T
-    dt = .05
-    for t in arange(0, 50, dt):
-        clear(ax)
-        theta += pi/50*randn()
-        phat = array([[0], [0]])
-        draw_dock(phat, theta)
 
-        u, e, sum, value, start = controller(x, phat, theta, e, sum, value, start)
-        x = x + dt * f(x, u)
-        draw_tank(x[[0, 1, 3]], 'red', 0.2)  # x,y,θ
-    pause(1)
+s = 10
+theta = pi/4
+ax = init_figure(-s, s, -s, s)
+e = array([0])
+sum = 0
+value = 3
+start = True
+x = array([[-3, -3, 1, 2]]).T
+boat = Boat(x)
+dt = .05
+for t in arange(0, 50, dt):
+    clear(ax)
+    theta += pi/50*randn()
+    phat = array([[0], [0]])
+    draw_dock(phat, theta)
+
+    # u, e, sum, value, start = controller(x, phat, theta, e, sum, value, start)
+    u = boat.controller(phat, theta)
+    boat.x = boat.x + dt * f(boat.x, u)
+    draw_tank(boat.x[[0, 1, 3]], 'red', 0.2)  # x,y,θ
+pause(1)
