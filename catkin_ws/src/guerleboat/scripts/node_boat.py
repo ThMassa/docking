@@ -4,7 +4,7 @@
 import rospy
 import socket
 import numpy as np
-from sbg_driver.msg import SbgEkfQuat
+from sbg_driver.msg import SbgEkfQuat, SbgGpsPos
 
 
 from geometry_msgs.msg import PoseStamped
@@ -18,7 +18,8 @@ pitch_dock = None
 yaw_dock = None
 
 imu_data = None
-
+lat = None
+long = None
 
 rho = 6371E3
 
@@ -59,6 +60,10 @@ def imu_callback(data):
     global imu_data
     imu_data = euler_from_quaternion(data.quaternion)
 
+def gps_callback(data):
+    global lat,long
+    lat = data.position.x
+    long = data.position.y
 
 def boat_node():
     global gps_data,imu_data, lat_dock,long_dock, phi_dock, theta_dock, psi_dock
@@ -69,6 +74,7 @@ def boat_node():
     dock_pose_publisher = rospy.Publisher("/dock_pose",PoseStamped, queue_size = 10)
 
     rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback)
+    rospy.Subscriber('/sbg/gps_pos', SbgGpsPos, gps_callback)
     
     # Configuration du socket UDP pour la communication avec le système distant
     udp_ip = "192.168.0.12"

@@ -3,9 +3,7 @@
 
 import rospy
 from classBoat import *
-from geometry_msgs.msg import TwistStamped, PoseStamped
-from mavros_msgs.msg import AttitudeTarget
-from tf.transformations import quaternion_from_euler
+from geometry_msgs.msg import Twist, PoseStamped
 
 
 from roblib import *  # available at https://www.ensta-bretagne.fr/jaulin/roblib.py
@@ -88,12 +86,10 @@ def control_node():
     rospy.Subscriber('/boat_pose', PoseStamped, boat_pose_cb)
     rospy.Subscriber('/dock_pose', PoseStamped, dock_pose_cb)
 
-    vel_publisher = rospy.Publisher('/cmd_vel', TwistStamped, queue_size=10)
+    vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
     rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
 
-    value  = 0
-    start = True
     u = np.array([[0,0]]).T
 
     while not rospy.is_shutdown():
@@ -102,7 +98,7 @@ def control_node():
         theta = Xd[-1,0]
         u = boat.controller(phat,theta)
 
-        vel_msg = TwistStamped()
+        vel_msg = Twist()
         vel_msg.twist.linear.x = u[0,0]
         vel_msg.twist.angular.z = u[1,0]
 
