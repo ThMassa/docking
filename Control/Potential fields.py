@@ -21,18 +21,19 @@ def f(x, u):
 
 def f1(x1, x2):
     prod = n[0, 0]*(x1 - phat[0, 0]) + n[1, 0]*(x2 - phat[1, 0])
-    x10 = -2 * n[0, 0] * prod + 1 * cos(theta + pi)
-    x20 = -2 * n[1, 0] * prod + 1 * sin(theta + pi)
+    x10 = -c11 * n[0, 0] * prod + c12 * cos(theta + pi)
+    x20 = -c11 * n[1, 0] * prod + c12 * sin(theta + pi)
     return x10, x20
 
 
 def f2(x1, x2):
-    x10 = (x1 - qhat[0, 0]) / ((x1 - qhat[0, 0]) ** 2 + (x2 - qhat[1, 0]) ** 2) ** (3 / 2) - 5 * cos(theta + pi)
-    x20 = (x2 - qhat[1, 0]) / ((x1 - qhat[0, 0]) ** 2 + (x2 - qhat[1, 0]) ** 2) ** (3 / 2) - 5 * sin(theta + pi)
+    x10 = c21*(x1 - phat[0, 0]) / ((x1 - phat[0, 0]) ** 2 + (x2 - phat[1, 0]) ** 2) ** (3 / 2) + c22 * cos(theta)
+    x20 = c21*(x2 - phat[1, 0]) / ((x1 - phat[0, 0]) ** 2 + (x2 - phat[1, 0]) ** 2) ** (3 / 2) + c22 * sin(theta)
     return x10, x20
 
-
-x = array([[1, -3, 1, 2]]).T  # x,y,v,θ
+c11, c12 = 2, 1
+c21, c22 = 5, 5
+x = array([[-3, -3, 1, 2]]).T  # x,y,v,θ
 dt = 0.05
 s = 10
 ax = init_figure(-s, s, -s, s)
@@ -58,7 +59,7 @@ for t in arange(0, 50, dt):
     n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
 
     if unit.T@(x[:2] - phat) < value and start:
-        vbar = 5 * unit
+        vbar = c21 * (x[:2]-phat)/norm(x[:2]-phat)**3 + c22 * unit 
         draw_field(ax, f2, -s, s, -s, s, 0.8)
         if value == 0:
             value = 3
@@ -69,7 +70,7 @@ for t in arange(0, 50, dt):
             value = 0
         k_ = -sign(unit.T@(phat-x[:2]))
         print("----")
-        vbar = -2*n@n.T@(x[:2]-phat) + 2*np.array([[cos(theta+pi)], [sin(theta+pi)]])
+        vbar = -c11*n@n.T@(x[:2]-phat) + c12*np.array([[cos(theta+pi)], [sin(theta+pi)]])
         draw_field(ax, f1, -s, s, -s, s, 0.8)
 
     thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
