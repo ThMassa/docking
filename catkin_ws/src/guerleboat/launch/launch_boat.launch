@@ -5,11 +5,11 @@
         <remap from="/mavros/setpoint_velocity/cmd_vel_unstamped" to="/cmd_vel" />
     </node>
 
-    <node name="mavsafety" pkg="mavros" type="mavsafety" name="mavsafety" output="screen">
+    <node name="mavsafety" pkg="mavros" type="mavsafety" output="screen">
         <param name="command" type="string" value="arm" />
     </node>
 
-    <node name="mavsys_mode" pkg="mavros" type="mavsys" name="mavsys_mode" output="screen">
+    <node name="mavsys_mode" pkg="mavros" type="mavsys" output="screen">
         <param name="mode" type="string" value="GUIDED" />
     </node>
 
