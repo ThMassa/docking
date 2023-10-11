@@ -22,4 +22,4 @@ Tests de bande passante avec *iPerf* :
     ```bash
     iperf3 -c ADDRESSE_IP_SERVEUR -u
     ```
-
+On peut également changer le temps de test (par défaut, 10s) avec le paramètre `-t`.
