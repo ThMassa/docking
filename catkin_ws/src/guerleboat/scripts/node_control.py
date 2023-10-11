@@ -10,7 +10,7 @@ from roblib import *  # available at https://www.ensta-bretagne.fr/jaulin/roblib
 
 
 L, l = 1, 1  # taille Longueur largeur du dock
-Lb, lb = 1, 1  #taille du bateau
+marge = 1.5  # marge de sécurité, plus elle est élevée, plus le bateau s'arrêtera loin du dock et donc moins il aura de chance de se cogner contre le dock
 c11, c12 = 5, 1  # constantes pour les champs de potentiels
 c21, c22 = 10, 5  # constantes pour les champs de potentiels
 
@@ -36,7 +36,7 @@ def controller(x, phat, theta, value=0, start=True):
     
     unit = array([[cos(theta)], [sin(theta)]])
     n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
-    phat0 = phat + 1.5*unit
+    phat0 = phat + marge*unit
     if unit.T@(x[:2] - phat) < value and start:
         vbar = c21 * (x[:2]-phat)/norm(x[:2]-phat)**3 + c22 * unit 
         if value == 0:
