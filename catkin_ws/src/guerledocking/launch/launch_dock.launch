@@ -35,7 +35,7 @@
   </node>
 
    <node pkg="rosbag" type="record" name="rosbag_record_dock"
-       args="record /home/nvidia/guerlelogs/dock.bag "
+       args="record -a -o /home/nvidia/guerlelogs/dock.bag "
        if="$(arg record_dock)" />
 
 </launch>
