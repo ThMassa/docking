@@ -45,17 +45,16 @@ def control_node():
 
     rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
 
-    u = np.array([[0,0]]).T
 
     while not rospy.is_shutdown():
-        boat.x = np.array([Xb[0,0],Xb[1,0],u[0,0],Xb[-1]])
+        boat.x = np.array([Xb[0,0], Xb[1,0], boat.u[0,0], Xb[-1]])
         phat = Xd[:2]
         theta = Xd[-1,0]
-        u = boat.controller(phat,theta)
+        boat.u = boat.controller(phat,theta)
 
         vel_msg = Twist()
-        vel_msg.twist.linear.x = u[0,0]
-        vel_msg.twist.angular.z = u[1,0]
+        vel_msg.twist.linear.x = boat.u[0,0]
+        vel_msg.twist.angular.z = boat.u[1,0]
 
         vel_publisher.publish(vel_msg)
 

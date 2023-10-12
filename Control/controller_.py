@@ -6,6 +6,8 @@ from roblib import *
 
 c11, c12 = 5, 1  # constantes pour les champs de potentiels
 c21, c22 = 10, 5  # constantes pour les champs de potentiels
+
+
 def draw_dock(xdock, theta):
     L, l = 1.2, 1
     P = array([[-L/3, L, L, 0], [0, 0, l, l]])
@@ -41,7 +43,9 @@ for t in arange(0, 50, dt):
     draw_dock(phat, theta)
 
     # u, e, sum, value, start = controller(x, phat, theta, e, sum, value, start)
+    noise = .08 * np.random.randn(4, 1)
+    boat.x = x + noise
     u = boat.controller(phat, theta)
-    boat.x = boat.x + dt * f(boat.x, u)
-    draw_tank(boat.x[[0, 1, 3]], 'red', 0.2)  # x,y,θ
+    x = x + dt*f(x, u)
+    draw_tank(x[[0, 1, 3]], 'red', 0.2)  # x,y,θ
 pause(1)
