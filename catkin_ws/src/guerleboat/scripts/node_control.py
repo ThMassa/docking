@@ -6,9 +6,6 @@ from classBoat import *
 from geometry_msgs.msg import Twist, PoseStamped
 
 
-from roblib import *  # available at https://www.ensta-bretagne.fr/jaulin/roblib.py
-
-
 L, l = 1, 1  # taille Longueur largeur du dock
 marge = 1.5  # marge de securite, plus elle est elevee, plus le bateau s'arretera loin du dock et donc moins il aura de chance de se cogner contre le dock
 c11, c12 = 5, 1  # constantes pour les champs de potentiels
