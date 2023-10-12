@@ -36,3 +36,7 @@ Dans un autre
 La doc pour la centrale inertielle SBG peut se trouver [ici](https://github.com/SBG-Systems/sbg_ros_driver)
 
 La doc pour le driver GPS sur le dock peut se trouver [ici](https://github.com/KumarRobotics/ublox)
+
+### Commande launch bateau
+
+    roslaunch guerleboat launch_boat.launch
