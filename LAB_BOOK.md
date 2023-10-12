@@ -14,7 +14,11 @@ Guillaume
         ssh basegnss@basegnss.local
         basegnss! # mot de passe
 
-    A partir de ça, j'ai suivi les indications de centipède pour [activer un port série](https://docs.centipede.fr/docs/base/port_serie.html) sur la carte Arduino. J'espère que cela va permettre de lire les données émises sur le(s) port(s) série. Jusqu'ici, je n'avais pas réussi à les décoder sous _putty_. J'ai [téléchargé un des logs de la base RTK](https://docs.centipede.fr/docs/base/positionnement.html) et je l'ai envoyé à IGN pour recevoir sa position plus précisément.
+    A partir de ça, j'ai suivi les indications de centipède pour [activer un port série](https://docs.centipede.fr/docs/base/port_serie.html) sur la carte Arduino. J'espère que cela va permettre de lire les données émises sur le(s) port(s) série. Jusqu'ici, je n'avais pas réussi à les décoder sous _putty_. J'ai [téléchargé un des logs de la base RTK](https://docs.centipede.fr/docs/base/positionnement.html) et je l'ai envoyé à IGN pour recevoir sa position plus précisément. Pour docker, il ne faut pas oublier de partager les dossiers nécessaires à notre application pour le conteneur. Depuis Docker Desktop : 
+
+        Parameters >> Resources >> File Sharing
+
+
 
 ### Mercredi 11
 
