@@ -5,17 +5,20 @@
         <remap from="/mavros/setpoint_velocity/cmd_vel_unstamped" to="/cmd_vel" />
     </node>
 
-    <node name="mavsafety" pkg="mavros" type="mavsafety" output="screen">
-        <param name="command" type="string" value="arm" />
+    <node name="mavsafety" pkg="mavros" type="mavsafety" output="screen" args="arm">
     </node>
 
-    <node name="mavsys_mode" pkg="mavros" type="mavsys" output="screen">
-        <param name="mode" type="string" value="GUIDED" />
+    <node name="mavsys_mode" pkg="mavros" type="mavsys" output="screen" args="mode -c GUIDED">
     </node>
+    <!-- <node name="mavsys_mode" pkg="mavros" type="mavsys" output="screen">
+        <param name="cmd_args" value="mode -c GUIDED"/>
+    </node> -->
 
-    <node name="sbg_device" pkg="sbg_driver" type="sbg_device" output="screen">
-  	    <rosparam command="load" file="$(find sbg_driver)/config/sbg_device_uart_default.yaml" />
-    </node>
+    <!-- <node name="sbg_device" pkg="sbg_driver" type="sbg_ellipse_e" output="screen">
+  	    <rosparam command="load" file="$(find sbg_driver)/config/example/ellipse_D_default.yaml" />
+    </node> -->
+
+    <include file="$(find sbg_driver)/launch/examples/sbg_ellipseD.launch"/>
 
     <node name="boat_node" pkg="guerleboat" type="node_boat.py" output="screen">
     </node>
