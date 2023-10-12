@@ -51,7 +51,7 @@ from matplotlib.collections import PatchCollection
 
 
 # Unicode https://en.wikipedia.org/wiki/List_of_Unicode_characters
-# αβδεθλΛμρτφψωΓ
+# αβδεthetaλΛμρτphipsiωΓ
 
 
 
@@ -61,22 +61,22 @@ def scalarprod(u,v): # scalar product
     return sum(u[:]*v[:])
 
 
-def eulermat(φ,θ,ψ):
-    return expw([0,0,ψ]) @ expw([0,θ,0]) @ expw([φ,0,0])
+def eulermat(phi,theta,psi):
+    return expw([0,0,psi]) @ expw([0,theta,0]) @ expw([phi,0,0])
 
 
 def eulermat2angles(R):
-    φ=arctan2(R[2,1],R[2,2])
-    θ=-arcsin(R[2,0])
-    ψ=arctan2(R[1,0],R[0,0])
-    return φ,θ,ψ
+    phi=arctan2(R[2,1],R[2,2])
+    theta=-arcsin(R[2,0])
+    psi=arctan2(R[1,0],R[0,0])
+    return phi,theta,psi
 
 
 def rot2w(R): return adjoint_inv(logm(R))
 
-def eulerderivative(φ,θ,ψ):
-    cφ,sφ,cθ,sθ,tθ,cψ,sψ = cos(φ),sin(φ),cos(θ),sin(θ),sin(θ)/cos(θ),cos(ψ),sin(ψ)        
-    return array([[1,sφ*tθ,cφ*tθ],[0, cφ,-sφ],[0,sφ/cθ,cφ/cθ]])    
+def eulerderivative(phi,theta,psi):
+    cphi,sphi,ctheta,stheta,ttheta,cpsi,spsi = cos(phi),sin(phi),cos(theta),sin(theta),sin(theta)/cos(theta),cos(psi),sin(psi)        
+    return array([[1,sphi*ttheta,cphi*ttheta],[0, cphi,-sphi],[0,sphi/ctheta,cphi/ctheta]])    
     
 def angle(x):
     x=x.flatten()
@@ -92,7 +92,7 @@ def angle2d(u,v):
 
 
 
-#def angle3dold(u,v):  #returns θ*w such that  v=expw(θ*w)*u  with θ minimal in [0,pi]
+#def angle3dold(u,v):  #returns theta*w such that  v=expw(theta*w)*u  with theta minimal in [0,pi]
 #    u=(1/norm(u))*array(u)
 #    v=(1/norm(v))*array(v)
 #    c=scalarprod(u,v)
@@ -111,7 +111,7 @@ def rotuv(u,v): #returns rotation with minimal angle  such that  v=R*u
     A=v@u.T-u@v.T
     return eye(3,3)+A+(1/(1+c))*A@A
 
-def angle3d(u,v):  #returns θ*w such that  v=expw(θ*w)*u  with θ minimal in [0,pi]
+def angle3d(u,v):  #returns theta*w such that  v=expw(theta*w)*u  with theta minimal in [0,pi]
     u=array(u).reshape(3,1)
     v=array(v).reshape(3,1)
     if norm(u)<0.0001: return angle3d(u+0.01*randn(3,1),v)
@@ -210,8 +210,8 @@ def rot3H(wx, wy, wz):
 def rot3H(wx, wy, wz): return ToH(expw([wx,wy,wz]))
 
 
-def eulerH(φ,θ,ψ):
-    return ToH(expw([0,0,ψ]) @ expw([0,θ,0]) @ expw([φ,0,0]))
+def eulerH(phi,theta,psi):
+    return ToH(expw([0,0,psi]) @ expw([0,theta,0]) @ expw([phi,0,0]))
 
 
 def draw3H(ax, M, col, shadow=False, mirror=1):  # mirror=-1 in case z in directed downward
@@ -239,9 +239,9 @@ def wheel3H(r):
 
 def circle3H(r):
     n = 20
-    θ = linspace(0, 2 * pi, n)
-    x = r * cos(θ) + array(n * [0])
-    y = r * sin(θ) + array(n * [0])
+    theta = linspace(0, 2 * pi, n)
+    x = r * cos(theta) + array(n * [0])
+    y = r * sin(theta) + array(n * [0])
     z = zeros(n)
     return add1(array([x, y, z]))
 
@@ -290,10 +290,10 @@ def draw_earth3D(ax,r,R,col='gray'):
     plot3D(ax,ToH(R)@earth3H(r),"gray")
     ax.scatter(*(R@array([[r],[0],[0]])),color='red')
     
-def draw_wheel3D(ax,x,y,z,φ,θ,ψ,r=1,col='blue',size=1):
-    M=tran3H(x,y,z)@eulerH(φ,θ,ψ)@wheel3H(r)
+def draw_wheel3D(ax,x,y,z,phi,theta,psi,r=1,col='blue',size=1):
+    M=tran3H(x,y,z)@eulerH(phi,theta,psi)@wheel3H(r)
     draw3H(ax,M,col,True,1)
-    p=array([[x],[y],[z]])+eulermat(φ,θ,ψ)@array([[0],[1],[0]])
+    p=array([[x],[y],[z]])+eulermat(phi,theta,psi)@array([[0],[1],[0]])
     ax.scatter(*p,color='red')
 
 def draw_robot3D(ax,p,R,col='blue',size=1):
@@ -301,8 +301,8 @@ def draw_robot3D(ax,p,R,col='blue',size=1):
     draw3H(ax, M, col, True, 1)
     pause(0.001)
 
-def draw_auv3D(ax,x,y,z,φ,θ,ψ,col='blue',size=1):
-    draw_robot3D(ax,array([[x],[y],[z]]),eulermat(φ,θ,ψ),col,size)
+def draw_auv3D(ax,x,y,z,phi,theta,psi,col='blue',size=1):
+    draw_robot3D(ax,array([[x],[y],[z]]),eulermat(phi,theta,psi),col,size)
     
 def draw_boat3D(ax,p,R,col='blue',size=1):
     p=array(p).reshape(3,1)
@@ -398,8 +398,8 @@ def draw_ellipse0(ax, c, Γ, a, col,coledge='black'):  # classical ellipse (x-c)
     v2 = array([[v[0, 1]], [v[1, 1]]])
     f1 = A @ v1
     f2 = A @ v2
-    φ = (arctan2(v1[1, 0], v1[0, 0]))
-    α = φ * 180 / 3.14
+    phi = (arctan2(v1[1, 0], v1[0, 0]))
+    α = phi * 180 / 3.14
     e = Ellipse(xy=c, width=2 * norm(f1), height=2 * norm(f2), angle=α)
     ax.add_artist(e)
     e.set_clip_box(ax.bbox)
@@ -452,55 +452,55 @@ def draw_polygon(ax, P, col):
     ax.add_collection(p)
 
 
-def draw_arc(c,a,θ,col):
-    s = arange(0,abs(θ),0.01)
-    s = sign(θ) * s
+def draw_arc(c,a,theta,col):
+    s = arange(0,abs(theta),0.01)
+    s = sign(theta) * s
     d = a-c
     r = norm(d)
     alpha = angle(d)
     w = c@ones((1,size(s))) + r*array([[cos(alpha), -sin(alpha)],[sin(alpha), cos(alpha)]])@array([cos(s),sin(s)])
     plot2D(w,col,3)  
     
-def draw_pie(ax,c,ρ1,ρ2,θ1,θ2,col):
+def draw_pie(ax,c,ρ1,ρ2,theta1,theta2,col):
     n = 12
-    W0 = array([[ρ1*np.cos(θ1)], [ρ1*np.sin(θ1)]])
+    W0 = array([[ρ1*np.cos(theta1)], [ρ1*np.sin(theta1)]])
     W = W0
-    dθ=(θ2-θ1)/n
-    R = array([[np.cos(dθ),-np.sin(dθ)],[np.sin(dθ),np.cos(dθ)]])
+    dtheta=(theta2-theta1)/n
+    R = array([[np.cos(dtheta),-np.sin(dtheta)],[np.sin(dtheta),np.cos(dtheta)]])
     for i in range(n + 1):
         W0 = R @ W0
         W = hstack((W, c+W0))
-    W0 = [[ρ2 * np.cos(θ2)], [ρ2 * np.sin(θ2)]]
-    R = array([[np.cos(dθ), np.sin(dθ)], [-np.sin(dθ), np.cos(dθ)]])
+    W0 = [[ρ2 * np.cos(theta2)], [ρ2 * np.sin(theta2)]]
+    R = array([[np.cos(dtheta), np.sin(dtheta)], [-np.sin(dtheta), np.cos(dtheta)]])
     for i in range(n + 1):
         W0 = R @ W0
         W = hstack((W, c+W0))
     draw_polygon(W.T, ax, col)    
     
     
-def draw_arrow(x,y,θ,L,col='darkblue',w=1):
-    plot2D(tran2H(x,y)@rot2H(θ)@arrow2H(L),col,w)
+def draw_arrow(x,y,theta,L,col='darkblue',w=1):
+    plot2D(tran2H(x,y)@rot2H(theta)@arrow2H(L),col,w)
 
 
 
-def draw_sailboat(x,δs,δr,ψ,awind):
-    mx,my,θ,v,w=list(x[0:5,0])
+def draw_sailboat(x,δs,δr,psi,awind):
+    mx,my,theta,v,w=list(x[0:5,0])
     hull=add1(array([[-1,5,7,7,5,-1,-1,-1],[-2,-2,-1,1,2,2,-2,-2]]))
     sail=array([[-7,0],[0,0],[1,1]])
     rudder=array([[-1,1],[0,0],[1,1]])
-    R=tran2H(mx,my)@rot2H(θ)
+    R=tran2H(mx,my)@rot2H(theta)
     Rs=tran2H(3,0)@rot2H(δs)
     Rr=tran2H(-1,0)@rot2H(δr)
-    draw_arrow(mx+5,my,ψ,5*awind,'red')
+    draw_arrow(mx+5,my,psi,5*awind,'red')
     plot2D(R@hull,'black');
     plot2D(R@Rs@sail,'red',2);
     plot2D(R@Rr@rudder,'red',2);
 
 def draw_tank(x,col='darkblue',r=1,w=2):
-    mx,my,θ=tolist(x)[0:3]
+    mx,my,theta=tolist(x)[0:3]
     M = r*array([[1,-1,0,0,-1,-1,0,0,-1,1,0,0,3,3,0], [-2,-2,-2,-1,-1,1,1,2,2,2,2,1,0.5,-0.5,-1]])
     M=add1(M)
-    plot2D(tran2H(mx,my)@rot2H(θ)@M,col,w)
+    plot2D(tran2H(mx,my)@rot2H(theta)@M,col,w)
 
 def draw_tank_trailer(x1,x2,x3,x4,x5):
     r=0.07
@@ -513,19 +513,19 @@ def draw_tank_trailer(x1,x2,x3,x4,x5):
 
     
 def draw_invpend(ax,x): #inverted pendulum
-    s,θ=x[0,0],x[1,0]
+    s,theta=x[0,0],x[1,0]
     draw_box(ax,s-0.7,s+0.7,-0.25,0,'blue')
-    plot( [s,s-sin(θ)],[0,cos(θ)],'magenta', linewidth = 2)
+    plot( [s,s-sin(theta)],[0,cos(theta)],'magenta', linewidth = 2)
     
 
     	
     
     
 def draw_car(x,col='darkblue',L=1,w=2): # the car has a length L
-    mx,my,θ,v,δ=list(x[0:5,0])
+    mx,my,theta,v,δ=list(x[0:5,0])
     M = add1(L*array([[-0.3, 1.3, 1.6,1.6,1.3,-0.3,-0.3,-0.3, 0, 0,-0.3, 0.3,0,0,-0.3,0.3, 0, 0,1,1,1],  
                       [-0.7,-0.7,-0.3,0.3,0.7, 0.7,-0.7,-0.7,-0.7,-1,-1,-1,-1,1, 1,1, 1, 0.7,0.7,1,-1]]))                
-    R=tran2H(mx,my)@rot2H(θ)
+    R=tran2H(mx,my)@rot2H(theta)
     W = add1(L*array([[-0.3, 0.3], [0, 0]])) #Front Wheel                
     plot2D(R@M,col,w)          
     plot2D(R@tran2H(L,L)@rot2H(δ)@W,col,1)
@@ -716,15 +716,15 @@ if __name__ == "__main__":
     #draw_robot3D(ax, array([[2],[3],[4]]), eye(3, 3), 'blue', 0.3)
     #pause(1)
 
-        #φ, θ, ψ=-0.1,-0.2,-0.3
-    #R=eulermat(φ, θ, ψ)
+        #phi, theta, psi=-0.1,-0.2,-0.3
+    #R=eulermat(phi, theta, psi)
     #print(R)
-    #φ1, θ1, ψ1=eulermat2angles(R)
-    #print(φ1, θ1, ψ1)
+    #phi1, theta1, psi1=eulermat2angles(R)
+    #print(phi1, theta1, psi1)
 
 
-    #     φ,θ,ψ=list(x[3:6])
-    #    s,θ,ds,dθ =list(x[0:4,0])  #select the components of a vector
+    #     phi,theta,psi=list(x[3:6])
+    #    s,theta,ds,dtheta =list(x[0:4,0])  #select the components of a vector
     # p = x[[0,1,3]] # forms the subvector associated to comppnents 1,2,4
 
 #    print("v=",v)
