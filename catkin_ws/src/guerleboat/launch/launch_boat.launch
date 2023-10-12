@@ -1,20 +1,23 @@
 <launch>
+
+    <arg name="record_boat" default="true" />
+
     <node pkg="mavros" type="mavros_node" name="mavros" clear_params="true" output="log">
         <param name="fcu_url" value="tcp://10.0.11.130:4003" />
         <!-- Topic Remaps for use on ROS -->
         <remap from="/mavros/setpoint_velocity/cmd_vel_unstamped" to="/cmd_vel" />
     </node>
 
-    <node name="mavsafety" pkg="mavros" type="mavsafety" output="screen" args="arm">
+    <!-- <node name="mavsafety" pkg="mavros" type="mavsafety" output="screen" args="arm">
     </node>
 
     <node name="mavsys_mode" pkg="mavros" type="mavsys" output="screen" args="mode -c GUIDED">
-    </node>
+    </node> -->
     <!-- <node name="mavsys_mode" pkg="mavros" type="mavsys" output="screen">
         <param name="cmd_args" value="mode -c GUIDED"/>
     </node> -->
 
-    <!-- <node name="sbg_device" pkg="sbg_driver" type="sbg_ellipse_e" output="screen">
+    <!-- <node name="sbg_device" pkg="sbg_driver" type="sbg_device" output="screen">
   	    <rosparam command="load" file="$(find sbg_driver)/config/example/ellipse_D_default.yaml" />
     </node> -->
 
@@ -26,7 +29,11 @@
     <node name="control_node" pkg="guerleboat" type="node_control.py" output="screen">
     </node>
     
+    <node pkg="rosbag" type="record" name="rosbag_record_boat"
+       args="record -a -o /home/guerlelogs/boat.bag"
+       if="$(arg record_boat)" />
 
   
     
 </launch>
+       <!-- args="record -o /home/guerlelogs/boat.bag /cmd_vel /sbg/ekf_quat /sbg/gps_pos" -->
