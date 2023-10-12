@@ -9,7 +9,7 @@ Guillaume
 
         docker run -it --privileged -e DISPLAY=$DISPLAY -v /dev/ttyACM0:/dev/ttyACM0 --rm name:latest
 
-
+    J'abandonne l'idée de faire ça dans un conteneur Docker. Je vais installer ros melodic sur mon PC.
 ### Mercredi 11
 
 Guillaume
