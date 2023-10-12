@@ -30,7 +30,7 @@
     </node>
     
     <node pkg="rosbag" type="record" name="rosbag_record_boat"
-       args="record /home/guerlelogs/boat.bag"
+       args="record -a -o /home/guerlelogs/boat.bag"
        if="$(arg record_boat)" />
 
   
