@@ -1,17 +1,89 @@
+# coding: latin-1
+
 from numpy import cos, sin, array, sign, pi
 import numpy as np
 from numpy.linalg import norm
 
+#TODO l'IMU du bateau n'est pas bien orienté
+
+"""
+Hypoth�se de fonctionnement :
+Faible acc�l�ration de sorte que vd = v (pour kalman notamment)
+Faible gite de sorte que dx/dt et dy/dt ne d�pend pas du gite (angle phi)
+
+"""
 
 def sawtooth(x):
     return (x+pi)%(2*pi)-pi
 
 
 class Boat:
-    def __init__(self, x, vmax=1):
+    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1):
+        """_summary_
+
+        Args:
+            x (colunm numpy array): State vector (px, py, pz, v, heading)
+            u (colunm numpy array): Control vector (v, yaw)
+            L (int, optional): Length of the boat. Defaults to 1.
+            vmax (int, optional): Maximum speed of the boat. Defaults to 1.
+        """
         self.x = x
         self.vmax = vmax
+        self.L = L
+        self.u = u
         
+    
+    def init_kalman(self, Gx=None):
+        if Gx == None:
+            self.Gx = 100*np.identity(len(self.x))
+        else:
+            self.Gx = Gx
+            
+    
+    def kalman_predict(self, A, B, Q, dt):
+        A = np.identity(len(self.x)) + dt*A
+        B = dt*B
+        Q = dt*Q
+        self.Gx = np.dot(A, self.Gx)
+        self.Gx = np.dot(self.Gx, A.T) + Q
+        self.x = np.dot(A, self.x) + np.dot(B, self.u)
+        self.__predict = True
+    
+    
+    def kalman_correc(self, y, C, R, dt):
+        R = 1/dt*R
+        S = np.dot(C, self.Gx)
+        S = np.dot(S, C.T) + R
+        K = np.dot(self.Gx, C.T)
+        K = np.dot(K, np.linalg.inv(S))
+        ytilde = y - np.dot(C, self.x)
+        self.Gx = np.dot(np.eye(len(self.x))-np.dot(K, C), self.Gx) 
+        self.x = self.x + np.dot(K, ytilde)
+        self.__predict = False
+    
+    
+    def f(self, theta=0):
+        psi = self.x[4, 0]
+        B = np.array([[cos(theta)*cos(psi), 0],
+                      [cos(theta)*sin(psi), 0],
+                      [-sin(theta)        , 0],
+                      [1                  , 0],
+                      [0                  , 1]], dtype=np.float64)
+        return np.dot(B, self.u)
+        
+    
+    def dead_reckoning(self, theta, dt):
+        self.x += dt*self.f(theta)
+        
+    
+    def kalman(self, y, A, B, C, Q, R):
+        if self.__predict == False:
+            self.kalman_predict(y, A, B, Q)
+        else:
+            self.kalman_correc(y, C, R)
+            self.kalman_predict(y, A, B, Q)
+    
+    
     def controller(self, phat, theta, marge=1.5):
         """Controleur utilisant les champs de potentiels
 
@@ -37,10 +109,10 @@ class Boat:
         if np.dot(unit.T, self.x[:2] - phat) < self.__value and self.__start:
             vbar = c21 * (self.x[:2]-phat)/norm(self.x[:2]-phat)**3 + c22 * unit
             if self.__value == 0:
-                self.__value = 3
+                self.__value = 3*self.L
                 self.__scap = 0
         else:
-            if self.__value == 3:
+            if self.__value == 3*self.L:
                 self.__scap = 0
                 self.__value = 0
             k_ = -sign(np.dot(unit.T, phat-self.x[:2]))[0, 0]
@@ -50,21 +122,22 @@ class Boat:
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
         vbar = min(norm(vbar), k_*self.vmax*norm(phat0 - self.x[:2]))
-        if norm(phat - self.x[:2]) < .1:
+        if norm(phat - self.x[:2]) < .2*self.L:
+            print("Ok")
             self.__start = False
         
-        ecap = sawtooth(thetabar - self.x[3, 0])
+        ecap = sawtooth(thetabar - self.x[4, 0])
         self.__scap += ecap
         if len(self.__ecap) < 5:
             self.__ecap = np.append(self.__ecap, ecap)
         else:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
-        u[0,0] = vbar - self.x[2, 0]
-        u[1,0] = 5*ecap + 0*(self.__ecap[-1] - self.__ecap[-2]) + .05*self.__scap
-        # u[1,0] = 5*sawtooth(thetabar - self.x[3, 0])
+        self.u[0,0] = vbar
+        self.u[1,0] = 5*ecap + 0*(self.__ecap[-1] - self.__ecap[-2]) + .0*self.__scap
+        # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
         return u
-        
+
 if __name__=="__main__":
     boat = Boat(np.array([[0], [0], [2], [1]]))
     u = boat.controller(np.array([[2], [2]]), pi/4)
