@@ -66,7 +66,7 @@ def gps_callback(data):
     long = data.position.y
 
 def boat_node():
-    global gps_data,imu_data, lat_dock,long_dock, phi_dock, theta_dock, psi_dock
+    global gps_data,imu_data, lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
     # Initialisation du noeud ROS
     rospy.init_node('boat')
 
