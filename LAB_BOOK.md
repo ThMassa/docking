@@ -9,7 +9,13 @@ Guillaume
 
         docker run -it --privileged -e DISPLAY=$DISPLAY -v /dev/ttyACM0:/dev/ttyACM0 --rm name:latest
 
-    J'abandonne l'idée de faire ça dans un conteneur Docker. Je vais installer ros melodic sur mon PC.
+    J'abandonne l'idée de faire ça dans un conteneur Docker. Je vais installer ros noetic sur mon PC. J'ai suivi les indications de [ArduSimple](https://www.ardusimple.com/how-to-use-ardusimple-rtk-receivers-and-get-gps-data-in-ros/) concernant l'installation de la base RTK. J'ai réussi à installer un workspace ROS noetic avec des nodes permettant d'avoir différentes informations sur le GPS. J'ai également réussi à me connecter depuis l'invite de commande Windows au module GPS en ssh avec :
+
+        ssh basegnss@basegnss.local
+        basegnss! # mot de passe
+
+    A partir de ça, j'ai suivi les indications de centipède pour [activer un port série](https://docs.centipede.fr/docs/base/port_serie.html) sur la carte Arduino. J'espère que cela va permettre de lire les données émises sur le(s) port(s) série. Jusqu'ici, je n'avais pas réussi à les décoder sous _putty_. J'ai [téléchargé un des logs de la base RTK](https://docs.centipede.fr/docs/base/positionnement.html) et je l'ai envoyé à IGN pour recevoir sa position plus précisément.
+
 ### Mercredi 11
 
 Guillaume
