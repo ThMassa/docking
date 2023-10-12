@@ -2,6 +2,14 @@
 
 ## Octobre 2023
 
+### Jeudi 12
+
+Guillaume
+- La commande pour lancer le docker container avec accès au GPS en USB est 
+
+        docker run -it --privileged -e DISPLAY=$DISPLAY -v /dev/ttyACM0:/dev/ttyACM0 --rm name:latest
+
+
 ### Mercredi 11
 
 Guillaume
