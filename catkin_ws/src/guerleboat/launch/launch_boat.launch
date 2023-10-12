@@ -30,9 +30,10 @@
     </node>
     
     <node pkg="rosbag" type="record" name="rosbag_record_boat"
-       args="record -o /home/guerlelogs/boat.bag /cmd_vel /sbg/ekf_quat /sbg/gps_pos"
+       args="record /home/guerlelogs/boat.bag"
        if="$(arg record_boat)" />
 
   
     
 </launch>
+       <!-- args="record -o /home/guerlelogs/boat.bag /cmd_vel /sbg/ekf_quat /sbg/gps_pos" -->
