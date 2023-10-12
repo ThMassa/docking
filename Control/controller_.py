@@ -1,5 +1,8 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 from test import Boat
-from roblib import * # available at https://www.ensta-bretagne.fr/jaulin/roblib.py
+from roblib import * 
 
 c11, c12 = 5, 1  # constantes pour les champs de potentiels
 c21, c22 = 10, 5  # constantes pour les champs de potentiels

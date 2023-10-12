@@ -1,3 +1,5 @@
+# coding: latin-1
+
 from numpy import cos, sin, array, sign, pi
 import numpy as np
 from numpy.linalg import norm
