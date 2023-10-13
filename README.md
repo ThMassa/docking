@@ -109,7 +109,7 @@ Dans le dossier Docker de ce projet, on peut trouver un Dockerfile permettant de
 
 Il faut ensuite attendre quelques minutes la création de l'image. Pour lancer le conteneur, il est important de préciser en commande les autorisations souhaitées et les fichiers partagés : 
 
-        docker run -it --privileged -v  "to_share":"shared_name" --rm "name":latest
+        docker run -it --privileged -v  "to_share":"destination" --rm "name":latest
 
 avec "name" le nom de l'image créée.
 
@@ -123,7 +123,7 @@ Pour autoriser le conteneur à afficher des fenêtres graphiques, il faut rajout
 
 Ce qui donne : 
 
-        docker run -it --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix "to_share":"shared_name" --rm "name":latest
+        docker run -it --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix "to_share":"destination" --rm "name":latest
         
 En cas de refus de la part de l'hôte, on rajoute : 
 
