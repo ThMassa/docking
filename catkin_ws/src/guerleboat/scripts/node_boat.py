@@ -11,8 +11,10 @@ from geometry_msgs.msg import PoseStamped
 
 gps_data = None
 imu_data = None
-lat_dock = None
-long_dock = None
+# lat_dock = None
+lat_dock = 48.1994155
+# long_dock = None
+long_dock = -3.0156827
 roll_dock = None
 pitch_dock = None
 yaw_dock = None
@@ -77,37 +79,41 @@ def boat_node():
     rospy.Subscriber('/sbg/gps_pos', SbgGpsPos, gps_callback)
     
     # Configuration du socket UDP pour la communication avec le système distant
-    udp_ip = "192.168.0.12"
-    udp_port = 12345  # Port UDP de destination sur le système distant
-    # Création du socket UDP
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    udp_socket.bind((udp_ip, udp_port))
+    # udp_ip = "192.168.0.12"
+    # udp_port = 12345  # Port UDP de destination sur le système distant
+    # # Création du socket UDP
+    # udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # udp_socket.bind((udp_ip, udp_port))
 
 
     rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
 
     while not rospy.is_shutdown():
         # Attendez de recevoir des données UDP
-        data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
-        lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
-        
-        x,y = conv_ll2xy(lat,long)
-        boat_pose = PoseStamped()
-        boat_pose.pose.position.x = x
-        boat_pose.pose.position.y = y
-        boat_pose.pose.orientation.x = imu_data[0]
-        boat_pose.pose.orientation.y = imu_data[1]
-        boat_pose.pose.orientation.z = imu_data[2]
-        boat_pose_publisher.publish(boat_pose)
+        # data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
+        # lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
+        if lat!=None and long != None:
+            x,y = conv_ll2xy(lat,long)
+            boat_pose = PoseStamped()
+            boat_pose.pose.position.x = x
+            boat_pose.pose.position.y = y
+            boat_pose.pose.orientation.x = imu_data[0]
+            boat_pose.pose.orientation.y = imu_data[1]
+            boat_pose.pose.orientation.z = imu_data[2]
+            boat_pose_publisher.publish(boat_pose)
 
         
-        xd,yd = conv_ll2xy(lat_dock,long_dock)
+        # xd,yd = conv_ll2xy(lat_dock,long_dock)
+        xd,yd = conv_ll2xy(48.1994155,-3.0156827)
         dock_pose = PoseStamped()
         dock_pose.pose.position.x = xd
         dock_pose.pose.position.y = yd
-        dock_pose.pose.orientation.x = roll_dock
-        dock_pose.pose.orientation.y = pitch_dock
-        dock_pose.pose.orientation.z = yaw_dock
+        # dock_pose.pose.orientation.x = roll_dock
+        # dock_pose.pose.orientation.y = pitch_dock
+        # dock_pose.pose.orientation.z = yaw_dock
+        dock_pose.pose.orientation.x = 0
+        dock_pose.pose.orientation.y = 0
+        dock_pose.pose.orientation.z = 0
         dock_pose_publisher.publish(dock_pose)
 
         rate.sleep()

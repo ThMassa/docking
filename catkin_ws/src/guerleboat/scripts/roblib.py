@@ -1,3 +1,6 @@
+# coding: latin-1
+
+
 # MIT License
 
 # Copyright (c) [2022] [Luc Jaulin]
