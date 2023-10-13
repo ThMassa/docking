@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # coding: latin-1
 
+"""Node de diffusion des données GPS et inertielles du dock à destination du bateau
+    """
+
+
 import rospy
 from sbg_driver.msg import SbgEkfQuat
 from sensor_msgs.msg import NavSatFix
@@ -12,6 +16,15 @@ gps_data = None
 imu_data = None
 
 def concatenate_data(gps_data, imu_angles):
+    """Concatène les données GPS et inertielles en une chaine de caractère pouvant être envoyée par connection UDP
+
+    Args:
+        gps_data (sensor_msgs.msg.NavSatFix): Message envoyé par le driver ROS du GPS, contient la position GPS
+        imu_angles (Tuple): Tuple des angles d'Euler (Roll, Pitch, Yaw)
+
+    Returns:
+        string: Chaine de caractères sous le format "latitude,longitude,roll,pitch,yaw"
+    """
     gps_header, gps_status = gps_data.header, gps_data.status
     lat, long = gps_data.latitude, gps_data.longitude
 
@@ -24,9 +37,13 @@ def concatenate_data(gps_data, imu_angles):
     return data
 
 def euler_from_quaternion(quat):
-    """
-    Convert quaternion (w in last place) to euler roll, pitch, yaw.
-    quat = [x, y, z, w]
+    """Convertit une orientation en quaternion en angles d'Euler
+
+    Args:
+        quat (list): Orientation en quaternion ([x,y,z,w])
+
+    Returns:
+        tuple(float,float,float): Tuple des angles d'Eulers (Roll, Pitch, Yaw)
     """
     x = quat.x
     y = quat.y
@@ -43,14 +60,27 @@ def euler_from_quaternion(quat):
     return roll, pitch, yaw
 
 def gps_callback(data):
+    """Fonction callback pour garder en mémoire le dernier message GPS
+
+    Args:
+        data (sensor_msgs.msg.NavSatFix): Message envoyé par le driver ROS du GPS, contient la position GPS
+    """
     global gps_data
     gps_data = data
 
 def imu_callback(data):
+    """Fonction callback pour garder en mémoire les dernieres données inertielles (orientation en angles d'Euler)
+
+    Args:
+        data (sbg_driver.msg.SbgEkfQuat): Message contenant l'orientation en quaternion
+    """
     global imu_data
     imu_data = euler_from_quaternion(data.quaternion)
 
 def broadcast_node():
+    """Node de diffusion des données sur un socket via une connection UDP.
+    S'abonne aux topics crées par les drivers du GPS et de la centrale inertielle pour acquérir les données et les convertir en une chaîne de caractères transmissibles en réseau.
+    """
     global gps_data,imu_data
     # Initialisation du noeud ROS
     rospy.init_node('data_broadcaster')
