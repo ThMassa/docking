@@ -78,10 +78,12 @@
 <dt class="sig sig-object py" id="classBoat.Boat">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classBoat.</span></span><span class="sig-name descname"><span class="pre">Boat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[0.],</span> <span class="pre">[0.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat" title="Permalink to this definition">&#61633;</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Classe bateau permettant de contrôler un bateau mais également un véhicule à deux roues.
-Pour un bon fonctionnement il faut :
-Une faible accélération de sorte que la vitesse est égale à la vitesse désirée à chaque instant car le contrôle se commande en vitesse et en lacet
-Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte</p>
+<p>Classe bateau permettant de contrôler un bateau mais également un véhicule à deux roues.</p>
+<p>Pour un bon fonctionnement il faut :</p>
+<ul class="simple">
+<li><p>Une faible accélération de sorte que la vitesse est égale à la vitesse désirée à chaque instant car le contrôle se commande en vitesse et en lacet</p></li>
+<li><p>Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte</p></li>
+</ul>
 <dl class="py method">
 <dt class="sig sig-object py" id="classBoat.Boat.controller">
 <span class="sig-name descname"><span class="pre">controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.controller"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.controller" title="Permalink to this definition">&#61633;</a></dt>
@@ -207,7 +209,7 @@ Un faible gîte de sorte que la dérivée de la position du bateau de dépend pa
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, K�vin REN, Th�o MASSA, Guillaume GARDE, Hugo HOFMANN.</p>
+    <p>&#169; Copyright 2023, Kévin REN, Théo MASSA, Guillaume GARDE, Hugo HOFMANN.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

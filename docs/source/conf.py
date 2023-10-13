@@ -1,3 +1,5 @@
+# coding: latin-1
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -51,7 +53,7 @@ source_suffix = ['.rst', '.md']
 
 language = 'en'
 
-# source_encoding = "latin-1"
+source_encoding = "latin-1"
 
 
 # -- Options for HTML output -------------------------------------------------

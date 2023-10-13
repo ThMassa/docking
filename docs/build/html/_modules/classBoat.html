@@ -78,30 +78,27 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
 
-<span class="c1">#TODO l&#39;IMU du bateau n&#39;est pas bien orientÃ©</span>
+<span class="c1">#TODO l&#39;IMU du bateau n&#39;est pas bien orienté</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Hypothï¿½se de fonctionnement :</span>
-<span class="sd">Faible accï¿½lï¿½ration de sorte que vd = v (pour kalman notamment)</span>
-<span class="sd">Faible gite de sorte que dx/dt et dy/dt ne dï¿½pend pas du gite (angle phi)</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="sawtooth"><a class="viewcode-back" href="../classBoat.html#classBoat.sawtooth">[docs]</a><span class="k">def</span> <span class="nf">sawtooth</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">pi</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span><span class="o">-</span><span class="n">pi</span></div>
 
 
 <div class="viewcode-block" id="Boat"><a class="viewcode-back" href="../classBoat.html#classBoat.Boat">[docs]</a><span class="k">class</span> <span class="nc">Boat</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Classe bateau permettant de contrÃ´ler un bateau mais Ã©galement un vÃ©hicule Ã  deux roues.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Classe bateau permettant de contrôler un bateau mais également un véhicule à deux roues.</span>
+<span class="sd">    </span>
 <span class="sd">    Pour un bon fonctionnement il faut :</span>
-<span class="sd">    Une faible accÃ©lÃ©ration de sorte que la vitesse est Ã©gale Ã  la vitesse dÃ©sirÃ©e Ã  chaque instant car le contrÃ´le se commande en vitesse et en lacet</span>
-<span class="sd">    Un faible gÃ®te de sorte que la dÃ©rivÃ©e de la position du bateau de dÃ©pend pas du gÃ®te</span>
+<span class="sd">    </span>
+<span class="sd">    - Une faible accélération de sorte que la vitesse est égale à la vitesse désirée à chaque instant car le contrôle se commande en vitesse et en lacet</span>
+<span class="sd">    </span>
+<span class="sd">    - Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]]),</span> <span class="n">L</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise l&#39;instance</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            x (numpy.ndarray): Vecteur d&#39;Ã©tat (px, py, pz, v, heading)</span>
+<span class="sd">            x (numpy.ndarray): Vecteur d&#39;état (px, py, pz, v, heading)</span>
 <span class="sd">            u (numpy.ndarray): Commande (v, yaw)</span>
 <span class="sd">            L (int, optional): Longueur du bateau. Defaults to 1.</span>
 <span class="sd">            vmax (int, optional): Vitesse maximale du bateau. Defaults to 1.</span>
@@ -113,10 +110,10 @@
         
     
 <div class="viewcode-block" id="Boat.init_kalman"><a class="viewcode-back" href="../classBoat.html#classBoat.Boat.init_kalman">[docs]</a>    <span class="k">def</span> <span class="nf">init_kalman</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Gx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise la matrice de covariance liÃ©e au vecteur d&#39;Ã©tat du bateau</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise la matrice de covariance liée au vecteur d&#39;état du bateau</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            Gx (numpy.ndarray, optional): Matrice de covariance liÃ©e au vecteur d&#39;Ã©tat. Defaults to None.</span>
+<span class="sd">            Gx (numpy.ndarray, optional): Matrice de covariance liée au vecteur d&#39;état. Defaults to None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">Gx</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gx</span> <span class="o">=</span> <span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
@@ -125,13 +122,13 @@
             
     
 <div class="viewcode-block" id="Boat.kalman_predict"><a class="viewcode-back" href="../classBoat.html#classBoat.Boat.kalman_predict">[docs]</a>    <span class="k">def</span> <span class="nf">kalman_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;PrÃ©dit la position du bateau avec le filtre de Kalman. L&#39;Ã©quation d&#39;Ã©volution considÃ©rÃ©e est dx/dt = Ax + Bu + w</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Prédit la position du bateau avec le filtre de Kalman. L&#39;équation d&#39;évolution considérée est dx/dt = Ax + Bu + w</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            A (numpy.ndarray): Matrice d&#39;Ã©volution</span>
+<span class="sd">            A (numpy.ndarray): Matrice d&#39;évolution</span>
 <span class="sd">            B (numpy.ndarray): Matrice de commande</span>
-<span class="sd">            Q (numpy.ndarray): Matrice de covariance du bruit d&#39;Ã©volution w</span>
-<span class="sd">            dt (float): PÃ©riode d&#39;une itÃ©ration dans la boucle principale </span>
+<span class="sd">            Q (numpy.ndarray): Matrice de covariance du bruit d&#39;évolution w</span>
+<span class="sd">            dt (float): Période d&#39;une itération dans la boucle principale </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">A</span>
         <span class="n">B</span> <span class="o">=</span> <span class="n">dt</span><span class="o">*</span><span class="n">B</span>
@@ -143,13 +140,13 @@
     
     
 <div class="viewcode-block" id="Boat.kalman_correc"><a class="viewcode-back" href="../classBoat.html#classBoat.Boat.kalman_correc">[docs]</a>    <span class="k">def</span> <span class="nf">kalman_correc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Corrige la position du bateau avec le filtre de Kalman. Le processus d&#39;observation considÃ©rÃ© est y = Cx + v</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Corrige la position du bateau avec le filtre de Kalman. Le processus d&#39;observation considéré est y = Cx + v</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            y (numpy.ndarray): Vecteur des observations</span>
 <span class="sd">            C (numpy.ndarray): Matrice d&#39;observation</span>
 <span class="sd">            R (numpy.ndarray): Matrice de covariance du bruit de mesure v</span>
-<span class="sd">            dt (float): PÃ©riode d&#39;une itÃ©ration dans la boucle principale </span>
+<span class="sd">            dt (float): Période d&#39;une itération dans la boucle principale </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">R</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">dt</span><span class="o">*</span><span class="n">R</span>
         <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gx</span><span class="p">)</span>
@@ -163,7 +160,7 @@
     
     
 <div class="viewcode-block" id="Boat.f"><a class="viewcode-back" href="../classBoat.html#classBoat.Boat.f">[docs]</a>    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fonction d&#39;Ã©volution du bateau. (ObselÃ¨te)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fonction d&#39;évolution du bateau. (Obselète)</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            theta (int, optional): Assiete du bateau. Defaults to 0.</span>
@@ -180,26 +177,26 @@
         
     
 <div class="viewcode-block" id="Boat.dead_reckoning"><a class="viewcode-back" href="../classBoat.html#classBoat.Boat.dead_reckoning">[docs]</a>    <span class="k">def</span> <span class="nf">dead_reckoning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dead reckoning (ObselÃ¨te, utiliser plutÃ´t la fonction kalman_predict)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dead reckoning (Obselète, utiliser plutôt la fonction kalman_predict)</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            theta (float): Assiete du bateau</span>
-<span class="sd">            dt (float): PÃ©riode d&#39;une itÃ©ration dans la boucle principale </span>
+<span class="sd">            dt (float): Période d&#39;une itération dans la boucle principale </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span></div>
         
     
 <div class="viewcode-block" id="Boat.kalman"><a class="viewcode-back" href="../classBoat.html#classBoat.Boat.kalman">[docs]</a>    <span class="k">def</span> <span class="nf">kalman</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utilise kalman_correc si nÃ©cessaire et kalman_predict. Pour plus d&#39;information voir ces deux fonctions</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utilise kalman_correc si nécessaire et kalman_predict. Pour plus d&#39;information voir ces deux fonctions</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            y (np.ndarray): Vecteur des observations</span>
-<span class="sd">            A (np.ndarray): Matrice d&#39;Ã©volution</span>
+<span class="sd">            A (np.ndarray): Matrice d&#39;évolution</span>
 <span class="sd">            B (np.ndarray): Matrice de commande</span>
 <span class="sd">            C (np.ndarray): Matrice d&#39;observation</span>
-<span class="sd">            Q (np.ndarray): Matrice de covariance du bruit d&#39;Ã©volution</span>
+<span class="sd">            Q (np.ndarray): Matrice de covariance du bruit d&#39;évolution</span>
 <span class="sd">            R (np.ndarray): Matrice de covariance du bruit de mesure</span>
-<span class="sd">            dt (float): PÃ©riode d&#39;une itÃ©ration dans la boucle principale </span>
+<span class="sd">            dt (float): Période d&#39;une itération dans la boucle principale </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__predict</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kalman_predict</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
@@ -212,9 +209,9 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Controleur du bateau utilisant les champs de potentiels</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            phat (np.ndarray): Position Ã  atteindre</span>
-<span class="sd">            theta (float): Cap souhaitÃ©</span>
-<span class="sd">            marge (float): Marge de securitÃ©, plus elle est elevÃ©e, plus le bateau s&#39;arretera loin du dock et donc moins il aura de chance de se cogner contre le dock</span>
+<span class="sd">            phat (np.ndarray): Position à atteindre</span>
+<span class="sd">            theta (float): Cap souhaité</span>
+<span class="sd">            marge (float): Marge de securité, plus elle est elevée, plus le bateau s&#39;arretera loin du dock et donc moins il aura de chance de se cogner contre le dock</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_Boat__start&quot;</span><span class="p">):</span>
