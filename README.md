@@ -19,6 +19,7 @@
     - [Packages](#packages)
     - [Dock](#dock)
     - [Boat](#boat)
+    - [RTK Base](#rtk-base)
   - [Utiliser Docker](#utiliser-docker-pour-ne-pas-avoir-à-installer-ros) 
 
 ## Description
@@ -106,7 +107,9 @@ Pour installer la base RTK, il suffit de
 - relier la carte Ardusimple à l'antenne RTK à l'aide du câble coaxial de l'installation. 
 - alimenter la Raspberry et attendre 2-3 minutes que le module se lance correctement (on peut connecter la Raspberry à un écran pour en avoir le coeur net).
 
-Normalement, l'acquisition se lance toute seule. Si on veut indépendament vérifier les données GPS, on peut le faire (sous linux) en connectant le module Ardusimple en USB et en suivant ce [tuto](https://www.ardusimple.com/how-to-use-ardusimple-rtk-receivers-and-get-gps-data-in-ros/). Sinon, on peut connecter le module Ardusimple en USB (sous Windows) suivre la section 7 des [indications](https://docs.centipede.fr/docs/base/Installation.html) données par Centipède. L'adresse http://basegnss.local permet d'accéder aux logs (sous Windows) de la base et le mot de passe est _admin_. Autrement, il est possible de se connecter en ssh à la carte Raspberry, lorsque le module Ardusimple y est relié, en tapant : 
+Normalement, l'acquisition se lance toute seule. Attention, pour obtenir une précision centimétrique, il faut que la base enregistre ses données pendant 24h. Les archivages se lancent à 4h du matin tous les jours donc il faut bien prendre en compte ce paramètre pour avoir un log de 24h complet. Il faut ensuite suivre les [instructions](https://docs.centipede.fr/docs/base/positionnement.html) données par Centipède pour communiquer avec IGN.
+
+Si on veut indépendament vérifier les données GPS, on peut le faire (sous linux) en connectant le module Ardusimple en USB et en suivant ce [tuto](https://www.ardusimple.com/how-to-use-ardusimple-rtk-receivers-and-get-gps-data-in-ros/). Sinon, on peut connecter le module Ardusimple en USB (sous Windows) suivre la section 7 des [indications](https://docs.centipede.fr/docs/base/Installation.html) données par Centipède. L'adresse http://basegnss.local permet d'accéder aux logs (sous Windows) de la base et le mot de passe est _admin_. On peut alors entre autre télécharger les fichiers qui nous intéressent. Autrement, il est possible de se connecter en ssh à la carte Raspberry, lorsque le module Ardusimple y est relié, en tapant : 
 
         ssh basegnss@basegnss.local
         # mot de passe : basegnss!
