@@ -8,7 +8,7 @@
 * HOFMANN Hugo (Promotion [_ENSTA Bretagne_](https://www.ensta-bretagne.fr) 2024 - Spécialité Robotique Autonome).
 * REN Kévin (Promotion [_ENSTA Bretagne_](https://www.ensta-bretagne.fr) 2024 - Spécialité Robotique Autonome).
 
-# Table of Contents
+# Table des matières
 
 - [Docking autonome](#docking-autonome)
     - [Auteurs](#auteurs)
