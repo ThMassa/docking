@@ -19,8 +19,11 @@ def sawtooth(x):
 
 class Boat:
     """Classe bateau permettant de contrôler un bateau mais également un véhicule à deux roues.
+    
     Pour un bon fonctionnement il faut :
+    
     Une faible accélération de sorte que la vitesse est égale à la vitesse désirée à chaque instant car le contrôle se commande en vitesse et en lacet
+    
     Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
     """
     def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1):
