@@ -6,12 +6,6 @@ from numpy.linalg import norm
 
 #TODO l'IMU du bateau n'est pas bien orienté
 
-"""
-Hypoth�se de fonctionnement :
-Faible acc�l�ration de sorte que vd = v (pour kalman notamment)
-Faible gite de sorte que dx/dt et dy/dt ne d�pend pas du gite (angle phi)
-
-"""
 
 def sawtooth(x):
     return (x+pi)%(2*pi)-pi
@@ -22,9 +16,9 @@ class Boat:
     
     Pour un bon fonctionnement il faut :
     
-    Une faible accélération de sorte que la vitesse est égale à la vitesse désirée à chaque instant car le contrôle se commande en vitesse et en lacet
+    - Une faible accélération de sorte que la vitesse est égale à la vitesse désirée à chaque instant car le contrôle se commande en vitesse et en lacet
     
-    Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
+    - Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
     """
     def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1):
         """Initialise l'instance
