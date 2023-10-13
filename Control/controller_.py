@@ -3,7 +3,7 @@
 
 from test import Boat
 from roblib import * 
-
+from time import time
 
 def draw_dock(xdock, theta):
     """_summary_
@@ -56,8 +56,14 @@ phat_receiv = 0
 k = 0
 kmax = 20
 wave = kmax/100*randn()
+t0GPS = 0
+t0 = time()
 for t in arange(0, 50, dt):
     clear(ax)
+    ax.xmin = -s
+    ax.xmax = s
+    ax.ymin = -s
+    ax.ymax = s
     # Ajoute un mouvement de rotation sinusoidal au dock
     if k < kmax:
         k += 1
@@ -77,11 +83,14 @@ for t in arange(0, 50, dt):
     
     # Avec Kalman
     noise = .01 * np.random.randn(3, 1)
-    if np.random.rand() < 1-.02*norm(x[:2]-phat):
+    d = norm(x[:2]-phat)
+    s = 1*d+boat.L
+    if np.random.rand() < 1-.02*d:
         theta_receiv = theta_dock
         phat_receiv = phat
-    if np.random.rand() < .9:
+    if np.random.rand() < .9 and time()-t0GPS >= 1:
         y1 = np.array([x[0], x[1], x[-1]]) + noise
+        t0GPS = time()
     psi = boat.x[-1, 0]
     theta = 0
     B = np.array([[cos(theta)*cos(psi), 0],
@@ -96,10 +105,13 @@ for t in arange(0, 50, dt):
     # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
     boat.controller(phat, theta_dock, marge = .2)
     boat.kalman_predict(0, B, Q, dt)
+    # boat.dead_reckoning(0, dt)
     if not(np.array_equal(y1, y)):
         y = y1
         boat.kalman_correc(y, C, R, dt)
     x = x + dt*boat.f()
     draw_tank(x[[0, 1, -1]], 'red', 0.2)  # x,y,θ
     draw_ellipse_cov(ax, boat.x[:2], boat.Gx[:2, :2], 0.9, [1, 0.8, 0.8])
+    if time()-t0 < dt:
+        pause(dt-time()+t0)
 pause(1)
