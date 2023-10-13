@@ -19,6 +19,7 @@
     - [Packages](#packages)
     - [Dock](#dock)
     - [Boat](#boat)
+  - [Utiliser Docker](#utiliser-docker-pour-ne-pas-avoir-à-installer-ros) 
 
 ## Description
 Le but du projet est d'automatiser le processus de docking d'un drone. Pour cela on doit créer un dock capable d'envoyer sa position GPS et son orientation au drone qui, à partir de ces informations, sera capable de calculer une trajectoire et d'adopter un comportement lui permettant de se docker automatiquement. En plus de cela, il est nécessaire de mettre en place une balise RTK permettant d'obtenir une précision GPS au centimètre.
