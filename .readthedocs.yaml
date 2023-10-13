@@ -17,7 +17,6 @@ build:
   #   - sudo apt-get install -y ros-foxy-desktop
 
 python:
-  system_packages: true
   install:
     - requirements: requirements.txt
 
