@@ -6,26 +6,28 @@ from numpy.linalg import norm
 
 #TODO l'IMU du bateau n'est pas bien orienté
 
-"""
-Hypoth�se de fonctionnement :
-Faible acc�l�ration de sorte que vd = v (pour kalman notamment)
-Faible gite de sorte que dx/dt et dy/dt ne d�pend pas du gite (angle phi)
-
-"""
 
 def sawtooth(x):
     return (x+pi)%(2*pi)-pi
 
 
 class Boat:
+    """Classe bateau permettant de contrôler un bateau mais également un véhicule à deux roues.
+    
+    Pour un bon fonctionnement il faut :
+    
+    - Une faible accélération de sorte que la vitesse est égale à la vitesse désirée à chaque instant car le contrôle se commande en vitesse et en lacet
+    
+    - Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
+    """
     def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1):
-        """_summary_
+        """Initialise l'instance
 
         Args:
-            x (colunm numpy array): State vector (px, py, pz, v, heading)
-            u (colunm numpy array): Control vector (v, yaw)
-            L (int, optional): Length of the boat. Defaults to 1.
-            vmax (int, optional): Maximum speed of the boat. Defaults to 1.
+            x (numpy.ndarray): Vecteur d'état (px, py, pz, v, heading)
+            u (numpy.ndarray): Commande (v, yaw)
+            L (int, optional): Longueur du bateau. Defaults to 1.
+            vmax (int, optional): Vitesse maximale du bateau. Defaults to 1.
         """
         self.x = x
         self.vmax = vmax
@@ -34,13 +36,26 @@ class Boat:
         
     
     def init_kalman(self, Gx=None):
+        """Initialise la matrice de covariance liée au vecteur d'état du bateau
+
+        Args:
+            Gx (numpy.ndarray, optional): Matrice de covariance liée au vecteur d'état. Defaults to None.
+        """
         if Gx == None:
             self.Gx = 100*np.identity(len(self.x))
         else:
             self.Gx = Gx
             
     
-    def kalman_predict(self, A:np.ndarray, B, Q, dt):
+    def kalman_predict(self, A, B, Q, dt):
+        """Prédit la position du bateau avec le filtre de Kalman. L'équation d'évolution considérée est dx/dt = Ax + Bu + w
+
+        Args:
+            A (numpy.ndarray): Matrice d'évolution
+            B (numpy.ndarray): Matrice de commande
+            Q (numpy.ndarray): Matrice de covariance du bruit d'évolution w
+            dt (float): Période d'une itération dans la boucle principale 
+        """
         A = np.identity(len(self.x)) + dt*A
         B = dt*B
         Q = dt*Q
@@ -51,6 +66,14 @@ class Boat:
     
     
     def kalman_correc(self, y, C, R, dt):
+        """Corrige la position du bateau avec le filtre de Kalman. Le processus d'observation considéré est y = Cx + v
+
+        Args:
+            y (numpy.ndarray): Vecteur des observations
+            C (numpy.ndarray): Matrice d'observation
+            R (numpy.ndarray): Matrice de covariance du bruit de mesure v
+            dt (float): Période d'une itération dans la boucle principale 
+        """
         R = 1/dt*R
         S = np.dot(C, self.Gx)
         S = np.dot(S, C.T) + R
@@ -63,6 +86,14 @@ class Boat:
     
     
     def f(self, theta=0):
+        """Fonction d'évolution du bateau. (Obselète)
+
+        Args:
+            theta (int, optional): Assiete du bateau. Defaults to 0.
+
+        Returns:
+            np.ndarray: dx/dy
+        """
         psi = self.x[-1, 0]
         B = np.array([[cos(theta)*cos(psi), 0],
                       [cos(theta)*sin(psi), 0],
@@ -72,10 +103,27 @@ class Boat:
         
     
     def dead_reckoning(self, theta, dt):
+        """Dead reckoning (Obselète, utiliser plutôt la fonction kalman_predict)
+
+        Args:
+            theta (float): Assiete du bateau
+            dt (float): Période d'une itération dans la boucle principale 
+        """
         self.x = self.x + dt*self.f(theta)
         
     
     def kalman(self, y, A, B, C, Q, R, dt):
+        """Utilise kalman_correc si nécessaire et kalman_predict. Pour plus d'information voir ces deux fonctions
+
+        Args:
+            y (np.ndarray): Vecteur des observations
+            A (np.ndarray): Matrice d'évolution
+            B (np.ndarray): Matrice de commande
+            C (np.ndarray): Matrice d'observation
+            Q (np.ndarray): Matrice de covariance du bruit d'évolution
+            R (np.ndarray): Matrice de covariance du bruit de mesure
+            dt (float): Période d'une itération dans la boucle principale 
+        """
         if self.__predict == False:
             self.kalman_predict(y, A, B, Q,dt)
         else:
@@ -84,12 +132,12 @@ class Boat:
     
     
     def controller(self, phat, theta, marge=1.5):
-        """Controleur utilisant les champs de potentiels
+        """Controleur du bateau utilisant les champs de potentiels
 
         Args:
-            phat (_type_): Position a atteindre
-            theta (_type_): Cap souhaite
-            marge (_type): marge de securite, plus elle est elevee, plus le bateau s'arretera loin du dock et donc moins il aura de chance de se cogner contre le dock
+            phat (np.ndarray): Position à atteindre
+            theta (float): Cap souhaité
+            marge (float): Marge de securité, plus elle est elevée, plus le bateau s'arretera loin du dock et donc moins il aura de chance de se cogner contre le dock
         """
         
         if not hasattr(self, "_Boat__start"):
@@ -123,6 +171,7 @@ class Boat:
         vbar = min(norm(vbar), k_*self.vmax*norm(phat0 - self.x[:2]))
         if norm(phat - self.x[:2]) < .2*self.L:
             print("Ok")
+            # self.__scap = 0
             self.__start = False
         
         ecap = sawtooth(thetabar - self.x[-1, 0])
@@ -133,7 +182,8 @@ class Boat:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
         self.u[0,0] = vbar
-        self.u[1,0] = 5*ecap + 0*(self.__ecap[-1] - self.__ecap[-2]) + .0*self.__scap
+        self.u[1,0] = 5*ecap + .02*self.__scap
+        print(ecap)
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
         return u
 

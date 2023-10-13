@@ -171,6 +171,7 @@ class Boat:
         vbar = min(norm(vbar), k_*self.vmax*norm(phat0 - self.x[:2]))
         if norm(phat - self.x[:2]) < .2*self.L:
             print("Ok")
+            # self.__scap = 0
             self.__start = False
         
         ecap = sawtooth(thetabar - self.x[-1, 0])
@@ -181,7 +182,8 @@ class Boat:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
         self.u[0,0] = vbar
-        self.u[1,0] = 5*ecap + 0*(self.__ecap[-1] - self.__ecap[-2]) + .0*self.__scap
+        self.u[1,0] = 5*ecap + .02*self.__scap
+        print(ecap)
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
         return u
 
