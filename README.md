@@ -99,6 +99,20 @@ Puis dans le ssh :
     cd catkin_ws
     catkin_make
 
+### RTK Base
+
+Pour installer la base RTK, il suffit de 
+- connecter le module Ardusimple+Xbee à la Raspberry en faisant attention à bien brancher sur le port "Power+GPS" et non pas sur le port "Power+XBEE".
+- relier la carte Ardusimple à l'antenne RTK à l'aide du câble coaxial de l'installation. 
+- alimenter la Raspberry et attendre 2-3 minutes que le module se lance correctement (on peut connecter la Raspberry à un écran pour en avoir le coeur net).
+
+Normalement, l'acquisition se lance toute seule. Si on veut indépendament vérifier les données GPS, on peut le faire (sous linux) en connectant le module Ardusimple en USB et en suivant ce [tuto](https://www.ardusimple.com/how-to-use-ardusimple-rtk-receivers-and-get-gps-data-in-ros/). Sinon, on peut connecter le module Ardusimple en USB (sous Windows) suivre la section 7 des [indications](https://docs.centipede.fr/docs/base/Installation.html) données par Centipède. L'adresse http://basegnss.local permet d'accéder aux logs (sous Windows) de la base et le mot de passe est _admin_. Autrement, il est possible de se connecter en ssh à la carte Raspberry, lorsque le module Ardusimple y est relié, en tapant : 
+
+        ssh basegnss@basegnss.local
+        # mot de passe : basegnss!
+
+Ceci permet d'accéder aux informations de la carte et éventuellement de débugger.
+
 
 ## Utiliser Docker pour ne pas avoir à installer ROS
 
