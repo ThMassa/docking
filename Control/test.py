@@ -63,25 +63,24 @@ class Boat:
     
     
     def f(self, theta=0):
-        psi = self.x[4, 0]
+        psi = self.x[-1, 0]
         B = np.array([[cos(theta)*cos(psi), 0],
                       [cos(theta)*sin(psi), 0],
                       [-sin(theta)        , 0],
-                      [1                  , 0],
                       [0                  , 1]], dtype=np.float64)
         return np.dot(B, self.u)
         
     
     def dead_reckoning(self, theta, dt):
-        self.x += dt*self.f(theta)
+        self.x = self.x + dt*self.f(theta)
         
     
-    def kalman(self, y, A, B, C, Q, R):
+    def kalman(self, y, A, B, C, Q, R, dt):
         if self.__predict == False:
-            self.kalman_predict(y, A, B, Q)
+            self.kalman_predict(y, A, B, Q,dt)
         else:
             self.kalman_correc(y, C, R)
-            self.kalman_predict(y, A, B, Q)
+            self.kalman_predict(y, A, B, Q, dt)
     
     
     def controller(self, phat, theta, marge=1.5):
@@ -126,7 +125,7 @@ class Boat:
             print("Ok")
             self.__start = False
         
-        ecap = sawtooth(thetabar - self.x[4, 0])
+        ecap = sawtooth(thetabar - self.x[-1, 0])
         self.__scap += ecap
         if len(self.__ecap) < 5:
             self.__ecap = np.append(self.__ecap, ecap)
