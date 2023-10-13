@@ -40,7 +40,7 @@ class Boat:
             self.Gx = Gx
             
     
-    def kalman_predict(self, A, B, Q, dt):
+    def kalman_predict(self, A:np.ndarray, B, Q, dt):
         A = np.identity(len(self.x)) + dt*A
         B = dt*B
         Q = dt*Q
