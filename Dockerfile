@@ -54,4 +54,4 @@ RUN echo "newubu ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Launch commands (replace "name" by image image name)
 # xhost +
-# docker run -it --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --rm "name":latest
+# docker run -it --privileged -e DISPLAY=$DISPLAY -v "chemin_host_a_partager":"nom_de_ce_repertoire_dans_le_conteneur" --rm "name":latest
