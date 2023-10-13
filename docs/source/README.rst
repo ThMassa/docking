@@ -1,9 +1,10 @@
 .. include:: README.md
    :encoding: latin-1
 
------------
-Readme File
------------
+-------------------
+Guide d'utilisation
+-------------------
+
 .. include:: ../../README.md
     :parser: myst_parser.sphinx_
     :encoding: latin-1

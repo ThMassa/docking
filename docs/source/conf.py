@@ -62,3 +62,7 @@ source_encoding = "latin-1"
 html_theme = "sphinx_rtd_theme"#'alabaster'
 html_static_path = ['_static']
 html_output_encoding = "latin-1"
+
+html_theme_options = {
+    'navigation_depth': 4,
+}

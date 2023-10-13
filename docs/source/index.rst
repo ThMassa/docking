@@ -8,11 +8,11 @@ Welcome to Guerledocking's documentation!
 
 .. image:: ./imgs/monodrone-1800-chenal.jpg
    :alt: Example Image
-   :width: 500
+   :width: 300
    :align: center
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    README.rst
