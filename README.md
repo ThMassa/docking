@@ -26,6 +26,9 @@ Le but du projet est d'automatiser le processus de docking d'un drone. Pour cela
 ## Documentation 
 
 <!-- TODO -->
+La doc pour la centrale inertielle SBG peut se trouver [ici](https://github.com/SBG-Systems/sbg_ros_driver)
+
+La doc pour le driver GPS sur le dock peut se trouver [ici](https://github.com/KumarRobotics/ublox)
 
 ## Configuration
 Toutes les cartes étant sur une installation ubuntu18.04 (ou équivalent), l'ensemble de notre architecture repose sur [ROS Melodic](http://wiki.ros.org/melodic).
