@@ -73,21 +73,25 @@
            <div itemprop="articleBody">
              
   <section id="module-classBoat">
-<span id="classboat-module"></span><h1>classBoat module<a class="headerlink" href="#module-classBoat" title="Permalink to this heading"></a></h1>
+<span id="classboat-module"></span><h1>classBoat module<a class="headerlink" href="#module-classBoat" title="Permalink to this heading">&#61633;</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="classBoat.Boat">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classBoat.</span></span><span class="sig-name descname"><span class="pre">Boat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[0],</span> <span class="pre">[0]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">classBoat.</span></span><span class="sig-name descname"><span class="pre">Boat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[0.],</span> <span class="pre">[0.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat" title="Permalink to this definition">&#61633;</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Classe bateau permettant de contrôler un bateau mais également un véhicule à deux roues.
+Pour un bon fonctionnement il faut :
+Une faible accélération de sorte que la vitesse est égale à la vitesse désirée à chaque instant car le contrôle se commande en vitesse et en lacet
+Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="classBoat.Boat.controller">
-<span class="sig-name descname"><span class="pre">controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.controller"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.controller" title="Permalink to this definition"></a></dt>
-<dd><p>Controleur utilisant les champs de potentiels</p>
+<span class="sig-name descname"><span class="pre">controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.controller"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.controller" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Controleur du bateau utilisant les champs de potentiels</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>phat</strong> (<em>_type_</em>) – Position a atteindre</p></li>
-<li><p><strong>theta</strong> (<em>_type_</em>) – Cap souhaite</p></li>
-<li><p><strong>marge</strong> (<em>_type</em>) – marge de securite, plus elle est elevee, plus le bateau s’arretera loin du dock et donc moins il aura de chance de se cogner contre le dock</p></li>
+<li><p><strong>phat</strong> (<em>np.ndarray</em>) &#8211; Position à atteindre</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) &#8211; Cap souhaité</p></li>
+<li><p><strong>marge</strong> (<em>float</em>) &#8211; Marge de securité, plus elle est elevée, plus le bateau s&#8217;arretera loin du dock et donc moins il aura de chance de se cogner contre le dock</p></li>
 </ul>
 </dd>
 </dl>
@@ -95,34 +99,102 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="classBoat.Boat.dead_reckoning">
-<span class="sig-name descname"><span class="pre">dead_reckoning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.dead_reckoning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.dead_reckoning" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">dead_reckoning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.dead_reckoning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.dead_reckoning" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Dead reckoning (Obselète, utiliser plutôt la fonction kalman_predict)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) &#8211; Assiete du bateau</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) &#8211; Période d&#8217;une itération dans la boucle principale</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="classBoat.Boat.f">
+<span class="sig-name descname"><span class="pre">f</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.f"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.f" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Fonction d&#8217;évolution du bateau. (Obselète)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>theta</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; Assiete du bateau. Defaults to 0.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dx/dy</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="classBoat.Boat.init_kalman">
-<span class="sig-name descname"><span class="pre">init_kalman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Gx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.init_kalman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.init_kalman" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">init_kalman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Gx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.init_kalman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.init_kalman" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Initialise la matrice de covariance liée au vecteur d&#8217;état du bateau</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Gx</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) &#8211; Matrice de covariance liée au vecteur d&#8217;état. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="classBoat.Boat.kalman">
-<span class="sig-name descname"><span class="pre">kalman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.kalman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.kalman" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">kalman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.kalman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.kalman" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Utilise kalman_correc si nécessaire et kalman_predict. Pour plus d&#8217;information voir ces deux fonctions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y</strong> (<em>np.ndarray</em>) &#8211; Vecteur des observations</p></li>
+<li><p><strong>A</strong> (<em>np.ndarray</em>) &#8211; Matrice d&#8217;évolution</p></li>
+<li><p><strong>B</strong> (<em>np.ndarray</em>) &#8211; Matrice de commande</p></li>
+<li><p><strong>C</strong> (<em>np.ndarray</em>) &#8211; Matrice d&#8217;observation</p></li>
+<li><p><strong>Q</strong> (<em>np.ndarray</em>) &#8211; Matrice de covariance du bruit d&#8217;évolution</p></li>
+<li><p><strong>R</strong> (<em>np.ndarray</em>) &#8211; Matrice de covariance du bruit de mesure</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) &#8211; Période d&#8217;une itération dans la boucle principale</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="classBoat.Boat.kalman_correc">
-<span class="sig-name descname"><span class="pre">kalman_correc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.kalman_correc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.kalman_correc" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">kalman_correc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.kalman_correc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.kalman_correc" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Corrige la position du bateau avec le filtre de Kalman. Le processus d&#8217;observation considéré est y = Cx + v</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y</strong> (<em>numpy.ndarray</em>) &#8211; Vecteur des observations</p></li>
+<li><p><strong>C</strong> (<em>numpy.ndarray</em>) &#8211; Matrice d&#8217;observation</p></li>
+<li><p><strong>R</strong> (<em>numpy.ndarray</em>) &#8211; Matrice de covariance du bruit de mesure v</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) &#8211; Période d&#8217;une itération dans la boucle principale</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="classBoat.Boat.kalman_predict">
-<span class="sig-name descname"><span class="pre">kalman_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.kalman_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.kalman_predict" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">kalman_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#Boat.kalman_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.Boat.kalman_predict" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Prédit la position du bateau avec le filtre de Kalman. L&#8217;équation d&#8217;évolution considérée est dx/dt = Ax + Bu + w</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> (<em>numpy.ndarray</em>) &#8211; Matrice d&#8217;évolution</p></li>
+<li><p><strong>B</strong> (<em>numpy.ndarray</em>) &#8211; Matrice de commande</p></li>
+<li><p><strong>Q</strong> (<em>numpy.ndarray</em>) &#8211; Matrice de covariance du bruit d&#8217;évolution w</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) &#8211; Période d&#8217;une itération dans la boucle principale</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="classBoat.sawtooth">
-<span class="sig-prename descclassname"><span class="pre">classBoat.</span></span><span class="sig-name descname"><span class="pre">sawtooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#sawtooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.sawtooth" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">classBoat.</span></span><span class="sig-name descname"><span class="pre">sawtooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classBoat.html#sawtooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classBoat.sawtooth" title="Permalink to this definition">&#61633;</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -135,7 +207,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Kévin REN, Théo MASSA, Guillaume GARDE, Hugo HOFMANN.</p>
+    <p>&#169; Copyright 2023, K�vin REN, Th�o MASSA, Guillaume GARDE, Hugo HOFMANN.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

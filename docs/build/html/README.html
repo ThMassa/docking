@@ -22,7 +22,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Welcome to Guerledocking’s documentation!" href="index.html" /> 
+    <link rel="prev" title="Welcome to Guerledocking&#8217;s documentation!" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -60,8 +60,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#packages">Packages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dock">Dock</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boat">Boat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rtk-base">RTK Base</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#utiliser-docker-pour-ne-pas-avoir-a-installer-ros">Utiliser Docker pour ne pas avoir à installer ROS</a></li>
 </ul>
 </li>
 </ul>
@@ -93,11 +95,12 @@
            <div itemprop="articleBody">
              
   <section id="readme-file">
-<h1>Readme File<a class="headerlink" href="#readme-file" title="Permalink to this heading"></a></h1>
+<h1>Readme File<a class="headerlink" href="#readme-file" title="Permalink to this heading">&#61633;</a></h1>
+<meta charset="latin-1">
 <section id="docking-autonome">
-<h2>Docking autonome<a class="headerlink" href="#docking-autonome" title="Permalink to this heading"></a></h2>
+<h2>Docking autonome<a class="headerlink" href="#docking-autonome" title="Permalink to this heading">&#61633;</a></h2>
 <section id="auteurs">
-<h3>Auteurs<a class="headerlink" href="#auteurs" title="Permalink to this heading"></a></h3>
+<h3>Auteurs<a class="headerlink" href="#auteurs" title="Permalink to this heading">&#61633;</a></h3>
 <ul class="simple">
 <li><p>GARDE Guillaume (Promotion <a class="reference external" href="https://www.ensta-bretagne.fr"><em>ENSTA Bretagne</em></a> 2024 - Spécialité Robotique Autonome).</p></li>
 <li><p>MASSA Théo (Promotion <a class="reference external" href="https://www.ensta-bretagne.fr"><em>ENSTA Bretagne</em></a> 2024 - Spécialité Robotique Autonome).</p></li>
@@ -107,7 +110,7 @@
 </section>
 </section>
 <section id="table-of-contents">
-<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this heading"></a></h2>
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this heading">&#61633;</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="#docking-autonome">Docking autonome</a></p>
 <ul>
@@ -125,37 +128,41 @@
 <li><p><a class="reference external" href="#packages">Packages</a></p></li>
 <li><p><a class="reference external" href="#dock">Dock</a></p></li>
 <li><p><a class="reference external" href="#boat">Boat</a></p></li>
+<li><p><a class="reference external" href="#rtk-base">RTK Base</a></p></li>
 </ul>
 </li>
+<li><p><a class="reference external" href="#utiliser-docker-pour-ne-pas-avoir-à-installer-ros">Utiliser Docker</a></p></li>
 </ul>
 </li>
 </ul>
 <section id="description">
-<h3>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h3>
-<p>Le but du projet est d’automatiser le processus de docking d’un drone. Pour cela on doit créer un dock capable d’envoyer sa position GPS et son orientation au drone qui, à partir de ces informations, sera capable de calculer une trajectoire et d’adopter un comportement lui permettant de se docker automatiquement. En plus de cela, il est nécessaire de mettre en place une balise RTK permettant d’obtenir une précision GPS au centimètre.</p>
+<h3>Description<a class="headerlink" href="#description" title="Permalink to this heading">&#61633;</a></h3>
+<p>Le but du projet est d&#8217;automatiser le processus de docking d&#8217;un drone. Pour cela on doit créer un dock capable d&#8217;envoyer sa position GPS et son orientation au drone qui, à partir de ces informations, sera capable de calculer une trajectoire et d&#8217;adopter un comportement lui permettant de se docker automatiquement. En plus de cela, il est nécessaire de mettre en place une balise RTK permettant d&#8217;obtenir une précision GPS au centimètre.</p>
 </section>
 <section id="documentation">
-<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">&#61633;</a></h3>
 <!-- TODO -->
+<p>La doc pour la centrale inertielle SBG peut se trouver <a class="reference external" href="https://github.com/SBG-Systems/sbg_ros_driver">ici</a></p>
+<p>La doc pour le driver GPS sur le dock peut se trouver <a class="reference external" href="https://github.com/KumarRobotics/ublox">ici</a></p>
 </section>
 <section id="configuration">
-<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading"></a></h3>
-<p>Toutes les cartes étant sur une installation ubuntu18.04 (ou équivalent), l’ensemble de notre architecture repose sur <a class="reference external" href="http://wiki.ros.org/melodic">ROS Melodic</a>.</p>
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading">&#61633;</a></h3>
+<p>Toutes les cartes étant sur une installation ubuntu18.04 (ou équivalent), l&#8217;ensemble de notre architecture repose sur <a class="reference external" href="http://wiki.ros.org/melodic">ROS Melodic</a>.</p>
 </section>
 <section id="requirements">
-<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h3>
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading">&#61633;</a></h3>
 <!-- TODO -->
 </section>
 <section id="usage">
-<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h3>
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">&#61633;</a></h3>
 <section id="packages">
-<h4>Packages<a class="headerlink" href="#packages" title="Permalink to this heading"></a></h4>
-<p>Pour des raisons pratiques de dépendances ROS différentes (et de capteurs différents) selon qu’on soit sur le dock, le drone ou le rover, il a été décidé de séparer chaque partie en un package ROS différent.</p>
-<p>Sur le dock, le package <em>guerledocking</em> sera utilisé, sur le drone ce sera <em>guerleboat</em> et sur le rover <em>guerlerover</em>. Il est important de noter qu’à priori il est impossible de build les packages sur autre chose que l’objet dédié car les dépendances ROS sont spécifiques comme précisé précédemment.</p>
+<h4>Packages<a class="headerlink" href="#packages" title="Permalink to this heading">&#61633;</a></h4>
+<p>Pour des raisons pratiques de dépendances ROS différentes (et de capteurs différents) selon qu&#8217;on soit sur le dock, le drone ou le rover, il a été décidé de séparer chaque partie en un package ROS différent.</p>
+<p>Sur le dock, le package <em>guerledocking</em> sera utilisé, sur le drone ce sera <em>guerleboat</em> et sur le rover <em>guerlerover</em>. Il est important de noter qu&#8217;à priori il est impossible de build les packages sur autre chose que l&#8217;objet dédié car les dépendances ROS sont spécifiques comme précisé précédemment.</p>
 </section>
 <section id="dock">
-<h4>Dock<a class="headerlink" href="#dock" title="Permalink to this heading"></a></h4>
-<p>Pour utiliser le dock, il suffit de se connecter sur le même réseau (pour l’instant via les modem SIMPULSE) et de se connecter en ssh:</p>
+<h4>Dock<a class="headerlink" href="#dock" title="Permalink to this heading">&#61633;</a></h4>
+<p>Pour utiliser le dock, il suffit de se connecter sur le même réseau (pour l&#8217;instant via les modem SIMPULSE) et de se connecter en ssh:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ssh nvidia@192.168.0.12
 # MDP : nvidia
 </pre></div>
@@ -164,7 +171,7 @@
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>roslaunch guerledock launch_dock.launch
 </pre></div>
 </div>
-<p>Cette commande lance notre <a class="reference internal" href="#/catkin_ws/src/guerledocking/scripts/node_data_broadcaster.py"><span class="xref myst">node ROS</span></a> ainsi que les drivers du GPS et de la centrale inertielle. Les données GPS et inertielle du dock sont ensuite communiquées via connection UDP au device connecté à l’autre modem. Il y a également une prise de logs de toutes les données GPS et inertielles qui peuvent être utiles à des fins d’analyse.</p>
+<p>Cette commande lance notre <a class="reference internal" href="#/catkin_ws/src/guerledocking/scripts/node_data_broadcaster.py"><span class="xref myst">node ROS</span></a> ainsi que les drivers du GPS et de la centrale inertielle. Les données GPS et inertielle du dock sont ensuite communiquées via connection UDP au device connecté à l&#8217;autre modem. Il y a également une prise de logs de toutes les données GPS et inertielles qui peuvent être utiles à des fins d&#8217;analyse.</p>
 <p>Pour mettre à jour le package il faut faire:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>scp -r catkin_ws/src/guerledocking nvidia@192.168.0.12:~/catkin_ws/src/
 </pre></div>
@@ -176,8 +183,8 @@ catkin_make
 </div>
 </section>
 <section id="boat">
-<h4>Boat<a class="headerlink" href="#boat" title="Permalink to this heading"></a></h4>
-<p>Pour utiliser le bateau, plusieurs options s’offrent à nous, principalement pour se connecter dessus. Il est possible de :</p>
+<h4>Boat<a class="headerlink" href="#boat" title="Permalink to this heading">&#61633;</a></h4>
+<p>Pour utiliser le bateau, plusieurs options s&#8217;offrent à nous, principalement pour se connecter dessus. Il est possible de :</p>
 <ul class="simple">
 <li><p>Se connecter sur le wifi local :  M1800_11_SR / MDP: Texys2018</p></li>
 <li><p>Se connecter en utilisant la base station : APN_Drone_11 / MDP: IMSolutions2020</p></li>
@@ -194,7 +201,7 @@ ssh surcouf@10.0.11.100 # Si base station
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>roslaunch guerleboat launch_boat.launch
 </pre></div>
 </div>
-<p>Cependant cela n’est pas suffisant. Il faut armer le système mavlink et le mettre en mode <em>GUIDED</em>. Pour cela il suffit de faire sur un autre terminal:</p>
+<p>Cependant cela n&#8217;est pas suffisant. Il faut armer le système mavlink et le mettre en mode <em>GUIDED</em>. Pour cela il suffit de faire sur un autre terminal:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>rosrun mavros mavsafety arm
 rosrun mavros mavsys mode -c GUIDED
 </pre></div>
@@ -209,6 +216,52 @@ catkin_make
 </pre></div>
 </div>
 </section>
+<section id="rtk-base">
+<h4>RTK Base<a class="headerlink" href="#rtk-base" title="Permalink to this heading">&#61633;</a></h4>
+<p>Pour installer la base RTK, il suffit de</p>
+<ul class="simple">
+<li><p>connecter le module Ardusimple+Xbee à la Raspberry en faisant attention à bien brancher sur le port &#8220;Power+GPS&#8221; et non pas sur le port &#8220;Power+XBEE&#8221;.</p></li>
+<li><p>relier la carte Ardusimple à l&#8217;antenne RTK à l&#8217;aide du câble coaxial de l&#8217;installation.</p></li>
+<li><p>alimenter la Raspberry et attendre 2-3 minutes que le module se lance correctement (on peut connecter la Raspberry à un écran pour en avoir le coeur net).</p></li>
+</ul>
+<p>Normalement, l&#8217;acquisition se lance toute seule. Attention, pour obtenir une précision centimétrique, il faut que la base enregistre ses données pendant 24h. Les archivages se lancent à 4h du matin tous les jours donc il faut bien prendre en compte ce paramètre pour avoir un log de 24h complet. Il faut ensuite suivre les <a class="reference external" href="https://docs.centipede.fr/docs/base/positionnement.html">instructions</a> données par Centipède pour communiquer avec IGN.</p>
+<p>Si on veut indépendament vérifier les données GPS, on peut le faire (sous linux) en connectant le module Ardusimple en USB et en suivant ce <a class="reference external" href="https://www.ardusimple.com/how-to-use-ardusimple-rtk-receivers-and-get-gps-data-in-ros/">tuto</a>. Sinon, on peut connecter le module Ardusimple en USB (sous Windows) suivre la section 7 des <a class="reference external" href="https://docs.centipede.fr/docs/base/Installation.html">indications</a> données par Centipède. L&#8217;adresse http://basegnss.local permet d&#8217;accéder aux logs (sous Windows) de la base et le mot de passe est <em>admin</em>. On peut alors entre autre télécharger les fichiers qui nous intéressent. Autrement, il est possible de se connecter en ssh à la carte Raspberry, lorsque le module Ardusimple y est relié, en tapant :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    ssh basegnss@basegnss.local
+    # mot de passe : basegnss!
+</pre></div>
+</div>
+<p>Ceci permet d&#8217;accéder aux informations de la carte et éventuellement de débugger.</p>
+</section>
+</section>
+<section id="utiliser-docker-pour-ne-pas-avoir-a-installer-ros">
+<h3>Utiliser Docker pour ne pas avoir à installer ROS<a class="headerlink" href="#utiliser-docker-pour-ne-pas-avoir-a-installer-ros" title="Permalink to this heading">&#61633;</a></h3>
+<p>Dans le dossier Docker de ce projet, on peut trouver un Dockerfile permettant de construire une image avec Ubuntu 18.04 et ROS Melodic. Une archive donne aussi la version avec Ubuntu 20.04 et ROS Noetic. Pour contruire l&#8217;image Docker, il faut se rendre dans le dossier <em>/Docker</em> puis taper :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    docker built -t name . # remplacer &quot;name&quot;
+    # par le nom voulu pour l&#39;image
+</pre></div>
+</div>
+<p>Il faut ensuite attendre quelques minutes la création de l&#8217;image. Pour lancer le conteneur, il est important de préciser en commande les autorisations souhaitées et les fichiers partagés :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    docker run -it --privileged -v  &quot;to_share&quot;:&quot;destination&quot; --rm &quot;name&quot;:latest
+</pre></div>
+</div>
+<p>avec &#8220;name&#8221; le nom de l&#8217;image créée.</p>
+<p>Pour autoriser le conteneur à afficher des fenêtres graphiques, il faut rajouter la commande suivante après &#8220;privileged&#8221; :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    -e DISPLAY=$DISPLAY
+</pre></div>
+</div>
+<p>et derrière le &#8220;-v&#8221; :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    /tmp/.X11-unix:/tmp/.X11-unix
+</pre></div>
+</div>
+<p>Ce qui donne :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    docker run -it --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix &quot;to_share&quot;:&quot;destination&quot; --rm &quot;name&quot;:latest
+</pre></div>
+</div>
+<p>En cas de refus de la part de l&#8217;hôte, on rajoute :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    xhost +
+</pre></div>
+</div>
+<p>avant de lancer le conteneur. Mais cette commande est à éviter si possible pour des raisons de sécurité pour l&#8217;hôte.</p>
 </section>
 </section>
 </section>
@@ -217,13 +270,13 @@ catkin_make
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Guerledocking’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Guerledocking&#8217;s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Kévin REN, Théo MASSA, Guillaume GARDE, Hugo HOFMANN.</p>
+    <p>&#169; Copyright 2023, K�vin REN, Th�o MASSA, Guillaume GARDE, Hugo HOFMANN.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -75,6 +75,10 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># coding: latin-1</span>
 
+<span class="sd">&quot;&quot;&quot;Node de diffusion des données GPS et inertielles du dock à destination du bateau</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
 <span class="kn">import</span> <span class="nn">rospy</span>
 <span class="kn">from</span> <span class="nn">sbg_driver.msg</span> <span class="kn">import</span> <span class="n">SbgEkfQuat</span>
 <span class="kn">from</span> <span class="nn">sensor_msgs.msg</span> <span class="kn">import</span> <span class="n">NavSatFix</span>
@@ -86,6 +90,15 @@
 <span class="n">imu_data</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="concatenate_data"><a class="viewcode-back" href="../node_data_broadcaster.html#node_data_broadcaster.concatenate_data">[docs]</a><span class="k">def</span> <span class="nf">concatenate_data</span><span class="p">(</span><span class="n">gps_data</span><span class="p">,</span> <span class="n">imu_angles</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Concatène les données GPS et inertielles en une chaine de caractère pouvant être envoyée par connection UDP</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        gps_data (sensor_msgs.msg.NavSatFix): Message envoyé par le driver ROS du GPS, contient la position GPS</span>
+<span class="sd">        imu_angles (Tuple): Tuple des angles d&#39;Euler (Roll, Pitch, Yaw)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        string: Chaine de caractères sous le format &quot;latitude,longitude,roll,pitch,yaw&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">gps_header</span><span class="p">,</span> <span class="n">gps_status</span> <span class="o">=</span> <span class="n">gps_data</span><span class="o">.</span><span class="n">header</span><span class="p">,</span> <span class="n">gps_data</span><span class="o">.</span><span class="n">status</span>
     <span class="n">lat</span><span class="p">,</span> <span class="n">long</span> <span class="o">=</span> <span class="n">gps_data</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">gps_data</span><span class="o">.</span><span class="n">longitude</span>
 
@@ -98,9 +111,13 @@
     <span class="k">return</span> <span class="n">data</span></div>
 
 <div class="viewcode-block" id="euler_from_quaternion"><a class="viewcode-back" href="../node_data_broadcaster.html#node_data_broadcaster.euler_from_quaternion">[docs]</a><span class="k">def</span> <span class="nf">euler_from_quaternion</span><span class="p">(</span><span class="n">quat</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert quaternion (w in last place) to euler roll, pitch, yaw.</span>
-<span class="sd">    quat = [x, y, z, w]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convertit une orientation en quaternion en angles d&#39;Euler</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        quat (list): Orientation en quaternion ([x,y,z,w])</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple(float,float,float): Tuple des angles d&#39;Eulers (Roll, Pitch, Yaw)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">x</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">y</span>
@@ -117,14 +134,27 @@
     <span class="k">return</span> <span class="n">roll</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">yaw</span></div>
 
 <div class="viewcode-block" id="gps_callback"><a class="viewcode-back" href="../node_data_broadcaster.html#node_data_broadcaster.gps_callback">[docs]</a><span class="k">def</span> <span class="nf">gps_callback</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fonction callback pour garder en mémoire le dernier message GPS</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (sensor_msgs.msg.NavSatFix): Message envoyé par le driver ROS du GPS, contient la position GPS</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">gps_data</span>
     <span class="n">gps_data</span> <span class="o">=</span> <span class="n">data</span></div>
 
 <div class="viewcode-block" id="imu_callback"><a class="viewcode-back" href="../node_data_broadcaster.html#node_data_broadcaster.imu_callback">[docs]</a><span class="k">def</span> <span class="nf">imu_callback</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fonction callback pour garder en mémoire les dernieres données inertielles (orientation en angles d&#39;Euler)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (sbg_driver.msg.SbgEkfQuat): Message contenant l&#39;orientation en quaternion</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">imu_data</span>
     <span class="n">imu_data</span> <span class="o">=</span> <span class="n">euler_from_quaternion</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">quaternion</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="broadcast_node"><a class="viewcode-back" href="../node_data_broadcaster.html#node_data_broadcaster.broadcast_node">[docs]</a><span class="k">def</span> <span class="nf">broadcast_node</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Node de diffusion des données sur un socket via une connection UDP.</span>
+<span class="sd">    S&#39;abonne aux topics crées par les drivers du GPS et de la centrale inertielle pour acquérir les données et les convertir en une chaîne de caractères transmissibles en réseau.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">gps_data</span><span class="p">,</span><span class="n">imu_data</span>
     <span class="c1"># Initialisation du noeud ROS</span>
     <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;data_broadcaster&#39;</span><span class="p">)</span>
@@ -133,11 +163,11 @@
     <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="s1">&#39;/sbg/ekf_quat&#39;</span><span class="p">,</span> <span class="n">SbgEkfQuat</span><span class="p">,</span> <span class="n">imu_callback</span><span class="p">)</span> <span class="c1">## ou (sbg/imu_data, SbgImuData</span>
 
     <span class="n">mon_publisher</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Publisher</span><span class="p">(</span><span class="s1">&#39;string_data&#39;</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-    <span class="c1"># Configuration du socket UDP pour la communication avec le systÃ¨me distant</span>
+    <span class="c1"># Configuration du socket UDP pour la communication avec le système distant</span>
     <span class="n">udp_ip</span> <span class="o">=</span> <span class="s2">&quot;192.168.0.10&quot;</span> <span class="c1">#TODO mettre bonne adresse</span>
-    <span class="n">udp_port</span> <span class="o">=</span> <span class="mi">12345</span>  <span class="c1"># Port UDP de destination sur le systÃ¨me distant</span>
+    <span class="n">udp_port</span> <span class="o">=</span> <span class="mi">12345</span>  <span class="c1"># Port UDP de destination sur le système distant</span>
 
-    <span class="c1"># CrÃ©ation du socket UDP</span>
+    <span class="c1"># Création du socket UDP</span>
     <span class="n">udp_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span>
 
     <span class="n">rate</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Rate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Par exemple, 1 message par seconde</span>
@@ -166,7 +196,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Kévin REN, Théo MASSA, Guillaume GARDE, Hugo HOFMANN.</p>
+    <p>&#169; Copyright 2023, K�vin REN, Th�o MASSA, Guillaume GARDE, Hugo HOFMANN.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

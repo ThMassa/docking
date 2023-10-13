@@ -6,11 +6,18 @@
 Welcome to Guerledocking's documentation!
 =========================================
 
+.. image:: ./imgs/monodrone-1800-chenal.jpg
+   :alt: Example Image
+   :width: 500
+   :align: center
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    README.rst
+
+   
 
 
 

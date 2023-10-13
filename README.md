@@ -1,3 +1,5 @@
+<meta charset="latin-1">
+
 # Docking autonome
 
 ### Auteurs

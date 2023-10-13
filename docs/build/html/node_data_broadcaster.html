@@ -73,33 +73,73 @@
            <div itemprop="articleBody">
              
   <section id="module-node_data_broadcaster">
-<span id="node-data-broadcaster-module"></span><h1>node_data_broadcaster module<a class="headerlink" href="#module-node_data_broadcaster" title="Permalink to this heading"></a></h1>
+<span id="node-data-broadcaster-module"></span><h1>node_data_broadcaster module<a class="headerlink" href="#module-node_data_broadcaster" title="Permalink to this heading">&#61633;</a></h1>
+<p>Node de diffusion des données GPS et inertielles du dock à destination du bateau</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="node_data_broadcaster.broadcast_node">
-<span class="sig-prename descclassname"><span class="pre">node_data_broadcaster.</span></span><span class="sig-name descname"><span class="pre">broadcast_node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/node_data_broadcaster.html#broadcast_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#node_data_broadcaster.broadcast_node" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">node_data_broadcaster.</span></span><span class="sig-name descname"><span class="pre">broadcast_node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/node_data_broadcaster.html#broadcast_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#node_data_broadcaster.broadcast_node" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Node de diffusion des données sur un socket via une connection UDP.
+S&#8217;abonne aux topics crées par les drivers du GPS et de la centrale inertielle pour acquérir les données et les convertir en une chaîne de caractères transmissibles en réseau.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="node_data_broadcaster.concatenate_data">
-<span class="sig-prename descclassname"><span class="pre">node_data_broadcaster.</span></span><span class="sig-name descname"><span class="pre">concatenate_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gps_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_angles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/node_data_broadcaster.html#concatenate_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#node_data_broadcaster.concatenate_data" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">node_data_broadcaster.</span></span><span class="sig-name descname"><span class="pre">concatenate_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gps_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_angles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/node_data_broadcaster.html#concatenate_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#node_data_broadcaster.concatenate_data" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Concatène les données GPS et inertielles en une chaine de caractère pouvant être envoyée par connection UDP</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gps_data</strong> (<em>sensor_msgs.msg.NavSatFix</em>) &#8211; Message envoyé par le driver ROS du GPS, contient la position GPS</p></li>
+<li><p><strong>imu_angles</strong> (<em>Tuple</em>) &#8211; Tuple des angles d&#8217;Euler (Roll, Pitch, Yaw)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Chaine de caractères sous le format &#8220;latitude,longitude,roll,pitch,yaw&#8221;</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="node_data_broadcaster.euler_from_quaternion">
-<span class="sig-prename descclassname"><span class="pre">node_data_broadcaster.</span></span><span class="sig-name descname"><span class="pre">euler_from_quaternion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/node_data_broadcaster.html#euler_from_quaternion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#node_data_broadcaster.euler_from_quaternion" title="Permalink to this definition"></a></dt>
-<dd><p>Convert quaternion (w in last place) to euler roll, pitch, yaw.
-quat = [x, y, z, w]</p>
+<span class="sig-prename descclassname"><span class="pre">node_data_broadcaster.</span></span><span class="sig-name descname"><span class="pre">euler_from_quaternion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/node_data_broadcaster.html#euler_from_quaternion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#node_data_broadcaster.euler_from_quaternion" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Convertit une orientation en quaternion en angles d&#8217;Euler</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>quat</strong> (<em>list</em>) &#8211; Orientation en quaternion ([x,y,z,w])</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple des angles d&#8217;Eulers (Roll, Pitch, Yaw)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(float,float,float)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="node_data_broadcaster.gps_callback">
-<span class="sig-prename descclassname"><span class="pre">node_data_broadcaster.</span></span><span class="sig-name descname"><span class="pre">gps_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/node_data_broadcaster.html#gps_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#node_data_broadcaster.gps_callback" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">node_data_broadcaster.</span></span><span class="sig-name descname"><span class="pre">gps_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/node_data_broadcaster.html#gps_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#node_data_broadcaster.gps_callback" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Fonction callback pour garder en mémoire le dernier message GPS</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>sensor_msgs.msg.NavSatFix</em>) &#8211; Message envoyé par le driver ROS du GPS, contient la position GPS</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="node_data_broadcaster.imu_callback">
-<span class="sig-prename descclassname"><span class="pre">node_data_broadcaster.</span></span><span class="sig-name descname"><span class="pre">imu_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/node_data_broadcaster.html#imu_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#node_data_broadcaster.imu_callback" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">node_data_broadcaster.</span></span><span class="sig-name descname"><span class="pre">imu_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/node_data_broadcaster.html#imu_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#node_data_broadcaster.imu_callback" title="Permalink to this definition">&#61633;</a></dt>
+<dd><p>Fonction callback pour garder en mémoire les dernieres données inertielles (orientation en angles d&#8217;Euler)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>sbg_driver.msg.SbgEkfQuat</em>) &#8211; Message contenant l&#8217;orientation en quaternion</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 
@@ -111,7 +151,7 @@ quat = [x, y, z, w]</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Kévin REN, Théo MASSA, Guillaume GARDE, Hugo HOFMANN.</p>
+    <p>&#169; Copyright 2023, K�vin REN, Th�o MASSA, Guillaume GARDE, Hugo HOFMANN.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
