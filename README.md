@@ -97,3 +97,35 @@ Puis dans le ssh :
 
     cd catkin_ws
     catkin_make
+
+
+## Utiliser Docker pour ne pas avoir à installer ROS
+
+Dans le dossier Docker de ce projet, on peut trouver un Dockerfile permettant de construire une image avec Ubuntu 18.04 et ROS Melodic. Une archive donne aussi la version avec Ubuntu 20.04 et ROS Noetic. Pour contruire l'image Docker, il faut se rendre dans le dossier _/Docker_ puis taper : 
+
+        docker built -t name . # remplacer "name" 
+        # par le nom voulu pour l'image
+
+Il faut ensuite attendre quelques minutes la création de l'image. Pour lancer le conteneur, il est important de préciser en commande les autorisations souhaitées et les fichiers partagés : 
+
+        docker run -it --privileged -v  "to_share":"shared_name" --rm "name":latest
+
+avec "name" le nom de l'image créée.
+
+Pour autoriser le conteneur à afficher des fenêtres graphiques, il faut rajouter la commande suivante après "privileged" : 
+
+        -e DISPLAY=$DISPLAY
+
+ et derrière le "-v" : 
+
+        /tmp/.X11-unix:/tmp/.X11-unix
+
+Ce qui donne : 
+
+        docker run -it --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix "to_share":"shared_name" --rm "name":latest
+        
+En cas de refus de la part de l'hôte, on rajoute : 
+
+        xhost +
+
+avant de lancer le conteneur. Mais cette commande est à éviter si possible pour des raisons de sécurité pour l'hôte.
