@@ -1,42 +1,19 @@
-# docking
+# Docking autonome
 
-Voir [ce lien](https://ardupilot.org/dev/docs/mavlink-basics.html) pour infos sur mavlink
+### Autors
+* GARDE Guillaume (Promotion [_ENSTA Bretagne_](https://www.ensta-bretagne.fr) 2024 - Spécialité Robotique Autonome).
+* MASSA Théo (Promotion [_ENSTA Bretagne_](https://www.ensta-bretagne.fr) 2024 - Spécialité Robotique Autonome).
+* HOFMANN Hugo (Promotion [_ENSTA Bretagne_](https://www.ensta-bretagne.fr) 2024 - Spécialité Robotique Autonome).
+* REN Kévin (Promotion [_ENSTA Bretagne_](https://www.ensta-bretagne.fr) 2024 - Spécialité Robotique Autonome).
 
-## Docker
-Pour ouvrir le container docker : (pas sur que ca marche)
+# Table of Contents
 
-    docker run -it --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --rm "ubuntu18":latest
+- [Description](#description)
+- [Documentation](#documentation)
+- [Configuration](#configuration)
+- [Requirements](#requirements)
+- [Usage](#usage)
+    - [Build the package](#build-the-package)
 
-## ROS
-On utilise ROS ( pas ROS 2 :( ) attention à bien coder les nodes pour que ce soit compatible ROS Melodic et pas Noetic comme nos versions (à voir si le code codé sur Melodic est compatible sur Noetic mais je pense que oui ya qu'une version d'écart et ca se trouve ya pas tant de différences).
-
-Ca a pas franchement l'air trop compliqué de faire les nodes (un exemple qui marche [là](ros_ws/src/docking/src/node_tst.py))
-
-Pour utiliser ROS (à faire sur les Jetson je pense), aller dans [/ros_ws](/ros_ws) puis faire :
-
-    catkin_make
-
-    # Si sous bash (bouh les anciens)
-    source devel/setup.bash
-
-    # Si zsh (<3)
-    source devel/setup.zsh
-
-Vous pouvez même mettre la source dans vos bashrc pour éviter des oublis c'est à vous de voir.
-
-Pour lancer un node, dans un terminal :
-
-    roscore
-
-Dans un autre
-
-    rosrun docking <node_name>
-
-### Doc des drivers
-La doc pour la centrale inertielle SBG peut se trouver [ici](https://github.com/SBG-Systems/sbg_ros_driver)
-
-La doc pour le driver GPS sur le dock peut se trouver [ici](https://github.com/KumarRobotics/ublox)
-
-### Commande launch bateau
-
-    roslaunch guerleboat launch_boat.launch
+## Description
+Le but du projet est d'automatiser le processus de docking d'un drone. Pour cela on doit créer un dock capable d'envoyer sa position GPS et son orientation au drone qui, à partir de ces informations, sera capable de calculer une trajectoire et d'adopter un comportement lui permettant de se docker automatiquement. En plus de cela, il est nécessaire de mettre en place une balise RTK permettant d'obtenir une précision GPS au centimètre.
