@@ -19,6 +19,8 @@
     - [Packages](#packages)
     - [Dock](#dock)
     - [Boat](#boat)
+    - [RTK Base](#rtk-base)
+  - [Utiliser Docker](#utiliser-docker-pour-ne-pas-avoir-à-installer-ros) 
 
 ## Description
 Le but du projet est d'automatiser le processus de docking d'un drone. Pour cela on doit créer un dock capable d'envoyer sa position GPS et son orientation au drone qui, à partir de ces informations, sera capable de calculer une trajectoire et d'adopter un comportement lui permettant de se docker automatiquement. En plus de cela, il est nécessaire de mettre en place une balise RTK permettant d'obtenir une précision GPS au centimètre.
@@ -98,6 +100,22 @@ Puis dans le ssh :
     cd catkin_ws
     catkin_make
 
+### RTK Base
+
+Pour installer la base RTK, il suffit de 
+- connecter le module Ardusimple+Xbee à la Raspberry en faisant attention à bien brancher sur le port "Power+GPS" et non pas sur le port "Power+XBEE".
+- relier la carte Ardusimple à l'antenne RTK à l'aide du câble coaxial de l'installation. 
+- alimenter la Raspberry et attendre 2-3 minutes que le module se lance correctement (on peut connecter la Raspberry à un écran pour en avoir le coeur net).
+
+Normalement, l'acquisition se lance toute seule. Attention, pour obtenir une précision centimétrique, il faut que la base enregistre ses données pendant 24h. Les archivages se lancent à 4h du matin tous les jours donc il faut bien prendre en compte ce paramètre pour avoir un log de 24h complet. Il faut ensuite suivre les [instructions](https://docs.centipede.fr/docs/base/positionnement.html) données par Centipède pour communiquer avec IGN.
+
+Si on veut indépendament vérifier les données GPS, on peut le faire (sous linux) en connectant le module Ardusimple en USB et en suivant ce [tuto](https://www.ardusimple.com/how-to-use-ardusimple-rtk-receivers-and-get-gps-data-in-ros/). Sinon, on peut connecter le module Ardusimple en USB (sous Windows) suivre la section 7 des [indications](https://docs.centipede.fr/docs/base/Installation.html) données par Centipède. L'adresse http://basegnss.local permet d'accéder aux logs (sous Windows) de la base et le mot de passe est _admin_. On peut alors entre autre télécharger les fichiers qui nous intéressent. Autrement, il est possible de se connecter en ssh à la carte Raspberry, lorsque le module Ardusimple y est relié, en tapant : 
+
+        ssh basegnss@basegnss.local
+        # mot de passe : basegnss!
+
+Ceci permet d'accéder aux informations de la carte et éventuellement de débugger.
+
 
 ## Utiliser Docker pour ne pas avoir à installer ROS
 
@@ -108,7 +126,7 @@ Dans le dossier Docker de ce projet, on peut trouver un Dockerfile permettant de
 
 Il faut ensuite attendre quelques minutes la création de l'image. Pour lancer le conteneur, il est important de préciser en commande les autorisations souhaitées et les fichiers partagés : 
 
-        docker run -it --privileged -v  "to_share":"shared_name" --rm "name":latest
+        docker run -it --privileged -v  "to_share":"destination" --rm "name":latest
 
 avec "name" le nom de l'image créée.
 
@@ -122,7 +140,7 @@ Pour autoriser le conteneur à afficher des fenêtres graphiques, il faut rajout
 
 Ce qui donne : 
 
-        docker run -it --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix "to_share":"shared_name" --rm "name":latest
+        docker run -it --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix "to_share":"destination" --rm "name":latest
         
 En cas de refus de la part de l'hôte, on rajoute : 
 
