@@ -75,7 +75,7 @@ def rover_node():
     rover_pose_publisher = rospy.Publisher("/rover_pose",PoseStamped, queue_size = 10)
     dock_pose_publisher = rospy.Publisher("/dock_pose",PoseStamped, queue_size = 10)
 
-    rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback)
+    rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback) # TODO mettre les bons topics mavros (sauf si sbg sur rover mais rien de moins sur)
     rospy.Subscriber('/sbg/gps_pos', SbgGpsPos, gps_callback)
     
     # Configuration du socket UDP pour la communication avec le système distant

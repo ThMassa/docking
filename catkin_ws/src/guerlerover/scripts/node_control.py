@@ -2,7 +2,7 @@
 # coding: latin-1
 
 import rospy
-from catkin_ws.src.guerlerover.scripts.classRover import *
+from classRover import *
 from geometry_msgs.msg import Twist, PoseStamped
 
 
@@ -11,14 +11,14 @@ marge = 1.5  # marge de securite, plus elle est elevee, plus le bateau s'arreter
 c11, c12 = 5, 1  # constantes pour les champs de potentiels
 c21, c22 = 10, 5  # constantes pour les champs de potentiels
 
-Xb = np.zeros((5,1))    #Pose du bateau (x,y,roll,pitch,yaw)
+Xb = np.zeros((5,1))    #Pose du rover (x,y,roll,pitch,yaw)
 Xd = np.zeros((5,1))    #Pose du dock   (x,y,roll,pitch,yaw)
 
 u = np.array([[0,0]]).T
-boat = Boat(np.array([Xb[0,0],Xb[1,0],u[0,0],Xb[-1]]))
+rover = Rover(np.array([Xb[0,0],Xb[1,0],u[0,0],Xb[-1]]))
 
 
-def boat_pose_cb(msg):
+def rover_pose_cb(msg):
     global Xb
     Xb = np.array([[msg.pose.position.x, 
                     msg.pose.position.y, 
@@ -38,7 +38,7 @@ def control_node():
     # Initialisation du noeud ROS
     rospy.init_node('control')
 
-    rospy.Subscriber('/boat_pose', PoseStamped, boat_pose_cb)
+    rospy.Subscriber('/rover_pose', PoseStamped, rover_pose_cb)
     rospy.Subscriber('/dock_pose', PoseStamped, dock_pose_cb)
 
     vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
@@ -47,14 +47,14 @@ def control_node():
 
 
     while not rospy.is_shutdown():
-        boat.x = np.array([Xb[0,0], Xb[1,0], boat.u[0,0], Xb[-1]])
+        rover.x = np.array([Xb[0,0], Xb[1,0], rover.u[0,0], Xb[-1]])
         phat = Xd[:2]
         theta = Xd[-1,0]
-        boat.u = boat.controller(phat,theta)
+        rover.u = rover.controller(phat,theta)
 
         vel_msg = Twist()
-        vel_msg.twist.linear.x = boat.u[0,0]
-        vel_msg.twist.angular.z = boat.u[1,0]
+        vel_msg.twist.linear.x = rover.u[0,0]
+        vel_msg.twist.angular.z = rover.u[1,0]
 
         vel_publisher.publish(vel_msg)
 
