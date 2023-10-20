@@ -41,7 +41,8 @@ sum = 0
 value = 3
 start = True
 #----------------------
-x = array([[-3, -3, 0, 2]]).T*10
+
+x = np.random.rand(4, 1)*30
 boat = Boat(x, vmax=5)
 dt = .05
 
@@ -98,13 +99,14 @@ for t in arange(0, 50, dt):
                   [cos(theta)*sin(psi), 0],
                   [-sin(theta)        , 0],
                   [0                  , 1]], dtype=np.float64)
-    Q = 1*np.identity(n)
+    Q = .05*np.identity(n)
     C = np.array([[1, 0, 0, 0],
                   [0, 1, 0, 0],
                   [0, 0, 0, 1]])
     R = .01*np.identity(len(y))
+    R[2, 2] = .17
     # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
-    boat.controller(phat, theta_dock, marge = .2)
+    boat.controller(phat_receiv, theta_receiv, marge = .2)
     boat.kalman_predict(0, B, Q, dt)
     # boat.dead_reckoning(0, dt)
     if not(np.array_equal(y1, y)):

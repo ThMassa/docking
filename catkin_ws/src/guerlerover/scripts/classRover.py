@@ -4,6 +4,8 @@ from numpy import cos, sin, array, sign, pi
 import numpy as np
 from numpy.linalg import norm
 
+#TODO l'IMU du bateau n'est pas bien orienté
+
 
 def sawtooth(x):
     return (x+pi)%(2*pi)-pi
@@ -18,7 +20,7 @@ class Rover:
     
     - Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
     """
-    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1):
+    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1, dthetamax = 100):
         """Initialise l'instance
 
         Args:
@@ -31,6 +33,7 @@ class Rover:
         self.vmax = vmax
         self.L = L
         self.u = u
+        self.dthetamax = dthetamax
         
     
     def init_kalman(self, Gx=None):
@@ -101,7 +104,7 @@ class Rover:
         
     
     def dead_reckoning(self, theta, dt):
-        """Dead reckoning (Obselète, utiliser plutôt la fonction kalman_predict)
+        """Dead reckoning (utilisez plutôt la fonction kalman_predict si possible)
 
         Args:
             theta (float): Assiete du bateau
@@ -125,11 +128,11 @@ class Rover:
         if self.__predict == False:
             self.kalman_predict(y, A, B, Q,dt)
         else:
-            self.kalman_correc(y, C, R)
+            self.kalman_correc(y, C, R, 1)
             self.kalman_predict(y, A, B, Q, dt)
     
     
-    def controller(self, phat, theta, marge=1.5):
+    def controller(self, phat, theta, marge=.5):
         """Controleur du bateau utilisant les champs de potentiels
 
         Args:
@@ -138,13 +141,13 @@ class Rover:
             marge (float): Marge de securité, plus elle est elevée, plus le bateau s'arretera loin du dock et donc moins il aura de chance de se cogner contre le dock
         """
         
-        if not hasattr(self, "_Rover__start"):
+        if not hasattr(self, "_Boat__start"):
             self.__start = True
             self.__value = 0
             self.__ecap = array([0])
             self.__scap = 0
             
-        c11, c12 = 5, 1  # constantes pour les champs de potentiels
+        c11, c12 = 5, 2  # constantes pour les champs de potentiels
         c21, c22 = 10, 5  # constantes pour les champs de potentiels
         u = np.array([[0], [0]])
         k_ = 1
@@ -166,9 +169,9 @@ class Rover:
 
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
-        vbar = min(norm(vbar), k_*self.vmax*norm(phat0 - self.x[:2]))
+        vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2]))
+        vbar = min(self.vmax, vbar)
         if norm(phat - self.x[:2]) < .2*self.L:
-            print("Ok")
             # self.__scap = 0
             self.__start = False
         
@@ -181,11 +184,13 @@ class Rover:
             self.__ecap[-1] = ecap
         self.u[0,0] = vbar
         self.u[1,0] = 5*ecap + .02*self.__scap
-        print(ecap)
+        self.u[1,0] = min(self.dthetamax, self.u[1,0])
+        self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
+        print(self.u[1, 0])
         return u
 
 if __name__=="__main__":
-    rover = Rover(np.array([[0], [0], [2], [1]]))
-    u = rover.controller(np.array([[2], [2]]), pi/4)
+    boat = Boat(np.array([[0], [0], [2], [1]]))
+    u = boat.controller(np.array([[2], [2]]), pi/4)
     print(u)
