@@ -53,8 +53,8 @@ def control_node():
         rover.u = rover.controller(phat,theta)
 
         vel_msg = Twist()
-        vel_msg.twist.linear.x = rover.u[0,0]
-        vel_msg.twist.angular.z = rover.u[1,0]
+        vel_msg.linear.x = rover.u[0,0]
+        vel_msg.angular.z = rover.u[1,0]
 
         vel_publisher.publish(vel_msg)
 

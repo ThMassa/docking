@@ -99,7 +99,7 @@
     </node>
     
     <node pkg="rosbag" type="record" name="rosbag_record_rover"
-       args="record -a -o /home/guerlelogs/rover.bag"
+       args="record -a -o /home/aion/guerlelogs/rover.bag"
        if="$(arg record_rover)" />
 
   

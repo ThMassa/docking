@@ -65,8 +65,8 @@ def imu_callback(data):
 
 def gps_callback(data):
     global lat,long
-    lat = data.position.x
-    long = data.position.y
+    lat = data.latitude
+    long = data.longitude
 
 def rover_node():
     global gps_data,imu_data, lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
