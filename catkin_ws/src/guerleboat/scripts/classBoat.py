@@ -168,9 +168,9 @@ class Boat:
 
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
-        vbar = min(norm(vbar), k_*self.vmax*norm(phat0 - self.x[:2]))
+        vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2]))
+        vbar = min(self.vmax, vbar)
         if norm(phat - self.x[:2]) < .2*self.L:
-            print("Ok")
             # self.__scap = 0
             self.__start = False
         
@@ -183,7 +183,7 @@ class Boat:
             self.__ecap[-1] = ecap
         self.u[0,0] = vbar
         self.u[1,0] = 5*ecap + .02*self.__scap
-        print(ecap)
+        
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
         return u
 

@@ -42,7 +42,7 @@ value = 3
 start = True
 #----------------------
 x = array([[-3, -3, 0, 2]]).T*10
-boat = Boat(x)
+boat = Boat(x, vmax=5)
 dt = .05
 
 boat.init_kalman()
@@ -84,7 +84,8 @@ for t in arange(0, 50, dt):
     # Avec Kalman
     noise = .01 * np.random.randn(3, 1)
     d = norm(x[:2]-phat)
-    s = 1*d+boat.L
+    if s > 10:
+        s = 1*d+boat.L
     if np.random.rand() < 1-.02*d:
         theta_receiv = theta_dock
         phat_receiv = phat
