@@ -12,7 +12,7 @@
 
 - [Docking autonome](#docking-autonome)
     - [Auteurs](#auteurs)
-- [Table of Contents](#table-of-contents)
+- [Table des matières](#table-des-matières)
   - [Description](#description)
   - [Documentation](#documentation)
   - [Configuration](#configuration)
@@ -22,7 +22,7 @@
     - [Dock](#dock)
     - [Boat](#boat)
     - [RTK Base](#rtk-base)
-  - [Utiliser Docker](#utiliser-docker-pour-ne-pas-avoir-à-installer-ros) 
+  - [Utiliser Docker pour ne pas avoir à installer ROS](#utiliser-docker-pour-ne-pas-avoir-à-installer-ros)
 
 ## Description
 Le but du projet est d'automatiser le processus de docking d'un drone. Pour cela on doit créer un dock capable d'envoyer sa position GPS et son orientation au drone qui, à partir de ces informations, sera capable de calculer une trajectoire et d'adopter un comportement lui permettant de se docker automatiquement. En plus de cela, il est nécessaire de mettre en place une balise RTK permettant d'obtenir une précision GPS au centimètre.
@@ -33,6 +33,8 @@ Le but du projet est d'automatiser le processus de docking d'un drone. Pour cela
 La doc pour la centrale inertielle SBG peut se trouver [ici](https://github.com/SBG-Systems/sbg_ros_driver)
 
 La doc pour le driver GPS sur le dock peut se trouver [ici](https://github.com/KumarRobotics/ublox)
+
+La doc pour le rover est [ici](https://github-docs.readthedocs.io/en/latest/aionio.html)
 
 ## Configuration
 Toutes les cartes étant sur une installation ubuntu18.04 (ou équivalent), l'ensemble de notre architecture repose sur [ROS Melodic](http://wiki.ros.org/melodic).
