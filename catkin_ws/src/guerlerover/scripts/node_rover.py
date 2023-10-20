@@ -4,9 +4,8 @@
 import rospy
 import socket
 import numpy as np
-from sbg_driver.msg import SbgEkfQuat, SbgGpsPos
-
-
+# from sbg_driver.msg import SbgEkfQuat, SbgGpsPos
+from sensor_msgs.msg import NavSatFix,Imu
 from geometry_msgs.msg import PoseStamped
 
 gps_data = None
@@ -60,7 +59,7 @@ def euler_from_quaternion(quat):
 
 def imu_callback(data):
     global imu_data
-    imu_data = euler_from_quaternion(data.quaternion)
+    imu_data = euler_from_quaternion(data.orientation)
 
 def gps_callback(data):
     global lat,long
@@ -75,8 +74,8 @@ def rover_node():
     rover_pose_publisher = rospy.Publisher("/rover_pose",PoseStamped, queue_size = 10)
     dock_pose_publisher = rospy.Publisher("/dock_pose",PoseStamped, queue_size = 10)
 
-    rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback) # TODO mettre les bons topics mavros (sauf si sbg sur rover mais rien de moins sur)
-    rospy.Subscriber('/sbg/gps_pos', SbgGpsPos, gps_callback)
+    rospy.Subscriber('/mavros/imu/data',Imu , imu_callback) # TODO mettre les bons topics mavros (sauf si sbg sur rover mais rien de moins sur)
+    rospy.Subscriber('/mavros/global_position/raw/fix', NavSatFix, gps_callback)
     
     # Configuration du socket UDP pour la communication avec le système distant
     # udp_ip = "192.168.0.12"
