@@ -60,6 +60,8 @@ def euler_from_quaternion(quat):
 def imu_callback(data):
     global imu_data
     imu_data = euler_from_quaternion(data.orientation)
+    cov_vel_ang = data.angular_velocity_covariance
+    cov_acc_lin = data.linear_acceleration_covariance
 
 def gps_callback(data):
     global lat,long
