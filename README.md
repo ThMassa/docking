@@ -142,7 +142,7 @@ Ceci permet d'accéder aux informations de la carte et éventuellement de débug
 
 ## Utiliser Docker pour ne pas avoir à installer ROS
 
-Dans le dossier Docker de ce projet, on peut trouver un Dockerfile permettant de construire une image avec Ubuntu 18.04 et ROS Melodic. Une archive donne aussi la version avec Ubuntu 20.04 et ROS Noetic. Pour contruire l'image Docker, il faut se rendre dans le dossier _/Docker_ puis taper : 
+Dans le dossier Docker de ce projet, on peut trouver un Dockerfile permettant de construire une image avec Ubuntu 18.04 et ROS Melodic. Une archive donne aussi la version avec Ubuntu 20.04 et ROS Noetic. Pour contruire l'image Docker, il faut se rendre dans le dossier [_Docker_](/Docker/) puis taper : 
 
         docker built -t name . # remplacer "name" 
         # par le nom voulu pour l'image
