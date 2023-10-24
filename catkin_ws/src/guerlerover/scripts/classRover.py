@@ -42,7 +42,7 @@ class Rover:
         Args:
             Gx (numpy.ndarray, optional): Matrice de covariance liée au vecteur d'état. Defaults to None.
         """
-        if Gx == None:
+        if Gx is None:
             self.Gx = 100*np.identity(len(self.x))
         else:
             self.Gx = Gx
@@ -125,7 +125,7 @@ class Rover:
             R (np.ndarray): Matrice de covariance du bruit de mesure
             dt (float): Période d'une itération dans la boucle principale 
         """
-        if self.__predict == False:
+        if not self.__predict:
             self.kalman_predict(y, A, B, Q,dt)
         else:
             self.kalman_correc(y, C, R, 1)
@@ -191,6 +191,6 @@ class Rover:
         return u
 
 if __name__=="__main__":
-    boat = Boat(np.array([[0], [0], [2], [1]]))
-    u = boat.controller(np.array([[2], [2]]), pi/4)
+    rover = Rover(np.array([[0], [0], [2], [1]]))
+    u = rover.controller(np.array([[2], [2]]), pi/4)
     print(u)
