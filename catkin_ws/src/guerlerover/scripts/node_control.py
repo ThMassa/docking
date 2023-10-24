@@ -4,6 +4,7 @@
 import rospy
 from classRover import *
 from geometry_msgs.msg import Twist, PoseStamped
+import numpy as np
 
 
 L, l = 1, 1  # taille Longueur largeur du dock

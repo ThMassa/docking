@@ -76,15 +76,15 @@ def rover_node():
     rover_pose_publisher = rospy.Publisher("/rover_pose",PoseStamped, queue_size = 10)
     dock_pose_publisher = rospy.Publisher("/dock_pose",PoseStamped, queue_size = 10)
 
-    rospy.Subscriber('/mavros/imu/data',Imu , imu_callback) # TODO mettre les bons topics mavros (sauf si sbg sur rover mais rien de moins sur)
+    rospy.Subscriber('/mavros/imu/data',Imu , imu_callback)
     rospy.Subscriber('/mavros/global_position/raw/fix', NavSatFix, gps_callback)
     
     # Configuration du socket UDP pour la communication avec le système distant
-    # udp_ip = "192.168.0.12"
-    # udp_port = 12345  # Port UDP de destination sur le système distant
-    # # Création du socket UDP
-    # udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # udp_socket.bind((udp_ip, udp_port))
+    udp_ip = "192.168.0.12"
+    udp_port = 12345  # Port UDP de destination sur le système distant
+    # Création du socket UDP
+    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    udp_socket.bind((udp_ip, udp_port))
 
 
     rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
@@ -93,7 +93,7 @@ def rover_node():
         # Attendez de recevoir des données UDP
         # data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
         # lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
-        if lat!=None and long != None:
+        if lat is not None and long is not None:
             x,y = conv_ll2xy(lat,long)
             rover_pose = PoseStamped()
             rover_pose.pose.position.x = x
@@ -104,8 +104,8 @@ def rover_node():
             rover_pose_publisher.publish(rover_pose)
 
         
-        # xd,yd = conv_ll2xy(lat_dock,long_dock)
-        xd,yd = conv_ll2xy(48.1994155,-3.0156827)
+        xd,yd = conv_ll2xy(lat_dock,long_dock)
+        # xd,yd = conv_ll2xy(48.1994155,-3.0156827)
         dock_pose = PoseStamped()
         dock_pose.pose.position.x = xd
         dock_pose.pose.position.y = yd
