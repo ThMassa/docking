@@ -21,6 +21,7 @@
     - [Packages](#packages)
     - [Dock](#dock)
     - [Boat](#boat)
+    - [Rover](#rover)
     - [RTK Base](#rtk-base)
   - [Utiliser Docker pour ne pas avoir à installer ROS](#utiliser-docker-pour-ne-pas-avoir-à-installer-ros)
 
@@ -95,7 +96,7 @@ Cependant cela n'est pas suffisant. Il faut armer le système mavlink et le mett
     rosrun mavros mavsys mode -c GUIDED
 
 
-Pour mettre à jour le package il faut faire:
+Pour mettre à jour le package il faut faire (sur sa machine):
 
     scp -r catkin_ws/src/guerleboat surcouf@10.0.11.100:~/catkin_ws/src/
 
@@ -103,6 +104,24 @@ Puis dans le ssh :
 
     cd catkin_ws
     catkin_make
+
+### Rover
+Pour utiliser le bateau, il est nécessaire de se connecter sur son réseau **AIONio-cb61** avec le mdp : **aionrobotics**
+
+Une fois que c'est fait :
+
+    ssh -X aion@10.0.1.128
+
+Le mdp étant **aion**.
+
+Ensuite dans le ssh :
+
+    roslaunch guerlerover launch_rover.launch
+
+Et comme pour le bateau :
+
+    rosrun mavros mavsafety arm
+    rosrun mavros mavsys mode -c GUIDED
 
 ### RTK Base
 

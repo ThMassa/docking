@@ -101,8 +101,5 @@
     <node pkg="rosbag" type="record" name="rosbag_record_rover"
        args="record -a -o /home/aion/guerlelogs/rover.bag"
        if="$(arg record_rover)" />
-
-  
     
 </launch>
-       <!-- args="record -o /home/guerlelogs/boat.bag /cmd_vel /sbg/ekf_quat /sbg/gps_pos" -->
