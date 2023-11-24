@@ -59,7 +59,7 @@ Pour utiliser le dock, il suffit de se connecter sur le même réseau (pour l'in
 
 Une fois connecté en ssh, il suffit de lancer notre [roslaunch](/catkin_ws/src/guerledocking/launch/launch_dock.launch) :
 
-    roslaunch guerledock launch_dock.launch
+    roslaunch guerledocking launch_dock.launch
 
 Cette commande lance notre [node ROS](/catkin_ws/src/guerledocking/scripts/node_data_broadcaster.py) ainsi que les drivers du GPS et de la centrale inertielle. Les données GPS et inertielle du dock sont ensuite communiquées via connection UDP au device connecté à l'autre modem. Il y a également une prise de logs de toutes les données GPS et inertielles qui peuvent être utiles à des fins d'analyse.
 
