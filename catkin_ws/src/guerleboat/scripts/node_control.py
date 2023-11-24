@@ -15,7 +15,7 @@ Xb = np.zeros((5,1))    #Pose du bateau (x,y,roll,pitch,yaw)
 Xd = np.zeros((5,1))    #Pose du dock   (x,y,roll,pitch,yaw)
 
 u = np.array([[0,0]]).T
-boat = Boat(np.array([Xb[0,0],Xb[1,0],u[0,0],Xb[-1]]))
+boat = Boat(np.array([Xb[0],Xb[1],u[0],Xb[-1]]))
 
 
 def boat_pose_cb(msg):
@@ -47,7 +47,7 @@ def control_node():
 
 
     while not rospy.is_shutdown():
-        boat.x = np.array([Xb[0,0], Xb[1,0], boat.u[0,0], Xb[-1]])
+        boat.x = np.array([Xb[0], Xb[1], boat.u[0], Xb[-1]])
         phat = Xd[:2]
         theta = Xd[-1,0]
         boat.u = boat.controller(phat,theta)
