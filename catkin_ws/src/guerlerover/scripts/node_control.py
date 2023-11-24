@@ -16,7 +16,7 @@ Xb = np.zeros((5,1))    #Pose du rover (x,y,roll,pitch,yaw)
 Xd = np.zeros((5,1))    #Pose du dock   (x,y,roll,pitch,yaw)
 
 u = np.array([[0,0]]).T
-rover = Rover(np.array([Xb[0,0],Xb[1,0],u[0,0],Xb[-1]]))
+rover = Rover(np.array([Xb[0],Xb[1],u[0],Xb[-1]]))
 
 
 def rover_pose_cb(msg):
@@ -48,7 +48,7 @@ def control_node():
 
 
     while not rospy.is_shutdown():
-        rover.x = np.array([Xb[0,0], Xb[1,0], rover.u[0,0], Xb[-1]])
+        rover.x = np.array([Xb[0], Xb[1], rover.u[0], Xb[-1]])
         phat = Xd[:2]
         theta = Xd[-1,0]
         rover.u = rover.controller(phat,theta)
