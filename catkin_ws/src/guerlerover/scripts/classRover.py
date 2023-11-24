@@ -42,7 +42,7 @@ class Rover:
         Args:
             Gx (numpy.ndarray, optional): Matrice de covariance liée au vecteur d'état. Defaults to None.
         """
-        if Gx == None:
+        if Gx is None:
             self.Gx = 100*np.identity(len(self.x))
         else:
             self.Gx = Gx
@@ -125,7 +125,7 @@ class Rover:
             R (np.ndarray): Matrice de covariance du bruit de mesure
             dt (float): Période d'une itération dans la boucle principale 
         """
-        if self.__predict == False:
+        if not self.__predict:
             self.kalman_predict(y, A, B, Q,dt)
         else:
             self.kalman_correc(y, C, R, 1)
@@ -154,7 +154,7 @@ class Rover:
         unit = np.array([[cos(theta)], [sin(theta)]])
         n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
         phat0 = phat + marge*unit
-        if np.dot(unit.T, self.x[:2] - phat) < self.__value and self.__start:
+        if np.dot(unit.T, self.x[:2] - phat)[0,0] < self.__value and self.__start:
             vbar = c21 * (self.x[:2]-phat)/norm(self.x[:2]-phat)**3 + c22 * unit
             if self.__value == 0:
                 self.__value = 3*self.L
@@ -175,7 +175,7 @@ class Rover:
             # self.__scap = 0
             self.__start = False
         
-        ecap = sawtooth(thetabar - self.x[-1, 0])
+        ecap = sawtooth(thetabar - self.x[-1])
         self.__scap += ecap
         if len(self.__ecap) < 5:
             self.__ecap = np.append(self.__ecap, ecap)
@@ -187,10 +187,10 @@ class Rover:
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
-        print(self.u[1, 0])
+        # print(self.u[1, 0])
         return u
 
 if __name__=="__main__":
-    boat = Rover(np.array([[0], [0], [2], [1]]))
-    u = boat.controller(np.array([[2], [2]]), pi/4)
+    rover = Rover(np.array([[0], [0], [2], [1]]))
+    u = rover.controller(np.array([[2], [2]]), pi/4)
     print(u)

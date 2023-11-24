@@ -12,7 +12,7 @@
 
 - [Docking autonome](#docking-autonome)
     - [Auteurs](#auteurs)
-- [Table of Contents](#table-of-contents)
+- [Table des matières](#table-des-matières)
   - [Description](#description)
   - [Documentation](#documentation)
   - [Configuration](#configuration)
@@ -21,8 +21,9 @@
     - [Packages](#packages)
     - [Dock](#dock)
     - [Boat](#boat)
+    - [Rover](#rover)
     - [RTK Base](#rtk-base)
-  - [Utiliser Docker](#utiliser-docker-pour-ne-pas-avoir-à-installer-ros) 
+  - [Utiliser Docker pour ne pas avoir à installer ROS](#utiliser-docker-pour-ne-pas-avoir-à-installer-ros)
 
 ## Description
 Le but du projet est d'automatiser le processus de docking d'un drone. Pour cela on doit créer un dock capable d'envoyer sa position GPS et son orientation au drone qui, à partir de ces informations, sera capable de calculer une trajectoire et d'adopter un comportement lui permettant de se docker automatiquement. En plus de cela, il est nécessaire de mettre en place une balise RTK permettant d'obtenir une précision GPS au centimètre.
@@ -33,6 +34,8 @@ Le but du projet est d'automatiser le processus de docking d'un drone. Pour cela
 La doc pour la centrale inertielle SBG peut se trouver [ici](https://github.com/SBG-Systems/sbg_ros_driver)
 
 La doc pour le driver GPS sur le dock peut se trouver [ici](https://github.com/KumarRobotics/ublox)
+
+La doc pour le rover est [ici](https://github-docs.readthedocs.io/en/latest/aionio.html)
 
 ## Configuration
 Toutes les cartes étant sur une installation ubuntu18.04 (ou équivalent), l'ensemble de notre architecture repose sur [ROS Melodic](http://wiki.ros.org/melodic).
@@ -93,7 +96,7 @@ Cependant cela n'est pas suffisant. Il faut armer le système mavlink et le mett
     rosrun mavros mavsys mode -c GUIDED
 
 
-Pour mettre à jour le package il faut faire:
+Pour mettre à jour le package il faut faire (sur sa machine):
 
     scp -r catkin_ws/src/guerleboat surcouf@10.0.11.100:~/catkin_ws/src/
 
@@ -101,6 +104,24 @@ Puis dans le ssh :
 
     cd catkin_ws
     catkin_make
+
+### Rover
+Pour utiliser le bateau, il est nécessaire de se connecter sur son réseau **AIONio-cb61** avec le mdp : **aionrobotics**
+
+Une fois que c'est fait :
+
+    ssh -X aion@10.0.1.128
+
+Le mdp étant **aion**.
+
+Ensuite dans le ssh :
+
+    roslaunch guerlerover launch_rover.launch
+
+Et comme pour le bateau :
+
+    rosrun mavros mavsafety arm
+    rosrun mavros mavsys mode -c GUIDED
 
 ### RTK Base
 
@@ -121,7 +142,7 @@ Ceci permet d'accéder aux informations de la carte et éventuellement de débug
 
 ## Utiliser Docker pour ne pas avoir à installer ROS
 
-Dans le dossier Docker de ce projet, on peut trouver un Dockerfile permettant de construire une image avec Ubuntu 18.04 et ROS Melodic. Une archive donne aussi la version avec Ubuntu 20.04 et ROS Noetic. Pour contruire l'image Docker, il faut se rendre dans le dossier _/Docker_ puis taper : 
+Dans le dossier Docker de ce projet, on peut trouver un Dockerfile permettant de construire une image avec Ubuntu 18.04 et ROS Melodic. Une archive donne aussi la version avec Ubuntu 20.04 et ROS Noetic. Pour contruire l'image Docker, il faut se rendre dans le dossier [_Docker_](/Docker/) puis taper : 
 
         docker built -t name . # remplacer "name" 
         # par le nom voulu pour l'image
