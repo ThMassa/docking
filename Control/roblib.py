@@ -447,7 +447,7 @@ def draw_box(ax,x1,x2,y1,y2,col):
 
 def draw_polygon(ax, P, col):
     patches = []
-    patches.append(Polygon(P, True))
+    patches.append(Polygon(P, False))
     p = PatchCollection(patches, cmap=matplotlib.cm.jet, alpha=0.4, color=col)
     ax.add_collection(p)
 

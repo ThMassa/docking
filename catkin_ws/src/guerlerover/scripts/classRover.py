@@ -191,6 +191,6 @@ class Rover:
         return u
 
 if __name__=="__main__":
-    boat = Boat(np.array([[0], [0], [2], [1]]))
+    boat = Rover(np.array([[0], [0], [2], [1]]))
     u = boat.controller(np.array([[2], [2]]), pi/4)
     print(u)
