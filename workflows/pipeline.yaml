@@ -1,0 +1,11 @@
+stages:
+  - build
+ 
+variables:
+  ROS_DISTRO: "melodic"
+  ROS_WS_PATH: "$CI_PROJECT_DIR"
+
+build:
+  stage: build
+  script: 
+    - catkin_make
