@@ -10,10 +10,13 @@ from geometry_msgs.msg import PoseStamped
 
 gps_data = None
 imu_data = None
+
 # lat_dock = None
-lat_dock = 48.1994155
 # long_dock = None
+
+lat_dock = 48.1994155
 long_dock = -3.0156827
+
 roll_dock = None
 pitch_dock = None
 yaw_dock = None
@@ -76,7 +79,7 @@ def rover_node():
     rover_pose_publisher = rospy.Publisher("/rover_pose",PoseStamped, queue_size = 10)
     dock_pose_publisher = rospy.Publisher("/dock_pose",PoseStamped, queue_size = 10)
 
-    rospy.Subscriber('/mavros/imu/data',Imu , imu_callback)
+    rospy.Subscriber('/mavros/imu/data', Imu, imu_callback)
     rospy.Subscriber('/mavros/global_position/raw/fix', NavSatFix, gps_callback)
     
     # Configuration du socket UDP pour la communication avec le système distant
@@ -91,8 +94,8 @@ def rover_node():
 
     while not rospy.is_shutdown():
         # Attendez de recevoir des données UDP
-        # data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
-        # lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
+        data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
+        lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
         if lat is not None and long is not None:
             x,y = conv_ll2xy(lat,long)
             rover_pose = PoseStamped()
@@ -104,17 +107,16 @@ def rover_node():
             rover_pose_publisher.publish(rover_pose)
 
         
-        xd,yd = conv_ll2xy(lat_dock,long_dock)
-        # xd,yd = conv_ll2xy(48.1994155,-3.0156827)
+        x_dock,y_dock = conv_ll2xy(lat_dock,long_dock)
         dock_pose = PoseStamped()
-        dock_pose.pose.position.x = xd
-        dock_pose.pose.position.y = yd
-        # dock_pose.pose.orientation.x = roll_dock
-        # dock_pose.pose.orientation.y = pitch_dock
-        # dock_pose.pose.orientation.z = yaw_dock
-        dock_pose.pose.orientation.x = 0
-        dock_pose.pose.orientation.y = 0
-        dock_pose.pose.orientation.z = 0
+        dock_pose.pose.position.x = x_dock
+        dock_pose.pose.position.y = y_dock
+        dock_pose.pose.orientation.x = roll_dock
+        dock_pose.pose.orientation.y = pitch_dock
+        dock_pose.pose.orientation.z = yaw_dock
+        # dock_pose.pose.orientation.x = 0
+        # dock_pose.pose.orientation.y = 0
+        # dock_pose.pose.orientation.z = 0
         dock_pose_publisher.publish(dock_pose)
 
         rate.sleep()
