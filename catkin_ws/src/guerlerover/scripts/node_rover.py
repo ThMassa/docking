@@ -11,11 +11,11 @@ from geometry_msgs.msg import PoseStamped
 gps_data = None
 imu_data = None
 
-# lat_dock = None
-# long_dock = None
+lat_dock = None
+long_dock = None
 
-lat_dock = 48.1994155
-long_dock = -3.0156827
+# lat_dock = 48.1994155
+# long_dock = -3.0156827
 
 roll_dock = None
 pitch_dock = None
@@ -107,17 +107,17 @@ def rover_node():
             rover_pose_publisher.publish(rover_pose)
 
         
-        x_dock,y_dock = conv_ll2xy(lat_dock,long_dock)
-        dock_pose = PoseStamped()
-        dock_pose.pose.position.x = x_dock
-        dock_pose.pose.position.y = y_dock
-        dock_pose.pose.orientation.x = roll_dock
-        dock_pose.pose.orientation.y = pitch_dock
-        dock_pose.pose.orientation.z = yaw_dock
-        # dock_pose.pose.orientation.x = 0
-        # dock_pose.pose.orientation.y = 0
-        # dock_pose.pose.orientation.z = 0
-        dock_pose_publisher.publish(dock_pose)
+            x_dock,y_dock = conv_ll2xy(lat_dock,long_dock)
+            dock_pose = PoseStamped()
+            dock_pose.pose.position.x = x_dock
+            dock_pose.pose.position.y = y_dock
+            dock_pose.pose.orientation.x = roll_dock
+            dock_pose.pose.orientation.y = pitch_dock
+            dock_pose.pose.orientation.z = yaw_dock
+            # dock_pose.pose.orientation.x = 0
+            # dock_pose.pose.orientation.y = 0
+            # dock_pose.pose.orientation.z = 0
+            dock_pose_publisher.publish(dock_pose)
 
         rate.sleep()
     
