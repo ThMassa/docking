@@ -1,5 +1,12 @@
 # LAB BOOK projet Guerle-docking
 
+## Décembre 2023
+
+### Vendredi 8
+
+Guillaume
+- TODO : améliorer la structure de la base gnss (ip66) + trouver un endroit fixe où installer la base gnss + comprendre comment émettre les données gps avec la correction RTK via le module XBEE S2C.
+
 ## Octobre 2023
 
 ### Jeudi 12
