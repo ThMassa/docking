@@ -118,10 +118,19 @@ Ensuite dans le ssh :
 
     roslaunch guerlerover launch_rover.launch
 
-Et comme pour le bateau :
+Et comme pour le bateau, sur un autre terminal (*toujours en ssh*) :
 
     rosrun mavros mavsafety arm
     rosrun mavros mavsys mode -c GUIDED
+
+Pour mettre à jour le package il faut faire (sur sa machine):
+
+    scp -r catkin_ws/src/guerlerover aion@10.0.1.128:~/AIONio_ws/src/
+
+Puis dans le ssh :
+
+    cd AIONio_ws
+    catkin build
 
 ### RTK Base
 
