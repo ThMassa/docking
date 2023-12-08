@@ -4,6 +4,7 @@
 import rospy
 import socket
 import numpy as np
+import pyproj as prj
 # from sbg_driver.msg import SbgEkfQuat, SbgGpsPos
 from sensor_msgs.msg import NavSatFix,Imu
 from geometry_msgs.msg import PoseStamped
@@ -14,9 +15,6 @@ imu_data = None
 lat_dock = None
 long_dock = None
 
-# lat_dock = 48.1994155
-# long_dock = -3.0156827
-
 roll_dock = None
 pitch_dock = None
 yaw_dock = None
@@ -25,7 +23,8 @@ imu_data = None
 lat = None
 long = None
 
-rho = 6371E3
+lambert = prj.Proj(init='EPSG:2154')
+wgs84 = prj.Proj(init='EPSG:4326')
 
 def unpack_data(data_string):
     if data_string[0] != "$":
@@ -38,8 +37,9 @@ def unpack_data(data_string):
     phi, theta, psi = [float(val) for val in angles.split(",")]
     return lat,long, phi, theta, psi
 
-def conv_ll2xy(lat,long):
-    return rho*(long-long_dock)*np.pi/180, rho*np.cos(long*np.pi/180)*(lat-lat_dock)*np.pi/180
+def conv_ll2xy(lat,lon):
+    print(prj.transform(wgs84, lambert, lon, lat))
+    return prj.transform(wgs84, lambert, lon, lat)
 
 def euler_from_quaternion(quat):
     """
@@ -83,7 +83,7 @@ def rover_node():
     rospy.Subscriber('/mavros/global_position/raw/fix', NavSatFix, gps_callback)
     
     # Configuration du socket UDP pour la communication avec le système distant
-    udp_ip = "192.168.0.12"
+    udp_ip = "0.0.0.0"
     udp_port = 12345  # Port UDP de destination sur le système distant
     # Création du socket UDP
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -114,9 +114,6 @@ def rover_node():
             dock_pose.pose.orientation.x = roll_dock
             dock_pose.pose.orientation.y = pitch_dock
             dock_pose.pose.orientation.z = yaw_dock
-            # dock_pose.pose.orientation.x = 0
-            # dock_pose.pose.orientation.y = 0
-            # dock_pose.pose.orientation.z = 0
             dock_pose_publisher.publish(dock_pose)
 
         rate.sleep()
