@@ -38,7 +38,7 @@ def unpack_data(data_string):
     return lat,long, phi, theta, psi
 
 def conv_ll2xy(lat,lon):
-    print(prj.transform(wgs84, lambert, lon, lat))
+    # print(prj.transform(wgs84, lambert, lon, lat))
     return prj.transform(wgs84, lambert, lon, lat)
 
 def euler_from_quaternion(quat):
