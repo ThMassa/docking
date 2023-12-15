@@ -5,19 +5,20 @@ import rospy
 from classRover import *
 from geometry_msgs.msg import Twist, PoseStamped
 import numpy as np
-
+from numpy import cos, sin
+from numpy.linalg import norm
 
 L, l = 1, 1  # taille Longueur largeur du dock
 marge = 1.5  # marge de securite, plus elle est elevee, plus le bateau s'arretera loin du dock et donc moins il aura de chance de se cogner contre le dock
 c11, c12 = 5, 1  # constantes pour les champs de potentiels
 c21, c22 = 10, 5  # constantes pour les champs de potentiels
 
-Xb = np.zeros((5,1))    #Pose du rover (x,y,roll,pitch,yaw)
-Xd = np.zeros((5,1))    #Pose du dock   (x,y,roll,pitch,yaw)
+Xb = np.zeros((5,1),dtype=np.float64)    #Pose du rover (x,y,roll,pitch,yaw)
+Xd = np.zeros((5,1),dtype=np.float64)    #Pose du dock   (x,y,roll,pitch,yaw)
 
-u = np.array([[0,0]]).T
+u = np.array([[0.,0.]]).T
 rover = Rover(np.array([Xb[0],Xb[1],u[0],Xb[-1]]))
-
+rover.init_kalman()
 
 def rover_pose_cb(msg):
     global Xb
@@ -44,15 +45,36 @@ def control_node():
 
     vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
-    rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
+    f = 1
+    dt = 1/f
+    rate = rospy.Rate(f)  # Par exemple, 1 message par seconde
 
-
+    y = None
     while not rospy.is_shutdown():
+        # y1 = np.array([Xb[0],Xb[1],Xb[-1]])
+
+
+        # B = np.array([[cos(Xb[-1,0])*cos(Xb[3,0]), 0],
+        #               [cos(Xb[-1,0])*sin(Xb[3,0]), 0],
+        #               [-sin(Xb[-1,0])        , 0],
+        #               [0                  , 1]], dtype=np.float64)
+        # Q = .05*np.identity(4)
+        # C = np.array([[1, 0, 0, 0],
+        #             [0, 1, 0, 0],
+        #             [0, 0, 0, 1]])
+        # R = 25*np.identity(3)
+        # R[2, 2] = .17
+        # # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
+        # rover.kalman_predict(0, B, Q, dt)
+
+        # if not(np.array_equal(y1, y)):
+        #     y = y1
+        #     rover.kalman_correc(y, C, R, dt)
+
         rover.x = np.array([Xb[0], Xb[1], rover.u[0], Xb[-1]])
         phat = Xd[:2]
         theta = Xd[-1,0]
-        rover.u = rover.controller(phat,theta)
-
+        rover.controller(phat,theta)
         vel_msg = Twist()
         vel_msg.linear.x = rover.u[0,0]
         vel_msg.angular.z = rover.u[1,0]

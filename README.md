@@ -155,7 +155,7 @@ Ceci permet d'accéder aux informations de la carte et éventuellement de débug
 
 Dans le dossier Docker de ce projet, on peut trouver un Dockerfile permettant de construire une image avec Ubuntu 18.04 et ROS Melodic. Une archive donne aussi la version avec Ubuntu 20.04 et ROS Noetic. Pour contruire l'image Docker, il faut se rendre dans le dossier [_Docker_](/Docker/) puis taper : 
 
-        docker built -t name . # remplacer "name" 
+        docker build -t name . # remplacer "name" 
         # par le nom voulu pour l'image
 
 Il faut ensuite attendre quelques minutes la création de l'image. Pour lancer le conteneur, il est important de préciser en commande les autorisations souhaitées et les fichiers partagés : 

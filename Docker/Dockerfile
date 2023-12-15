@@ -38,6 +38,8 @@ RUN wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add 
 RUN add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
 RUN apt-get install code -y
 
+RUN apt install ros-melodic-plotjuggler-ros
+
 RUN apt-get install git -y
 
 WORKDIR /home/Guerledan

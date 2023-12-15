@@ -23,6 +23,8 @@ imu_data = None
 lat = None
 long = None
 
+history_dock=[]
+
 lambert = prj.Proj(init='EPSG:2154')
 wgs84 = prj.Proj(init='EPSG:4326')
 
@@ -96,7 +98,7 @@ def rover_node():
         # Attendez de recevoir des données UDP
         data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
         lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
-        if lat is not None and long is not None:
+        if lat is not None and long is not None and imu_data is not None:
             x,y = conv_ll2xy(lat,long)
             rover_pose = PoseStamped()
             rover_pose.pose.position.x = x

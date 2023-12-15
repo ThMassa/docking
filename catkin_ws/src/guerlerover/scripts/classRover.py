@@ -20,7 +20,7 @@ class Rover:
     
     - Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
     """
-    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1, dthetamax = 100):
+    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1, dthetamax = 5.):
         """Initialise l'instance
 
         Args:
@@ -144,12 +144,11 @@ class Rover:
         if not hasattr(self, "_Boat__start"):
             self.__start = True
             self.__value = 0
-            self.__ecap = array([0])
+            self.__ecap = array([0.])
             self.__scap = 0
             
         c11, c12 = 5, 2  # constantes pour les champs de potentiels
         c21, c22 = 10, 5  # constantes pour les champs de potentiels
-        u = np.array([[0], [0]])
         k_ = 1
         unit = np.array([[cos(theta)], [sin(theta)]])
         n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
@@ -166,6 +165,7 @@ class Rover:
             k_ = -sign(np.dot(unit.T, phat-self.x[:2]))[0, 0]
             nn = np.dot(n, n.T)
             vbar = -c11*np.dot(nn, self.x[:2]-phat) + c12*np.array([[cos(theta+pi)], [sin(theta+pi)]])
+        # print("vbar :\n",vbar)
 
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
@@ -182,13 +182,15 @@ class Rover:
         else:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
+
+        # print(vbar)
         self.u[0,0] = vbar
-        self.u[1,0] = 5*ecap + .02*self.__scap
+        self.u[1,0] = (5*ecap + .02*self.__scap)/5
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
         # print(self.u[1, 0])
-        return u
+        # return self.u
 
 if __name__=="__main__":
     rover = Rover(np.array([[0], [0], [2], [1]]))
