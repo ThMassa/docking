@@ -43,7 +43,8 @@ class Rover:
             Gx (numpy.ndarray, optional): Matrice de covariance liée au vecteur d'état. Defaults to None.
         """
         if Gx is None:
-            self.Gx = 100*np.identity(len(self.x))
+            # self.Gx = 100*np.identity(len(self.x))
+            self.Gx = np.diag(np.array([5,5,1,0.1]))
         else:
             self.Gx = Gx
             
