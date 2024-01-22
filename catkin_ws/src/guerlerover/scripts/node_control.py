@@ -59,7 +59,8 @@ def control_node():
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None:
             if not rover_initiated:
-                rover = Rover(np.array([Xb[0],Xb[1],u[0],Xb[-1]]))
+                rover = Rover(np.array([Xb[0],Xb[1], Xb[-1]]))
+                # rover = Rover(np.array([Xb[0],Xb[1], 0, Xb[-1]]))
                 rover.init_kalman()
                 rover_initiated = True
 
@@ -83,10 +84,12 @@ def control_node():
             #     y = y1
             #     rover.kalman_correc(y, C, R, dt)
 
-            rover.x = np.array([Xb[0], Xb[1], rover.u[0], Xb[-1]])
+            rover.x = np.array([Xb[0], Xb[1], rover.u, Xb[-1]])
             phat = Xd[:2]
             theta = Xd[-1,0]
             rover.controller(phat,theta)
+            # rover.extended_kalman(rover.u,Xb[:2],dt)
+
             vel_msg = Twist()
             vel_msg.linear.x = rover.u[0,0]
             vel_msg.angular.z = rover.u[1,0]

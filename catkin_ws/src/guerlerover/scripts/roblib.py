@@ -64,8 +64,8 @@ def scalarprod(u,v): # scalar product
     return sum(u[:]*v[:])
 
 
-def eulermat(phi,theta,psi):
-    return expw([0,0,psi]) @ expw([0,theta,0]) @ expw([phi,0,0])
+# def eulermat(phi,theta,psi):
+#     return expw([0,0,psi]) @ expw([0,theta,0]) @ expw([phi,0,0])
 
 
 def eulermat2angles(R):
@@ -104,15 +104,15 @@ def angle2d(u,v):
 #    if c <-0.99:return angle3d(u,v+0.01*randn(3,1))
 #    return (arccos(c)/norm(w))*w
 
-def rotuv(u,v): #returns rotation with minimal angle  such that  v=R*u
-            # see https://en.wikipedia.org/wiki/Rotation_matrix#Vector_to_vector_formulation
-    u=array(u).reshape(3,1)
-    v=array(v).reshape(3,1)
-    u=(1/norm(u))*u
-    v=(1/norm(v))*v
-    c=scalarprod(u,v)
-    A=v@u.T-u@v.T
-    return eye(3,3)+A+(1/(1+c))*A@A
+# def rotuv(u,v): #returns rotation with minimal angle  such that  v=R*u
+#             # see https://en.wikipedia.org/wiki/Rotation_matrix#Vector_to_vector_formulation
+#     u=array(u).reshape(3,1)
+#     v=array(v).reshape(3,1)
+#     u=(1/norm(u))*u
+#     v=(1/norm(v))*v
+#     c=scalarprod(u,v)
+#     A=v@u.T-u@v.T
+#     return eye(3,3)+A+(1/(1+c))*A@A
 
 def angle3d(u,v):  #returns theta*w such that  v=expw(theta*w)*u  with theta minimal in [0,pi]
     u=array(u).reshape(3,1)
@@ -152,8 +152,8 @@ def expw(w): return expm(adjoint(w))
 def expwH(w): return ToH(expw(w))
 def logw(R): return adjoint_inv(logm(R))
 
-def Rlatlong(lx,ly): 
-    return eulermat(0,0,lx)@eulermat(0,-pi/2+ly,-pi/2).T
+# def Rlatlong(lx,ly): 
+#     return eulermat(0,0,lx)@eulermat(0,-pi/2+ly,-pi/2).T
         
 
 def latlong2cart(ρ,lx,ly): 

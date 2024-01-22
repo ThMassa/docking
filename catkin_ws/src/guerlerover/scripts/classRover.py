@@ -3,6 +3,7 @@
 from numpy import cos, sin, array, sign, pi
 import numpy as np
 from numpy.linalg import norm
+from EKF import EKF
 
 #TODO l'IMU du bateau n'est pas bien orienté
 
@@ -24,7 +25,7 @@ class Rover:
         """Initialise l'instance
 
         Args:
-            x (numpy.ndarray): Vecteur d'état (px, py, pz, v, heading)
+            x (numpy.ndarray): Vecteur d'état (px, py, heading)
             u (numpy.ndarray): Commande (v, yaw)
             L (int, optional): Longueur du bateau. Defaults to 1.
             vmax (int, optional): Vitesse maximale du bateau. Defaults to 1.
@@ -35,6 +36,8 @@ class Rover:
         self.u = u
         self.dthetamax = dthetamax
         
+        self.zk = np.array([[0,0.]]).T
+        
     
     def init_kalman(self, Gx=None):
         """Initialise la matrice de covariance liée au vecteur d'état du bateau
@@ -43,8 +46,7 @@ class Rover:
             Gx (numpy.ndarray, optional): Matrice de covariance liée au vecteur d'état. Defaults to None.
         """
         if Gx is None:
-            # self.Gx = 100*np.identity(len(self.x))
-            self.Gx = np.diag(np.array([5,5,1,0.1]))
+            self.Gx = 100*np.identity(len(self.x))
         else:
             self.Gx = Gx
             
@@ -103,6 +105,12 @@ class Rover:
                       [0                  , 1]], dtype=np.float64)
         return np.dot(B, self.u)
         
+
+    def fc(self,X,u):
+        x,y,th= X.flatten()
+        u1,u2 = u.flatten()
+        return np.array([[u1*cos(th),u1*sin(th),u2]]).T
+    
     
     def dead_reckoning(self, theta, dt):
         """Dead reckoning (utilisez plutôt la fonction kalman_predict si possible)
@@ -132,6 +140,10 @@ class Rover:
             self.kalman_correc(y, C, R, 1)
             self.kalman_predict(y, A, B, Q, dt)
     
+    def extended_kalman(self,u,y,dt):
+        self.x, self.Gx, self.zk = EKF(self.x,self.Gx,y,u,self.fc,dt,self.zk)
+
+
     
     def controller(self, phat, theta, marge=.5):
         """Controleur du bateau utilisant les champs de potentiels
@@ -192,6 +204,7 @@ class Rover:
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
         # print(self.u[1, 0])
         # return self.u
+
 
 if __name__=="__main__":
     rover = Rover(np.array([[0], [0], [2], [1]]))
