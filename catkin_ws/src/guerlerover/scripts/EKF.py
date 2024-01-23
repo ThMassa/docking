@@ -65,7 +65,7 @@ def EKF(X_hat,Gx,y,u,fc,dt,zk_1):
     Ak = A(X_hat,u,dt)
     Ck = C
     
-    if np.linalg.norm(zk-zk_1)<=1E-5*np.linalg.norm(zk):
+    if np.linalg.norm(zk-zk_1)>1E-2:
         xup, Gup = kalman_correc(X_hat,Gx,zk,Gbeta,Ck)
         X_hat, Gx = kalman_predict(xup,Gup,vk,Galpha,Ak)
     
