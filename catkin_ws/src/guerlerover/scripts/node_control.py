@@ -68,9 +68,9 @@ def control_node():
             y1 = np.array([Xb[0],Xb[1],Xb[-1]])
 
 
-            B = np.array([[cos(Xb[-1,0])*cos(Xb[3,0]), 0],
-                          [cos(Xb[-1,0])*sin(Xb[3,0]), 0],
-                          [-sin(Xb[-1,0])        , 0],
+            B = np.array([[cos(Xb[3,0])*cos(Xb[-1,0]), 0],
+                          [cos(Xb[3,0])*sin(Xb[-1,0]), 0],
+                          [-sin(Xb[3,0])        , 0],
                           [0                  , 1]], dtype=np.float64)
             Q = .05*np.identity(4)
             C = np.array([[1, 0, 0, 0],
@@ -78,12 +78,13 @@ def control_node():
                         [0, 0, 0, 1]])
             R = 25*np.identity(3)
             R[2, 2] = .17
-            # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
-            rover.kalman_predict(0, B, Q, dt)
 
             if np.linalg.norm(y1-y) > .01:
                 y = y1
                 rover.kalman_correc(y, C, R, dt)
+
+            # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
+            rover.kalman_predict(0, B, Q, dt)
 
             # rover.x = np.array([[Xb[0,0],Xb[1,0],0.,Xb[-1,0]]])
             phat = Xd[:2]
