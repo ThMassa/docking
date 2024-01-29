@@ -24,17 +24,10 @@ def kalman(x0,G0,u,y,Ga,Gb,A,C):
 sigma_x,sigma_y,sigma_psi, = 1,1,0.1
 sigma_beta = 1
 
-dt = 1/5
+dt = 1./5.
 
 Galpha = dt*np.diag([sigma_x,sigma_y,sigma_psi])
-Gbeta = (sigma_beta/dt)*np.eye(2)
-
-
-# def g(x):
-#     p = x[:2]
-#     return x_intruder - p + np.random.normal(scale=sigma_beta,size=(2,1))
-# C = -array([[1,0,0],
-#            [0,1,0]])
+Gbeta = (sigma_beta/dt)*np.eye(3)
 
 def g(x):
     x = x.flatten()
@@ -43,7 +36,6 @@ def g(x):
 C = np.array([[1,0,0],
               [0,1,0],
               [0,0,1]])
-
 
 def v(x,u,fc,dt):
     f = x + dt*fc(x,u)
@@ -61,13 +53,13 @@ def A(X,u,dt):
     return np.eye(3)+dt*dfc
 
 
-def EKF(X_hat,Gx,y,u,fc,dt,yk_1):
+def EKF(X_hat,Gx,yk,u,fc,dt,yk_1):
     vk = v(X_hat,u,fc,dt)
-    zk = z(y,X_hat)
+    zk = z(yk,X_hat)
     Ak = A(X_hat,u,dt)
     Ck = C
     
-    if np.linalg.norm(y-yk_1)>1E-2:
+    if np.linalg.norm(yk-yk_1)>1E-2:
         xup, Gup = kalman_correc(X_hat,Gx,zk,Gbeta,Ck)
         X_hat, Gx = kalman_predict(xup,Gup,vk,Galpha,Ak)
     

@@ -84,6 +84,7 @@ class Rover:
         K = np.dot(self.Gx, C.T)
         K = np.dot(K, np.linalg.inv(S))
         ytilde = y - np.dot(C, self.x)
+        print(np.linalg.norm(ytilde))
         self.Gx = np.dot(np.eye(len(self.x))-np.dot(K, C), self.Gx) 
         self.x = self.x + np.dot(K, ytilde)
         self.__predict = False
@@ -146,9 +147,12 @@ class Rover:
         Gx[0,0] = self.Gx[0,0]
         Gx[1,1] = self.Gx[1,1]
         Gx[2,2] = self.Gx[-1,-1]
+        print(X)
 
         X, Gx = EKF(X,Gx,y,u,self.fc,dt,yk_1)
 
+        print(X)
+        print(self.x)
         self.x[:2] = X[:2]
         self.x[-1,0] = X[2,0]
 

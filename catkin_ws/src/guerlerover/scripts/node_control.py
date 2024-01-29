@@ -51,51 +51,56 @@ def control_node():
 
     vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
-    f = 5
-    dt = 1/f
+    f = 5.
+    dt = 1./f
     rate = rospy.Rate(f)
 
     y = np.array([[0., 0., 0.]]).T
     yk_1 = np.zeros((3,1))
+
+    EKF_kevin = True
+
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None:
             if not rover_initiated:
-                rover = Rover(np.array([Xb[0],Xb[1], 0, Xb[-1]]))
+                rover = Rover(np.array([[Xb[0,0],Xb[1,0], 0, Xb[-1,0]]]).T)
                 # rover = Rover(np.array([Xb[0],Xb[1], 0, Xb[-1]]))
                 rover.init_kalman()
                 rover_initiated = True
 
-            y1 = np.array([Xb[0],Xb[1],Xb[-1]])
+            if EKF_kevin:
+                y1 = np.array([[Xb[0,0],Xb[1,0],Xb[-1,0]]]).T
 
 
-            B = np.array([[cos(Xb[3,0])*cos(Xb[-1,0]), 0],
-                          [cos(Xb[3,0])*sin(Xb[-1,0]), 0],
-                          [-sin(Xb[3,0])        , 0],
-                          [0                  , 1]], dtype=np.float64)
-            Q = .05*np.identity(4)
-            C = np.array([[1, 0, 0, 0],
-                        [0, 1, 0, 0],
-                        [0, 0, 0, 1]])
-            R = 25*np.identity(3)
-            R[2, 2] = .17
+                B = np.array([[cos(Xb[3,0])*cos(Xb[-1,0]), 0],
+                            [cos(Xb[3,0])*sin(Xb[-1,0]), 0],
+                            [-sin(Xb[3,0])        , 0],
+                            [0                  , 1]], dtype=np.float64)
+                Q = .05*np.identity(4)
+                C = np.array([[1, 0, 0, 0],
+                            [0, 1, 0, 0],
+                            [0, 0, 0, 1]])
+                R = 25*np.identity(3)
+                R[2, 2] = .17
 
-            if np.linalg.norm(y1-y) > .01:
-                y = y1
-                rover.kalman_correc(y, C, R, dt)
+                if np.linalg.norm(y1-y) > 0:
+                    y = y1
+                    rover.kalman_correc(y, C, R, dt)
 
+                rover.kalman_predict(0, B, Q, dt)
             # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
-            rover.kalman_predict(0, B, Q, dt)
 
             # rover.x = np.array([[Xb[0,0],Xb[1,0],0.,Xb[-1,0]]])
             
-            ### EKF
-            # yk = np.array([[Xb[0,0],Xb[1,0],Xb[-1,0]]])
-            # rover.extended_kalman(rover.u,yk,yk_1,dt)
-            # yk_1 = y
+            else :
+                yk = np.array([[Xb[0,0],Xb[1,0],Xb[-1,0]]]).T
+                rover.extended_kalman(rover.u,yk,yk_1,dt)
+                yk_1 = y
 
-            phat = Xd[:2]
-            theta = Xd[-1,0]
-            rover.controller(phat,theta)
+            # phat = Xd[:2]
+            # theta = Xd[-1,0]
+            # rover.controller(phat,theta)
+            rover.controller(rover.x[:2],rover.x[-1,0])
 
             vel_msg = Twist()
             vel_msg.linear.x = rover.u[0,0]
