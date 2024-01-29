@@ -140,8 +140,8 @@ class Rover:
             self.kalman_correc(y, C, R, 1)
             self.kalman_predict(y, A, B, Q, dt)
     
-    def extended_kalman(self,u,y,dt):
-        self.x, self.Gx, self.zk = EKF(self.x,self.Gx,y,u,self.fc,dt,self.zk)
+    def extended_kalman(self,u,y,yk_1,dt):
+        self.x, self.Gx, self.zk = EKF(self.x,self.Gx,y,u,self.fc,dt,yk_1)
 
 
     
