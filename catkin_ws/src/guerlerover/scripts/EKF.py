@@ -37,10 +37,12 @@ Gbeta = (sigma_beta/dt)*np.eye(2)
 #            [0,1,0]])
 
 def g(x):
-    p = x[:2]
+    x = x.flatten()
+    p = np.array([[x[0],x[1],x[-1]]]).T
     return p
 C = np.array([[1,0,0],
-           [0,1,0]])
+              [0,1,0],
+              [0,0,1]])
 
 
 def v(x,u,fc,dt):
@@ -54,8 +56,8 @@ def A(X,u,dt):
     x1,x2,x3= X.flatten()
     u1,u2 = u.flatten()
     dfc = np.array([[0,0,-u1*np.sin(x3)],
-                 [0,0, u1*np.cos(x3)],
-                 [0,0, 0]])
+                    [0,0, u1*np.cos(x3)],
+                    [0,0, 0]])
     return np.eye(3)+dt*dfc
 
 
@@ -71,4 +73,4 @@ def EKF(X_hat,Gx,y,u,fc,dt,yk_1):
     
     else:
         X_hat, Gx = kalman_predict(X_hat,Gx,vk,Galpha,Ak)
-    return X_hat,Gx,zk
+    return X_hat,Gx

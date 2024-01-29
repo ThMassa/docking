@@ -56,7 +56,7 @@ def control_node():
     rate = rospy.Rate(f)
 
     y = np.array([[0., 0., 0.]]).T
-    yk_1 = np.zeros((2,1))
+    yk_1 = np.zeros((3,1))
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None:
             if not rover_initiated:
@@ -87,13 +87,15 @@ def control_node():
             rover.kalman_predict(0, B, Q, dt)
 
             # rover.x = np.array([[Xb[0,0],Xb[1,0],0.,Xb[-1,0]]])
+            
+            ### EKF
+            # yk = np.array([[Xb[0,0],Xb[1,0],Xb[-1,0]]])
+            # rover.extended_kalman(rover.u,yk,yk_1,dt)
+            # yk_1 = y
+
             phat = Xd[:2]
             theta = Xd[-1,0]
             rover.controller(phat,theta)
-
-            ### EKF
-            # rover.extended_kalman(rover.u,Xb[:2],yk_1,dt)
-            # yk_1 = Xb[:2]
 
             vel_msg = Twist()
             vel_msg.linear.x = rover.u[0,0]

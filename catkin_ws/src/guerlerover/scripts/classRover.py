@@ -141,7 +141,20 @@ class Rover:
             self.kalman_predict(y, A, B, Q, dt)
     
     def extended_kalman(self,u,y,yk_1,dt):
-        self.x, self.Gx, self.zk = EKF(self.x,self.Gx,y,u,self.fc,dt,yk_1)
+        X = np.array([[self.x[0,0],self.x[1,0],self.x[-1,0]]]).T
+        Gx = np.zeros((3,3))
+        Gx[0,0] = self.Gx[0,0]
+        Gx[1,1] = self.Gx[1,1]
+        Gx[2,2] = self.Gx[-1,-1]
+
+        X, Gx = EKF(X,Gx,y,u,self.fc,dt,yk_1)
+
+        self.x[:2] = X[:2]
+        self.x[-1,0] = X[2,0]
+
+        self.Gx[0,0] = Gx[0,0]
+        self.Gx[1,1] = Gx[1,1]
+        self.Gx[-1,-1] = Gx[2,2]
 
 
     
