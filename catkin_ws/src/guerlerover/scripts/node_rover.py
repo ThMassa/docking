@@ -41,7 +41,8 @@ def unpack_data(data_string):
 
 def conv_ll2xy(lat,lon):
     # print(prj.transform(wgs84, lambert, lon, lat))
-    return prj.transform(wgs84, lambert, lon, lat)
+    # return prj.transform(wgs84, lambert, lon, lat)
+    return lambert(lon,lat)
 
 def euler_from_quaternion(quat):
     """
@@ -52,14 +53,20 @@ def euler_from_quaternion(quat):
     y = quat.y
     z = quat.z
     w = quat.w
-    sinr_cosp = 2 * (w * x + y * z)
-    cosr_cosp = 1 - 2 * (x * x + y * y)
-    roll = np.arctan2(sinr_cosp, cosr_cosp)
-    sinp = 2 * (w * y - z * x)
-    pitch = np.arcsin(sinp)
-    siny_cosp = 2 * (w * z + x * y)
-    cosy_cosp = 1 - 2 * (y * y + z * z)
-    yaw = np.arctan2(siny_cosp, cosy_cosp)
+
+    # sinr_cosp = 2 * (w * x + y * z)
+    # cosr_cosp = 1 - 2 * (x * x + y * y)
+    # roll = np.arctan2(sinr_cosp, cosr_cosp)
+    # sinp = 2 * (w * y - z * x)
+    # pitch = np.arcsin(sinp)
+    # siny_cosp = 2 * (w * z + x * y)
+    # cosy_cosp = 1 - 2 * (y * y + z * z)
+    # yaw = np.arctan2(siny_cosp, cosy_cosp)
+
+    roll = np.arctan2(2*(w*x+y*z),1-2*(x**2+y**2))
+    pitch = -np.pi/2 + 2*np.arctan2(np.sqrt(1+2*(w*y-x*z)),np.sqrt(1-2*(w*y-x*z)))
+    yaw = np.arctan2(2*(w*z+w*y),1-2*(y**2+z**2))
+
     return roll, pitch, yaw
 
 def imu_callback(data):
@@ -84,9 +91,9 @@ def rover_node():
     rospy.Subscriber('/mavros/imu/data', Imu, imu_callback)
     rospy.Subscriber('/mavros/global_position/raw/fix', NavSatFix, gps_callback)
     
-    # Configuration du socket UDP pour la communication avec le système distant
+    # Configuration du socket UDP pour la communication avec le dock
     udp_ip = "0.0.0.0"
-    udp_port = 12345  # Port UDP de destination sur le système distant
+    udp_port = 12345  # Port UDP de destination sur le dock
     # Création du socket UDP
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_socket.bind((udp_ip, udp_port))
@@ -96,8 +103,9 @@ def rover_node():
 
     while not rospy.is_shutdown():
         # Attendez de recevoir des données UDP
-        data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
+        data, addr = udp_socket.recvfrom(1024)
         lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
+        # print(lat,long,imu_data)
         if lat is not None and long is not None and imu_data is not None:
             x,y = conv_ll2xy(lat,long)
             rover_pose = PoseStamped()

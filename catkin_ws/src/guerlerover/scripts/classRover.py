@@ -84,7 +84,7 @@ class Rover:
         K = np.dot(self.Gx, C.T)
         K = np.dot(K, np.linalg.inv(S))
         ytilde = y - np.dot(C, self.x)
-        print(np.linalg.norm(ytilde))
+        # print(np.linalg.norm(ytilde))
         self.Gx = np.dot(np.eye(len(self.x))-np.dot(K, C), self.Gx) 
         self.x = self.x + np.dot(K, ytilde)
         self.__predict = False
@@ -147,12 +147,13 @@ class Rover:
         Gx[0,0] = self.Gx[0,0]
         Gx[1,1] = self.Gx[1,1]
         Gx[2,2] = self.Gx[-1,-1]
-        print(X)
+        # print(X)
 
         X, Gx = EKF(X,Gx,y,u,self.fc,dt,yk_1)
 
         print(X)
-        print(self.x)
+        print("##############")
+        # print(self.x)
         self.x[:2] = X[:2]
         self.x[-1,0] = X[2,0]
 
@@ -192,6 +193,9 @@ class Rover:
             if self.__value == 3*self.L:
                 self.__scap = 0
                 self.__value = 0
+            # print(phat,self.x[:2])
+            # print(phat-self.x[:2])
+            # print("---------")
             k_ = -sign(np.dot(unit.T, phat-self.x[:2]))[0, 0]
             nn = np.dot(n, n.T)
             vbar = -c11*np.dot(nn, self.x[:2]-phat) + c12*np.array([[cos(theta+pi)], [sin(theta+pi)]])
@@ -199,7 +203,10 @@ class Rover:
 
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
+        # print("before :", vbar)
+        # print(k_,norm(phat0 - self.x[:2]))
         vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2]))
+        # print("temp :",vbar)
         vbar = min(self.vmax, vbar)
         if norm(phat - self.x[:2]) < .2*self.L:
             # self.__scap = 0
@@ -213,7 +220,7 @@ class Rover:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
 
-        # print(vbar)
+        # print("after :", vbar)
         self.u[0,0] = vbar
         self.u[1,0] = (5*ecap + .02*self.__scap)/5
         self.u[1,0] = min(self.dthetamax, self.u[1,0])

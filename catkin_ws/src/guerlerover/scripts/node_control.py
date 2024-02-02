@@ -62,11 +62,13 @@ def control_node():
 
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None:
+            print((Xd-Xb).flatten())
             if not rover_initiated:
                 rover = Rover(np.array([[Xb[0,0],Xb[1,0], 0, Xb[-1,0]]]).T)
                 # rover = Rover(np.array([Xb[0],Xb[1], 0, Xb[-1]]))
                 rover.init_kalman()
                 rover_initiated = True
+            # print((rover.x[:2]-Xb[:2]).flatten(),(Xb[:2]-Xd[:2]).flatten())
 
             if EKF_kevin:
                 y1 = np.array([[Xb[0,0],Xb[1,0],Xb[-1,0]]]).T
@@ -88,19 +90,20 @@ def control_node():
                     rover.kalman_correc(y, C, R, dt)
 
                 rover.kalman_predict(0, B, Q, dt)
+                # print(rover.Gx)
             # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
 
-            # rover.x = np.array([[Xb[0,0],Xb[1,0],0.,Xb[-1,0]]])
             
             else :
                 yk = np.array([[Xb[0,0],Xb[1,0],Xb[-1,0]]]).T
                 rover.extended_kalman(rover.u,yk,yk_1,dt)
-                yk_1 = y
+                yk_1 = yk
 
             # phat = Xd[:2]
             # theta = Xd[-1,0]
             # rover.controller(phat,theta)
-            rover.controller(rover.x[:2],rover.x[-1,0])
+            rover.x = np.array([[Xb[0,0],Xb[1,0],0.,Xb[-1,0]]]).T
+            rover.controller(Xd[:2],Xd[-1,0])
 
             vel_msg = Twist()
             vel_msg.linear.x = rover.u[0,0]
