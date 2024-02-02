@@ -35,8 +35,8 @@ def rover_pose_cb(msg):
 
 def dock_pose_cb(msg):
     global Xd
-    Xd = np.array([[msg.pose.position.x, 
-                    msg.pose.position.y, 
+    Xd = np.array([[msg.pose.position.x - 20,
+                    msg.pose.position.y + 20,
                     msg.pose.orientation.x, 
                     msg.pose.orientation.y, 
                     msg.pose.orientation.z]]).T
@@ -102,7 +102,7 @@ def control_node():
             # phat = Xd[:2]
             # theta = Xd[-1,0]
             # rover.controller(phat,theta)
-            rover.x = np.array([[Xb[0,0],Xb[1,0],0.,Xb[-1,0]]]).T
+            # rover.x = np.array([[Xb[0,0],Xb[1,0],0.,Xb[-1,0]]]).T
             rover.controller(Xd[:2],Xd[-1,0])
 
             vel_msg = Twist()
