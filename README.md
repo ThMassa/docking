@@ -135,7 +135,7 @@ Puis dans le ssh :
 ### RTK Base
 
 Pour installer la base RTK, il suffit de 
-- connecter le module Ardusimple+Xbee à la Raspberry en faisant attention à bien brancher sur le port "Power+GPS" et non pas sur le port "Power+XBEE".
+- connecter le module Ardusimple à la Raspberry en branchant les deux ports **GPS+Power** et **Xbee+Power**.
 - relier la carte Ardusimple à l'antenne RTK à l'aide du câble coaxial de l'installation. 
 - alimenter la Raspberry et attendre 2-3 minutes que le module se lance correctement (on peut connecter la Raspberry à un écran pour en avoir le coeur net).
 
