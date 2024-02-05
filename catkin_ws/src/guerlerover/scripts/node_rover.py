@@ -116,7 +116,11 @@ def rover_node():
             rover_pose.pose.orientation.z = imu_data[2]
             rover_pose_publisher.publish(rover_pose)
 
-        
+            lat_dock = 48.1984105
+            long_dock = -3.0130417
+            roll_dock = 0
+            pitch_dock = 0
+            yaw_dock = 115*np.pi/180
             x_dock,y_dock = conv_ll2xy(lat_dock,long_dock)
             dock_pose = PoseStamped()
             dock_pose.pose.position.x = x_dock

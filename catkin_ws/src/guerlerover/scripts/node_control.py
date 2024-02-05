@@ -35,8 +35,8 @@ def rover_pose_cb(msg):
 
 def dock_pose_cb(msg):
     global Xd
-    Xd = np.array([[msg.pose.position.x - 20,
-                    msg.pose.position.y + 20,
+    Xd = np.array([[msg.pose.position.x,
+                    msg.pose.position.y,
                     msg.pose.orientation.x, 
                     msg.pose.orientation.y, 
                     msg.pose.orientation.z]]).T
