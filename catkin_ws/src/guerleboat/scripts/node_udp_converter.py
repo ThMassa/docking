@@ -83,7 +83,7 @@ def udp_converter_node():
         dock_pose.pose.position.y = lat_dock
         dock_pose.pose.orientation.x = roll_dock
         dock_pose.pose.orientation.y = pitch_dock
-        dock_pose.pose.orientation.z = sawtooth(yaw_dock - np.pi/2) #TODO peut être a revoir
+        dock_pose.pose.orientation.z = yaw_dock #TODO peut être a revoir
         udp_converter_publisher.publish(dock_pose)
 
         rate.sleep()

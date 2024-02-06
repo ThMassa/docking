@@ -1,9 +1,9 @@
 <launch>
 
-    <arg name="record_logs" default="false" />
-    <arg name="simulate_dock" default='false' />
-    <arg name="replay_log" default='true' />
-    <arg name="bag_played"/>
+    <arg name="get_logs" default="false" />
+    <arg name="simulate_dock" default="false" />
+    <arg name="simulate_dock_with_log" default="false" />
+    <arg name="bag_played" default=""/>
     <arg name="latitude" default="48.19894652483758"/>
     <arg name="longitude" default="-3.0156170343320365"/>
     <arg name="yaw" default="0."/>
@@ -39,23 +39,20 @@
         unless="$(arg simulate_dock)" />
     
     <node name="udp_simulator_node" pkg="guerleboat" type="node_udp_simulator.py" output="screen"
-        if="$(arg simulate_dock) and not $(arg replay_log)" >
+        if="$(arg simulate_dock)" >
         <param name="latitude" type="double" value="$(arg latitude)"/>
         <param name="longitude" type="double" value="$(arg longitude)"/>
         <param name="yaw" type="double" value="$(arg yaw)"/>
     </node>
 
     <node name="rosbag_player" pkg="rosbag" type="play" output="screen"
-        if="$(arg simulate_dock) and $(arg replay_log)"
+        if="$(arg simulate_dock_with_log)"
         args="-l $(arg bag_played) --topics /udp_publisher">
     </node>
 
     <node pkg="rosbag" type="record" name="rosbag_record_boat"
        args="record -o /home/surcouf/guerlelogs/boat.bag /dock_pose /boat_pose /cmd_vel /boat_kalman /udp_publisher"
-       if="$(arg record_boat)" />
-
-
-  
+       if="$(arg get_logs)" />
     
 </launch>
        <!-- args="record -o /home/guerlelogs/boat.bag /cmd_vel /sbg/ekf_quat /sbg/gps_pos" -->

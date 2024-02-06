@@ -24,6 +24,7 @@
     - [Rover](#rover)
     - [RTK Base](#rtk-base)
   - [Utiliser Docker pour ne pas avoir à installer ROS](#utiliser-docker-pour-ne-pas-avoir-à-installer-ros)
+  - [TODO](#todo)
 
 ## Description
 Le but du projet est d'automatiser le processus de docking d'un drone. Pour cela on doit créer un dock capable d'envoyer sa position GPS et son orientation au drone qui, à partir de ces informations, sera capable de calculer une trajectoire et d'adopter un comportement lui permettant de se docker automatiquement. En plus de cela, il est nécessaire de mettre en place une balise RTK permettant d'obtenir une précision GPS au centimètre.
@@ -92,16 +93,16 @@ Une fois connecté, il faut lancer le [roslaunch](/catkin_ws/src/guerleboat/laun
     roslaunch guerleboat launch_boat.launch
 
     # Lance tout le système avec logs
-    roslaunch guerleboat launch_boat.launch record_logs:=true
-
-    # Lance le système en simulant le dock (la connexion UDP) grâce à un log précédent
-    roslaunch guerleboat launch_boat.launch simulate_dock:=true bag_played:=chemin/vers/le/bag
+    roslaunch guerleboat launch_boat.launch get_logs:=true
 
     # Lance le système en simulant le dock (la connexion UDP) en forçant les coordonnées à un point du lac
-    roslaunch guerleboat launch_boat.launch simulate_dock:=true replay_log:=false
+    roslaunch guerleboat launch_boat.launch simulate_dock:=true
 
     # Lance le système en simulant le dock (la connexion UDP) en forçant les coordonnées
-    roslaunch guerleboat launch_boat.launch simulate_dock:=true replay_log:=false latitude:=XXX longitude:=XXX yaw:=XXX
+    roslaunch guerleboat launch_boat.launch simulate_dock:=true latitude:=XXX longitude:=XXX yaw:=XXX
+
+    # Lance le système en simulant le dock (la connexion UDP) grâce à un log précédent
+    roslaunch guerleboat launch_boat.launch simulate_dock_with_log:=true bag_played:=chemin/vers/le/bag
 
 Cependant cela n'est pas suffisant. Il faut armer le système mavlink et le mettre en mode *GUIDED*. Pour cela il suffit de faire sur un autre terminal:
 
@@ -194,3 +195,14 @@ En cas de refus de la part de l'hôte, on rajoute :
         xhost +
 
 avant de lancer le conteneur. Mais cette commande est à éviter si possible pour des raisons de sécurité pour l'hôte.
+
+
+## TODO
+- potentiellement passer aux angles d'euler
+- regarder l'heading avec dual antenne
+- calibrer centrale
+- verifier ou mettre bonne convention (ENU)
+- baisser les coefficients (surtout vitesse)
+- verifier projection
+- réessayer launch global
+- faire un schéma de l'architecture logicielle

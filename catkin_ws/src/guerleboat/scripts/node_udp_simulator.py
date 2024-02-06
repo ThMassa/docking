@@ -77,13 +77,12 @@ def udp_simulator_node():
     rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
 
     while not rospy.is_shutdown():
-        xd,yd = conv_ll2xy(lat_dock,long_dock)
         dock_pose = PoseStamped()
-        dock_pose.pose.position.x = xd
-        dock_pose.pose.position.y = yd
+        dock_pose.pose.position.x = long_dock
+        dock_pose.pose.position.y = lat_dock
         dock_pose.pose.orientation.x = roll_dock
         dock_pose.pose.orientation.y = pitch_dock
-        dock_pose.pose.orientation.z = sawtooth(yaw_dock - np.pi/2) #TODO peut être a revoir
+        dock_pose.pose.orientation.z = yaw_dock #TODO peut être a revoir
         # dock_pose.pose.orientation.x = 0
         # dock_pose.pose.orientation.y = 0
         # dock_pose.pose.orientation.z = 0
@@ -93,6 +92,6 @@ def udp_simulator_node():
     
 if __name__ == '__main__':
     try:
-        udp_converter_node()
+        udp_simulator_node()
     except rospy.ROSInterruptException:
         pass
