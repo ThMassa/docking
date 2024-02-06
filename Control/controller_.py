@@ -42,8 +42,8 @@ value = 3
 start = True
 #----------------------
 
-x = np.random.rand(4, 1)*30
-boat = Boat(x, vmax=5)
+x = np.random.rand(4, 1)*15
+boat = Boat(x, vmax=1)
 dt = .05
 
 boat.init_kalman()
@@ -83,7 +83,8 @@ for t in arange(0, 50, dt):
     draw_tank(x[[0, 1, 4]], 'red', 0.2)  # x,y,θ"""
     
     # Avec Kalman
-    noise = .01 * np.random.randn(3, 1)
+    noise = .33 * np.random.randn(3, 1)
+    noise[2, 0] = 0.005
     d = norm(x[:2]-phat)
     if s > 10:
         s = 1*d+boat.L
@@ -103,10 +104,10 @@ for t in arange(0, 50, dt):
     C = np.array([[1, 0, 0, 0],
                   [0, 1, 0, 0],
                   [0, 0, 0, 1]])
-    R = .01*np.identity(len(y))
-    R[2, 2] = .17
+    R = .1*np.identity(len(y))
+    R[2, 2] = .05
     # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
-    print('theta:', theta_receiv)
+    # print('theta:', theta_receiv)
     boat.controller(phat_receiv, theta_receiv, marge = .2)
     boat.kalman_predict(0, B, Q, dt)
     # boat.dead_reckoning(0, dt)

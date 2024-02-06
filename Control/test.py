@@ -95,12 +95,15 @@ class Boat:
         Returns:
             np.ndarray: dx/dy
         """
+        noise = 1*np.random.randn(2, 1)
+        noise[1, 0] = .002
         psi = self.x[-1, 0]
         B = np.array([[cos(theta)*cos(psi), 0],
                       [cos(theta)*sin(psi), 0],
                       [-sin(theta)        , 0],
                       [0                  , 1]], dtype=np.float64)
-        return np.dot(B, self.u)
+        self.u[0, 0] += .5
+        return np.dot(B, self.u + noise)
         
     
     def dead_reckoning(self, theta, dt):
@@ -155,11 +158,13 @@ class Boat:
         n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
         phat0 = phat + marge*unit
         if np.dot(unit.T, self.x[:2] - phat) < self.__value and self.__start:
+            print('state : ', 1)
             vbar = c21 * (self.x[:2]-phat)/norm(self.x[:2]-phat)**3 + c22 * unit
             if self.__value == 0:
                 self.__value = 3*self.L
                 self.__scap = 0
         else:
+            print('state : ', 2)
             if self.__value == 3*self.L:
                 self.__scap = 0
                 self.__value = 0
@@ -187,7 +192,7 @@ class Boat:
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
-        print(self.u[1, 0])
+        # print(self.u[1, 0])
         return u
 
 if __name__=="__main__":
