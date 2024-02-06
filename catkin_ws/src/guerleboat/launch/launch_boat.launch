@@ -1,6 +1,8 @@
 <launch>
 
-    <arg name="record_boat" default="true" />
+    <arg name="record_logs" default="false" />
+    <arg name="simulate_dock" default='false' />
+    <arg name="bag_played" />
 
     <node pkg="mavros" type="mavros_node" name="mavros" clear_params="true" output="log">
         <param name="fcu_url" value="tcp://10.0.11.130:4003" />
@@ -28,10 +30,18 @@
 
     <node name="control_node" pkg="guerleboat" type="node_control.py" output="screen">
     </node>
+
+    <node name="udp_converter_node" pkg="guerleboat" type="node_udp_converter.py" output="screen"
+        unless="$(arg simulate_dock)" />
     
     <node pkg="rosbag" type="record" name="rosbag_record_boat"
        args="record -o /home/surcouf/guerlelogs/boat.bag /dock_pose /boat_pose /cmd_vel /boat_kalman"
        if="$(arg record_boat)" />
+
+    <node name="rosbag_player" pkg="rosbag" type="play" respawn="false" output="screen"
+        unless="$(arg run_my_node)"
+        args="-l $(arg bag_played) --topics /udp_publisher">
+    </node>
 
   
     
