@@ -46,6 +46,8 @@ def control_node():
     # Initialisation du noeud ROS
     rospy.init_node('control')
 
+    rover_kalman_publisher = rospy.Publisher("/rover_kalman",PoseStamped, queue_size = 10)
+
     rospy.Subscriber('/rover_pose', PoseStamped, rover_pose_cb)
     rospy.Subscriber('/dock_pose', PoseStamped, dock_pose_cb)
 
@@ -111,6 +113,14 @@ def control_node():
             vel_msg.angular.z = rover.u[1,0]
 
             vel_publisher.publish(vel_msg)
+
+            rover_kalman = PoseStamped()
+            rover_kalman.pose.position.x = rover.x[0,0]
+            rover_kalman.pose.position.y = rover.x[1,0]
+            rover_kalman.pose.orientation.x = 0
+            rover_kalman.pose.orientation.y = 0
+            rover_kalman.pose.orientation.z = rover.x[-1,0]
+            rover_kalman_publisher.publish(rover_kalman)
 
         rate.sleep()
     
