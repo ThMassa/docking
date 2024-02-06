@@ -34,14 +34,15 @@
     <node name="udp_converter_node" pkg="guerleboat" type="node_udp_converter.py" output="screen"
         unless="$(arg simulate_dock)" />
     
-    <node pkg="rosbag" type="record" name="rosbag_record_boat"
-       args="record -o /home/surcouf/guerlelogs/boat.bag /dock_pose /boat_pose /cmd_vel /boat_kalman"
-       if="$(arg record_boat)" />
-
-    <node name="rosbag_player" pkg="rosbag" type="play" respawn="false" output="screen"
+    <node name="rosbag_player" pkg="rosbag" type="play" output="screen"
         unless="$(arg run_my_node)"
         args="-l $(arg bag_played) --topics /udp_publisher">
     </node>
+
+    <node pkg="rosbag" type="record" name="rosbag_record_boat"
+       args="record -o /home/surcouf/guerlelogs/boat.bag /dock_pose /boat_pose /cmd_vel /boat_kalman /udp_publisher"
+       if="$(arg record_boat)" />
+
 
   
     
