@@ -27,6 +27,9 @@ long = None
 
 lambert = prj.Proj(init='EPSG:2154')
 
+def sawtooth(x):
+    return (x+np.pi)%(2*np.pi)-np.pi
+
 
 def unpack_data(data_string):
     if data_string[0] != "$":
@@ -99,7 +102,7 @@ def boat_node():
             boat_pose.pose.position.y = y
             boat_pose.pose.orientation.x = imu_data[0]
             boat_pose.pose.orientation.y = imu_data[1]
-            boat_pose.pose.orientation.z = imu_data[2]
+            boat_pose.pose.orientation.z = imu_data[2] #TODO peut être décalage
             boat_pose_publisher.publish(boat_pose)
 
         
@@ -110,7 +113,7 @@ def boat_node():
         dock_pose.pose.position.y = yd
         dock_pose.pose.orientation.x = roll_dock
         dock_pose.pose.orientation.y = pitch_dock
-        dock_pose.pose.orientation.z = yaw_dock
+        dock_pose.pose.orientation.z = sawtooth(yaw_dock -np.pi/2) #TODO peut être a revoir
         # dock_pose.pose.orientation.x = 0
         # dock_pose.pose.orientation.y = 0
         # dock_pose.pose.orientation.z = 0

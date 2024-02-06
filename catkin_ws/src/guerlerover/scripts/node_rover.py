@@ -28,6 +28,9 @@ history_dock=[]
 lambert = prj.Proj(init='EPSG:2154')
 wgs84 = prj.Proj(init='EPSG:4326')
 
+def sawtooth(x):
+    return (x+np.pi)%(2*np.pi)-np.pi
+
 def unpack_data(data_string):
     if data_string[0] != "$":
         print("##### ERROR, WRONG DATA FORMAT #####")
@@ -103,8 +106,8 @@ def rover_node():
 
     while not rospy.is_shutdown():
         # Attendez de recevoir des données UDP
-        data, addr = udp_socket.recvfrom(1024)
-        lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
+        # data, addr = udp_socket.recvfrom(1024)
+        # lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
         # print(lat,long,imu_data)
         if lat is not None and long is not None and imu_data is not None:
             x,y = conv_ll2xy(lat,long)
@@ -113,21 +116,21 @@ def rover_node():
             rover_pose.pose.position.y = y
             rover_pose.pose.orientation.x = imu_data[0]
             rover_pose.pose.orientation.y = imu_data[1]
-            rover_pose.pose.orientation.z = imu_data[2]
+            rover_pose.pose.orientation.z = sawtooth(imu_data[2]-0.418)
             rover_pose_publisher.publish(rover_pose)
 
-            lat_dock = 48.1984105
-            long_dock = -3.0130417
+            lat_dock = 48.1984297
+            long_dock = -3.0130317
             roll_dock = 0
             pitch_dock = 0
-            yaw_dock = 115*np.pi/180
+            yaw_dock = -0.570
             x_dock,y_dock = conv_ll2xy(lat_dock,long_dock)
             dock_pose = PoseStamped()
             dock_pose.pose.position.x = x_dock
             dock_pose.pose.position.y = y_dock
             dock_pose.pose.orientation.x = roll_dock
             dock_pose.pose.orientation.y = pitch_dock
-            dock_pose.pose.orientation.z = yaw_dock
+            dock_pose.pose.orientation.z = sawtooth(yaw_dock-np.pi/2) #TODO peut être a revoir
             dock_pose_publisher.publish(dock_pose)
 
         rate.sleep()
