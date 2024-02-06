@@ -65,7 +65,7 @@ def control_node():
         if Xb is not None and Xd is not None:
             # print((Xd-Xb).flatten())
             if not boat_initiated:
-                boat = Boat(np.array([[Xb[0,0],Xb[1,0], 0, Xb[-1,0]]]).T)
+                boat = Boat(np.array([[Xb[0,0],Xb[1,0], Xb[3,0], Xb[-1,0]]]).T)
                 boat.init_kalman()
                 boat_initiated = True
 
