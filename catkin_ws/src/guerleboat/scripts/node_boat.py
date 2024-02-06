@@ -102,7 +102,7 @@ def boat_node():
             boat_pose.pose.position.y = y
             boat_pose.pose.orientation.x = imu_data[0]
             boat_pose.pose.orientation.y = imu_data[1]
-            boat_pose.pose.orientation.z = imu_data[2] #TODO peut être décalage
+            boat_pose.pose.orientation.z = sawtooth(imu_data[2]-0.038) #TODO peut être décalage
             boat_pose_publisher.publish(boat_pose)
 
         
