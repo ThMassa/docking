@@ -86,9 +86,22 @@ Ensuite il suffit de se ssh :
 
 Dans tous les cas le mot de passe est : ***surcouf2023***
 
-Une fois connecté, il faut lancer le [roslaunch](/catkin_ws/src/guerleboat/launch/launch_boat.launch).
+Une fois connecté, il faut lancer le [roslaunch](/catkin_ws/src/guerleboat/launch/launch_boat.launch) avec differents arguments.
 
+    # Lance tout le système sans logs
     roslaunch guerleboat launch_boat.launch
+
+    # Lance tout le système avec logs
+    roslaunch guerleboat launch_boat.launch record_logs:=true
+
+    # Lance le système en simulant le dock (la connexion UDP) grâce à un log précédent
+    roslaunch guerleboat launch_boat.launch simulate_dock:=true bag_played:=chemin/vers/le/bag
+
+    # Lance le système en simulant le dock (la connexion UDP) en forçant les coordonnées à un point du lac
+    roslaunch guerleboat launch_boat.launch simulate_dock:=true replay_log:=false
+
+    # Lance le système en simulant le dock (la connexion UDP) en forçant les coordonnées
+    roslaunch guerleboat launch_boat.launch simulate_dock:=true replay_log:=false latitude:=XXX longitude:=XXX yaw:=XXX
 
 Cependant cela n'est pas suffisant. Il faut armer le système mavlink et le mettre en mode *GUIDED*. Pour cela il suffit de faire sur un autre terminal:
 
