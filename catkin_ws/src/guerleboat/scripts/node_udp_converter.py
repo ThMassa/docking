@@ -5,31 +5,26 @@ import rospy
 import socket
 import numpy as np
 import pyproj as prj
-
-from sbg_driver.msg import SbgEkfQuat, SbgGpsPos
-
-
 from geometry_msgs.msg import PoseStamped
 
-gps_data = None
-imu_data = None
+# gps_data = None
+# imu_data = None
 # lat_dock = None
 # lat_dock = 48.1994155
 # long_dock = None
 # long_dock = -3.0156827
-roll_dock = None
-pitch_dock = None
-yaw_dock = None
+# roll_dock = None
+# pitch_dock = None
+# yaw_dock = None
 
-imu_data = None
-lat = None
-long = None
+# imu_data = None
+# lat = None
+# long = None
 
 lambert = prj.Proj(init='EPSG:2154')
 
 def sawtooth(x):
     return (x+np.pi)%(2*np.pi)-np.pi
-
 
 def unpack_data(data_string):
     if data_string[0] != "$":
@@ -61,30 +56,12 @@ def euler_from_quaternion(quat):
 
     return roll, pitch, yaw
 
-def imu_callback(data):
-    global imu_data
-    imu_data = euler_from_quaternion(data.quaternion)
-
-def gps_callback(data):
-    global lat,long
-    lat = data.position.x
-    long = data.position.y
-    
-def udp_callback(msg):
-    lat_dock = msg.pose.position
-
-def boat_node():
-    global gps_data,imu_data, lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
+def udp_converter_node():
+    global lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
     # Initialisation du noeud ROS
-    rospy.init_node('boat')
+    rospy.init_node('UDP_converter')
 
-    boat_pose_publisher = rospy.Publisher("/boat_pose",PoseStamped, queue_size = 10)
-    dock_pose_publisher = rospy.Publisher("/dock_pose",PoseStamped, queue_size = 10)
-
-    rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback)
-    rospy.Subscriber('/sbg/gps_pos', SbgGpsPos, gps_callback)
-    
-    rospy.Subscriber('/udp_publisher', PoseStamped, udp_callback)
+    udp_converter_publisher = rospy.Publisher("/udp_publisher",PoseStamped, queue_size = 10)
     
     # Configuration du socket UDP pour la communication avec le dock
     udp_ip = "0.0.0.0"
@@ -100,34 +77,19 @@ def boat_node():
         # Attendez de recevoir des données UDP
         data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
         lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
-        if lat is not None and long is not None and imu_data is not None:
-            x,y = conv_ll2xy(lat,long)
-            boat_pose = PoseStamped()
-            boat_pose.pose.position.x = x
-            boat_pose.pose.position.y = y
-            boat_pose.pose.orientation.x = imu_data[0]
-            boat_pose.pose.orientation.y = imu_data[1]
-            boat_pose.pose.orientation.z = sawtooth(imu_data[2]-0.038) #TODO peut être décalage
-            boat_pose_publisher.publish(boat_pose)
-
         
-        # xd,yd = conv_ll2xy(48.1994155,-3.0156827)
-        xd,yd = conv_ll2xy(lat_dock,long_dock)
         dock_pose = PoseStamped()
-        dock_pose.pose.position.x = xd
-        dock_pose.pose.position.y = yd
+        dock_pose.pose.position.x = long_dock
+        dock_pose.pose.position.y = lat_dock
         dock_pose.pose.orientation.x = roll_dock
         dock_pose.pose.orientation.y = pitch_dock
-        dock_pose.pose.orientation.z = sawtooth(yaw_dock -np.pi/2) #TODO peut être a revoir
-        # dock_pose.pose.orientation.x = 0
-        # dock_pose.pose.orientation.y = 0
-        # dock_pose.pose.orientation.z = 0
-        dock_pose_publisher.publish(dock_pose)
+        dock_pose.pose.orientation.z = sawtooth(yaw_dock - np.pi/2) #TODO peut être a revoir
+        udp_converter_publisher.publish(dock_pose)
 
         rate.sleep()
     
 if __name__ == '__main__':
     try:
-        boat_node()
+        udp_converter_node()
     except rospy.ROSInterruptException:
         pass

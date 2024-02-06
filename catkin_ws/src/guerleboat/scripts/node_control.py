@@ -4,6 +4,7 @@
 import rospy
 from classBoat import *
 from geometry_msgs.msg import Twist, PoseStamped
+from mavros_msgs.msg import State
 import numpy as np
 from numpy import cos, sin
 from numpy.linalg import norm
@@ -41,13 +42,23 @@ def dock_pose_cb(msg):
                     msg.pose.orientation.y, 
                     msg.pose.orientation.z]]).T
 
+armed = False
+guided = False
+def state_cb(msg):
+    global armed,guided
+    armed = msg.armed
+    guided = msg.guided
+
 def control_node():
     global boat,boat_initiated
     # Initialisation du noeud ROS
     rospy.init_node('control')
 
+    boat_kalman_publisher = rospy.Publisher("/boat_kalman",PoseStamped, queue_size = 10)
+
     rospy.Subscriber('/boat_pose', PoseStamped, boat_pose_cb)
     rospy.Subscriber('/dock_pose', PoseStamped, dock_pose_cb)
+    rospy.Subscriber('/mavros/state', State, state_cb)
 
     vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
@@ -60,10 +71,10 @@ def control_node():
 
 
     while not rospy.is_shutdown():
-        if Xb is not None and Xd is not None:
-            print((Xd-Xb).flatten())
+        if Xb is not None and Xd is not None and armed and guided:
+            # print((Xd-Xb).flatten())
             if not boat_initiated:
-                boat = Boat(np.array([[Xb[0,0],Xb[1,0], 0, Xb[-1,0]]]).T)
+                boat = Boat(np.array([[Xb[0,0],Xb[1,0], Xb[3,0], Xb[-1,0]]]).T)
                 boat.init_kalman()
                 boat_initiated = True
 
@@ -96,6 +107,14 @@ def control_node():
             vel_msg.angular.z = boat.u[1,0]
 
             vel_publisher.publish(vel_msg)
+
+            boat_kalman = PoseStamped()
+            boat_kalman.pose.position.x = boat.x[0,0]
+            boat_kalman.pose.position.y = boat.x[1,0]
+            boat_kalman.pose.orientation.x = 0
+            boat_kalman.pose.orientation.y = 0
+            boat_kalman.pose.orientation.z = boat.x[-1,0]
+            boat_kalman_publisher.publish(boat_kalman)
 
         rate.sleep()
     

@@ -4,6 +4,7 @@
 import rospy
 from classRover import *
 from geometry_msgs.msg import Twist, PoseStamped
+from mavros_msgs.msg import State
 import numpy as np
 from numpy import cos, sin
 from numpy.linalg import norm
@@ -41,6 +42,13 @@ def dock_pose_cb(msg):
                     msg.pose.orientation.y, 
                     msg.pose.orientation.z]]).T
 
+armed = False
+guided = False
+def state_cb(msg):
+    global armed,guided
+    armed = msg.armed
+    guided = msg.guided
+
 def control_node():
     global rover,rover_initiated
     # Initialisation du noeud ROS
@@ -50,6 +58,7 @@ def control_node():
 
     rospy.Subscriber('/rover_pose', PoseStamped, rover_pose_cb)
     rospy.Subscriber('/dock_pose', PoseStamped, dock_pose_cb)
+    rospy.Subscriber('/mavros/state', State, state_cb)
 
     vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
@@ -63,7 +72,7 @@ def control_node():
     EKF_kevin = True
 
     while not rospy.is_shutdown():
-        if Xb is not None and Xd is not None:
+        if Xb is not None and Xd is not None and armed and guided:
             print((Xd-Xb).flatten())
             print('Rover cap : ', Xb[-1, 0])
             if not rover_initiated:
@@ -81,12 +90,12 @@ def control_node():
                             [cos(Xb[3,0])*sin(Xb[-1,0]), 0],
                             [-sin(Xb[3,0])        , 0],
                             [0                  , 1]], dtype=np.float64)
-                Q = .1*np.identity(4)
+                Q = .05*np.identity(4)
                 C = np.array([[1, 0, 0, 0],
                             [0, 1, 0, 0],
                             [0, 0, 0, 1]])
-                R = .5*np.identity(3)
-                R[2, 2] = .05
+                R = 1*np.identity(3)
+                R[2, 2] = .1
 
                 if np.linalg.norm(y1-y) > 0:
                     y = y1
