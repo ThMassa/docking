@@ -24,7 +24,7 @@ class Boat:
         """Initialise l'instance
 
         Args:
-            x (numpy.ndarray): Vecteur d'état (px, py, pz, v, heading)
+            x (numpy.ndarray): Vecteur d'état (px, py, pz, heading)
             u (numpy.ndarray): Commande (v, yaw)
             L (int, optional): Longueur du bateau. Defaults to 1.
             vmax (int, optional): Vitesse maximale du bateau. Defaults to 1.
@@ -42,7 +42,7 @@ class Boat:
         Args:
             Gx (numpy.ndarray, optional): Matrice de covariance liée au vecteur d'état. Defaults to None.
         """
-        if Gx == None:
+        if Gx is None:
             self.Gx = 100*np.identity(len(self.x))
         else:
             self.Gx = Gx
@@ -125,7 +125,7 @@ class Boat:
             R (np.ndarray): Matrice de covariance du bruit de mesure
             dt (float): Période d'une itération dans la boucle principale 
         """
-        if self.__predict == False:
+        if not self.__predict:
             self.kalman_predict(y, A, B, Q,dt)
         else:
             self.kalman_correc(y, C, R, 1)
@@ -144,17 +144,16 @@ class Boat:
         if not hasattr(self, "_Boat__start"):
             self.__start = True
             self.__value = 0
-            self.__ecap = array([0])
+            self.__ecap = array([0.])
             self.__scap = 0
             
         c11, c12 = 5, 2  # constantes pour les champs de potentiels
         c21, c22 = 10, 5  # constantes pour les champs de potentiels
-        u = np.array([[0], [0]])
         k_ = 1
         unit = np.array([[cos(theta)], [sin(theta)]])
         n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
         phat0 = phat + marge*unit
-        if np.dot(unit.T, self.x[:2] - phat) < self.__value and self.__start:
+        if np.dot(unit.T, self.x[:2] - phat)[0,0] < self.__value and self.__start:
             vbar = c21 * (self.x[:2]-phat)/norm(self.x[:2]-phat)**3 + c22 * unit
             if self.__value == 0:
                 self.__value = 3*self.L
@@ -183,12 +182,12 @@ class Boat:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
         self.u[0,0] = vbar
-        self.u[1,0] = 5*ecap + .02*self.__scap
+        self.u[1,0] = (5*ecap + .02*self.__scap)/5
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
-        print(self.u[1, 0])
-        return u
+        # print(self.u[1, 0])
+        # return self.u
 
 if __name__=="__main__":
     boat = Boat(np.array([[0], [0], [2], [1]]))
