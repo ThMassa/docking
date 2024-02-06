@@ -106,6 +106,7 @@ for t in arange(0, 50, dt):
     R = .01*np.identity(len(y))
     R[2, 2] = .17
     # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
+    print('theta:', theta_receiv)
     boat.controller(phat_receiv, theta_receiv, marge = .2)
     boat.kalman_predict(0, B, Q, dt)
     # boat.dead_reckoning(0, dt)

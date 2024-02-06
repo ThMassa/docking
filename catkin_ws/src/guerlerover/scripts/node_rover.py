@@ -57,18 +57,18 @@ def euler_from_quaternion(quat):
     z = quat.z
     w = quat.w
 
-    # sinr_cosp = 2 * (w * x + y * z)
-    # cosr_cosp = 1 - 2 * (x * x + y * y)
-    # roll = np.arctan2(sinr_cosp, cosr_cosp)
-    # sinp = 2 * (w * y - z * x)
-    # pitch = np.arcsin(sinp)
-    # siny_cosp = 2 * (w * z + x * y)
-    # cosy_cosp = 1 - 2 * (y * y + z * z)
-    # yaw = np.arctan2(siny_cosp, cosy_cosp)
+    sinr_cosp = 2 * (w * x + y * z)
+    cosr_cosp = 1 - 2 * (x * x + y * y)
+    roll = np.arctan2(sinr_cosp, cosr_cosp)
+    sinp = 2 * (w * y - z * x)
+    pitch = np.arcsin(sinp)
+    siny_cosp = 2 * (w * z + x * y)
+    cosy_cosp = 1 - 2 * (y * y + z * z)
+    yaw = np.arctan2(siny_cosp, cosy_cosp)
 
-    roll = np.arctan2(2*(w*x+y*z),1-2*(x**2+y**2))
-    pitch = -np.pi/2 + 2*np.arctan2(np.sqrt(1+2*(w*y-x*z)),np.sqrt(1-2*(w*y-x*z)))
-    yaw = np.arctan2(2*(w*z+w*y),1-2*(y**2+z**2))
+    # roll = np.arctan2(2*(w*x+y*z),1-2*(x**2+y**2))
+    # pitch = -np.pi/2 + 2*np.arctan2(np.sqrt(1+2*(w*y-x*z)),np.sqrt(1-2*(w*y-x*z)))
+    # yaw = np.arctan2(2*(w*z+w*y),1-2*(y**2+z**2))
 
     return roll, pitch, yaw
 
@@ -116,21 +116,21 @@ def rover_node():
             rover_pose.pose.position.y = y
             rover_pose.pose.orientation.x = imu_data[0]
             rover_pose.pose.orientation.y = imu_data[1]
-            rover_pose.pose.orientation.z = sawtooth(imu_data[2]-0.418)
+            rover_pose.pose.orientation.z = sawtooth(imu_data[2]-0.418+0.38)
             rover_pose_publisher.publish(rover_pose)
 
-            lat_dock = 48.1984297
-            long_dock = -3.0130317
+            lat_dock = 48.1984743
+            long_dock = -3.013011
             roll_dock = 0
             pitch_dock = 0
-            yaw_dock = -0.570
+            yaw_dock = 2.74
             x_dock,y_dock = conv_ll2xy(lat_dock,long_dock)
             dock_pose = PoseStamped()
             dock_pose.pose.position.x = x_dock
             dock_pose.pose.position.y = y_dock
             dock_pose.pose.orientation.x = roll_dock
             dock_pose.pose.orientation.y = pitch_dock
-            dock_pose.pose.orientation.z = sawtooth(yaw_dock-np.pi/2) #TODO peut être a revoir
+            dock_pose.pose.orientation.z = sawtooth(yaw_dock)  # -np.pi/2) #TODO peut être a revoir
             dock_pose_publisher.publish(dock_pose)
 
         rate.sleep()

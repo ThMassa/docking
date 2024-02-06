@@ -63,6 +63,7 @@ def control_node():
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None:
             print((Xd-Xb).flatten())
+            print('Rover cap : ', Xb[-1, 0])
             if not rover_initiated:
                 rover = Rover(np.array([[Xb[0,0],Xb[1,0], 0, Xb[-1,0]]]).T)
                 # rover = Rover(np.array([Xb[0],Xb[1], 0, Xb[-1]]))

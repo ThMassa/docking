@@ -212,7 +212,7 @@ class Rover:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
         self.u[0,0] = vbar
-        self.u[1,0] = (5*ecap + .02*self.__scap)/5
+        self.u[1,0] = (5*ecap + .0*self.__scap)/20
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
