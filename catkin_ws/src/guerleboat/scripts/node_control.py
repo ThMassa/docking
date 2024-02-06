@@ -46,6 +46,8 @@ def control_node():
     # Initialisation du noeud ROS
     rospy.init_node('control')
 
+    boat_kalman_publisher = rospy.Publisher("/boat_kalman",PoseStamped, queue_size = 10)
+
     rospy.Subscriber('/boat_pose', PoseStamped, boat_pose_cb)
     rospy.Subscriber('/dock_pose', PoseStamped, dock_pose_cb)
 
@@ -61,7 +63,7 @@ def control_node():
 
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None:
-            print((Xd-Xb).flatten())
+            # print((Xd-Xb).flatten())
             if not boat_initiated:
                 boat = Boat(np.array([[Xb[0,0],Xb[1,0], 0, Xb[-1,0]]]).T)
                 boat.init_kalman()
@@ -96,6 +98,14 @@ def control_node():
             vel_msg.angular.z = boat.u[1,0]
 
             vel_publisher.publish(vel_msg)
+
+            boat_kalman = PoseStamped()
+            boat_kalman.pose.position.x = boat.x[0,0]
+            boat_kalman.pose.position.y = boat.x[1,0]
+            boat_kalman.pose.orientation.x = 0
+            boat_kalman.pose.orientation.y = 0
+            boat_kalman.pose.orientation.z = boat.x[-1,0]
+            boat_kalman_publisher.publish(boat_kalman)
 
         rate.sleep()
     
