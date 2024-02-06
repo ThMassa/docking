@@ -61,28 +61,22 @@ def gps_callback(data):
     lat = data.position.x
     long = data.position.y
 
-def udp_converter_node():
-    global gps_data,imu_data, lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
+def udp_simulator_node():
+    global lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
     # Initialisation du noeud ROS
-    rospy.init_node('UDP_converter')
+    rospy.init_node('UDP_simulator')
 
-    udp_converter_publisher = rospy.Publisher("/udp_publisher",PoseStamped, queue_size = 10)
-    
-    # Configuration du socket UDP pour la communication avec le dock
-    udp_ip = "0.0.0.0"
-    udp_port = 12345  # Port UDP de destination sur le dock
-    # Création du socket UDP
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    udp_socket.bind((udp_ip, udp_port))
+    udp_simulator_publisher = rospy.Publisher("/udp_publisher",PoseStamped, queue_size = 10)
 
+    lat_dock = rospy.get_param("~latitude", "default_latitude")
+    long_dock = rospy.get_param("~longitude", "default_longitude")
+    yaw_dock = rospy.get_param("~yaw", "default_yaw")
+    roll_dock = 0
+    pitch_dock = 0
 
     rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
 
     while not rospy.is_shutdown():
-        # Attendez de recevoir des données UDP
-        data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
-        lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
-        
         xd,yd = conv_ll2xy(lat_dock,long_dock)
         dock_pose = PoseStamped()
         dock_pose.pose.position.x = xd
@@ -93,7 +87,7 @@ def udp_converter_node():
         # dock_pose.pose.orientation.x = 0
         # dock_pose.pose.orientation.y = 0
         # dock_pose.pose.orientation.z = 0
-        udp_converter_publisher.publish(dock_pose)
+        udp_simulator_publisher.publish(dock_pose)
 
         rate.sleep()
     
