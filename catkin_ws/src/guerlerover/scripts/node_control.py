@@ -81,12 +81,12 @@ def control_node():
                             [cos(Xb[3,0])*sin(Xb[-1,0]), 0],
                             [-sin(Xb[3,0])        , 0],
                             [0                  , 1]], dtype=np.float64)
-                Q = .05*np.identity(4)
+                Q = .1*np.identity(4)
                 C = np.array([[1, 0, 0, 0],
                             [0, 1, 0, 0],
                             [0, 0, 0, 1]])
-                R = 25*np.identity(3)
-                R[2, 2] = .17
+                R = .5*np.identity(3)
+                R[2, 2] = .05
 
                 if np.linalg.norm(y1-y) > 0:
                     y = y1

@@ -84,7 +84,7 @@ class Rover:
         K = np.dot(self.Gx, C.T)
         K = np.dot(K, np.linalg.inv(S))
         ytilde = y - np.dot(C, self.x)
-        self.Gx = np.dot(np.eye(len(self.x))-np.dot(K, C), self.Gx) 
+        self.Gx = np.dot(np.eye(len(self.x))-np.dot(K, C), self.Gx)
         self.x = self.x + np.dot(K, ytilde)
         self.__predict = False
     
