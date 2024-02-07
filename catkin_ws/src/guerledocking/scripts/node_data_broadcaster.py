@@ -83,7 +83,7 @@ def broadcast_node():
     """
     global gps_data,imu_data
     # Initialisation du noeud ROS
-    rospy.init_node('/docking/data_broadcaster')
+    rospy.init_node('data_broadcaster')
     
     rospy.Subscriber('/ublox/fix', NavSatFix, gps_callback)
     rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback) ## ou (sbg/imu_data, SbgImuData

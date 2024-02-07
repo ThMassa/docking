@@ -78,7 +78,7 @@ def udp_callback(msg):
 def boat_node():
     global gps_data,imu_data, lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
     # Initialisation du noeud ROS
-    rospy.init_node('/docking/boat')
+    rospy.init_node('boat')
 
     boat_pose_publisher = rospy.Publisher("/docking/nav/boat_pose",PoseStamped, queue_size = 10)
     dock_pose_publisher = rospy.Publisher("/docking/nav/dock_pose",PoseStamped, queue_size = 10)

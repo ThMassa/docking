@@ -59,7 +59,7 @@ def euler_from_quaternion(quat):
 def udp_converter_node():
     global lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
     # Initialisation du noeud ROS
-    rospy.init_node('/docking/UDP_converter')
+    rospy.init_node('UDP_converter')
 
     udp_converter_publisher = rospy.Publisher("/docking/dock/udp_publisher",PoseStamped, queue_size = 10)
     

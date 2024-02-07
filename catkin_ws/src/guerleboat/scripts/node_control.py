@@ -52,7 +52,7 @@ def state_cb(msg):
 def control_node():
     global boat,boat_initiated
     # Initialisation du noeud ROS
-    rospy.init_node('/docking/control')
+    rospy.init_node('control')
 
     boat_kalman_publisher = rospy.Publisher("/docking/nav/boat_kalman",PoseStamped, queue_size = 10)
 

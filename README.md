@@ -204,5 +204,3 @@ avant de lancer le conteneur. Mais cette commande est à éviter si possible pou
 - verifier ou mettre bonne convention (ENU)
 - baisser les coefficients (surtout vitesse)
 - verifier projection
-- réessayer launch global
-- faire un schéma de l'architecture logicielle
