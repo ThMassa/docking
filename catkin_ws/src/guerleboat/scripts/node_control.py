@@ -54,10 +54,10 @@ def control_node():
     # Initialisation du noeud ROS
     rospy.init_node('control')
 
-    boat_kalman_publisher = rospy.Publisher("/boat_kalman",PoseStamped, queue_size = 10)
+    boat_kalman_publisher = rospy.Publisher("/docking/nav/boat_kalman",PoseStamped, queue_size = 10)
 
-    rospy.Subscriber('/boat_pose', PoseStamped, boat_pose_cb)
-    rospy.Subscriber('/dock_pose', PoseStamped, dock_pose_cb)
+    rospy.Subscriber('/docking/nav/boat_pose', PoseStamped, boat_pose_cb)
+    rospy.Subscriber('/docking/nav/dock_pose', PoseStamped, dock_pose_cb)
     rospy.Subscriber('/mavros/state', State, state_cb)
 
     vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
@@ -67,54 +67,58 @@ def control_node():
     rate = rospy.Rate(f)
 
     y = np.array([[0., 0., 0.]]).T
-    yk_1 = np.zeros((3,1))
-
 
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None and armed and guided:
             # print((Xd-Xb).flatten())
             if not boat_initiated:
-                boat = Boat(np.array([[Xb[0,0],Xb[1,0], Xb[3,0], Xb[-1,0]]]).T)
+                boat = Boat(np.array([[Xb[0,0],Xb[1,0], 0., Xb[-1,0]]]).T)
                 boat.init_kalman()
                 boat_initiated = True
 
-                y1 = np.array([[Xb[0,0],Xb[1,0],Xb[-1,0]]]).T
+            y1 = np.array([[Xb[0,0],Xb[1,0],Xb[-1,0]]]).T
 
 
-                B = np.array([[cos(Xb[3,0])*cos(Xb[-1,0]), 0],
-                            [cos(Xb[3,0])*sin(Xb[-1,0]), 0],
-                            [-sin(Xb[3,0])        , 0],
-                            [0                  , 1]], dtype=np.float64)
-                Q = .05*np.identity(4)
-                C = np.array([[1, 0, 0, 0],
-                            [0, 1, 0, 0],
-                            [0, 0, 0, 1]])
-                R = 25*np.identity(3)
-                R[2, 2] = .17
+            B = np.array([[cos(Xb[3,0])*cos(Xb[-1,0]), 0],
+                        [cos(Xb[3,0])*sin(Xb[-1,0]), 0],
+                        [-sin(Xb[3,0])        , 0],
+                        [0                  , 1]], dtype=np.float64)
+            Q = .05*np.identity(4)
+            C = np.array([[1, 0, 0, 0],
+                        [0, 1, 0, 0],
+                        [0, 0, 0, 1]])
+            R = 25*np.identity(3)
+            R[2, 2] = .17
 
-                if np.linalg.norm(y1-y) > 0:
-                    y = y1
-                    boat.kalman_correc(y, C, R, dt)
+            if np.linalg.norm(y1-y) > 0:
+                y = y1
+                boat.kalman_correc(y, C, R, dt)
 
-                boat.kalman_predict(0, B, Q, dt)
+            boat.kalman_predict(0, B, Q, dt)
                 # print(boat.Gx)
             # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
             
-            boat.controller(Xd[:2],Xd[-1,0])
+            if np.linalg.norm(boat.x[:2] - Xd[:2])>=2:
+                boat.controller(Xd[:2],Xd[-1,0])
 
-            vel_msg = Twist()
-            vel_msg.linear.x = boat.u[0,0]
-            vel_msg.angular.z = boat.u[1,0]
+                vel_msg = Twist()
+                vel_msg.linear.x = boat.u[0,0]
+                vel_msg.angular.z = boat.u[1,0]
 
-            vel_publisher.publish(vel_msg)
+                vel_publisher.publish(vel_msg)
 
-            boat_kalman = PoseStamped()
-            boat_kalman.pose.position.x = boat.x[0,0]
-            boat_kalman.pose.position.y = boat.x[1,0]
-            boat_kalman.pose.orientation.x = 0
-            boat_kalman.pose.orientation.y = 0
-            boat_kalman.pose.orientation.z = boat.x[-1,0]
-            boat_kalman_publisher.publish(boat_kalman)
+                boat_kalman = PoseStamped()
+                boat_kalman.pose.position.x = boat.x[0,0]
+                boat_kalman.pose.position.y = boat.x[1,0]
+                boat_kalman.pose.orientation.x = 0
+                boat_kalman.pose.orientation.y = 0
+                boat_kalman.pose.orientation.z = boat.x[-1,0]
+                boat_kalman_publisher.publish(boat_kalman)
+            else :
+                vel_msg = Twist()
+                vel_msg.linear.x = 0.
+                vel_msg.angular.z = 0.
+                vel_publisher.publish(vel_msg)
 
         rate.sleep()
     

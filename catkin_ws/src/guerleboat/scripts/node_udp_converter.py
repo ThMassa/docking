@@ -61,11 +61,11 @@ def udp_converter_node():
     # Initialisation du noeud ROS
     rospy.init_node('UDP_converter')
 
-    udp_converter_publisher = rospy.Publisher("/udp_publisher",PoseStamped, queue_size = 10)
+    udp_converter_publisher = rospy.Publisher("/docking/dock/udp_publisher",PoseStamped, queue_size = 10)
     
     # Configuration du socket UDP pour la communication avec le dock
     udp_ip = "0.0.0.0"
-    udp_port = 12345  # Port UDP de destination sur le dock
+    udp_port = 5005  # Port UDP de destination sur le dock
     # Création du socket UDP
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_socket.bind((udp_ip, udp_port))
@@ -83,7 +83,7 @@ def udp_converter_node():
         dock_pose.pose.position.y = lat_dock
         dock_pose.pose.orientation.x = roll_dock
         dock_pose.pose.orientation.y = pitch_dock
-        dock_pose.pose.orientation.z = sawtooth(yaw_dock - np.pi/2) #TODO peut être a revoir
+        dock_pose.pose.orientation.z = yaw_dock #TODO peut être a revoir
         udp_converter_publisher.publish(dock_pose)
 
         rate.sleep()

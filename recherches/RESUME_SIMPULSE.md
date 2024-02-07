@@ -10,6 +10,7 @@
 
 
 IP du dock : 192.168.0.12
+EDIT : IP dock = 10.0.11.72
 
 Tests de bande passante avec *iPerf* :
 - sur un premier node (ex: le dock):
@@ -23,3 +24,11 @@ Tests de bande passante avec *iPerf* :
     iperf3 -c ADDRESSE_IP_SERVEUR -u
     ```
 On peut également changer le temps de test (par défaut, 10s) avec le paramètre `-t`.
+
+
+## Reconfigurer les addresses IP
+Pour changer d'addresse IP sur le rover par exemple ou le drone:
+```bash
+sudo ifconfig [interface] [IP/mask_length]
+```
+

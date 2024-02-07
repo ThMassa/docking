@@ -4,6 +4,8 @@
 
 - https://fr.ardusimple.com/product/simplertk2b-basic-starter-kit-ip65/
 
+- si jamais la raspberry n'a pas l'air de fonctionner, il faut sûrement reflasher la carte SD et activer à nouveau le port série. Pour faire ça correctement, suivre les instructions de centipède sur la base rtk.
+
 - le module Ardusimple qu'on a est muni de deux ports micro USB. Le premier (power+GPS) permet d'alimenter la carte et de se connecter au ublox. Le second (power+Xbee) permet d'alimenter la carte et de se connecter à la radio Xbee. 
 
 - pour configurer le Xbee, il faut avoir XCTU sur windows. **Note importante : si jamais XTCU refuse de reconnaitre le Xbee, il faut court-circuiter le module en reliant le pin reset au pin GND et maintenir le tout pendant la configuration. Cela devrait régler le problème.**

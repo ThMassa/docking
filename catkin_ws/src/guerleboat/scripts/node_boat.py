@@ -6,22 +6,21 @@ import socket
 import numpy as np
 import pyproj as prj
 
-from sbg_driver.msg import SbgEkfQuat, SbgGpsPos
+from sbg_driver.msg import SbgEkfQuat, SbgGpsPos, SbgEkfEuler, SbgGpsHdt
 
 
 from geometry_msgs.msg import PoseStamped
 
-gps_data = None
-imu_data = None
-# lat_dock = None
-# lat_dock = 48.1994155
-# long_dock = None
-# long_dock = -3.0156827
+lat_dock = None
+long_dock = None
 roll_dock = None
 pitch_dock = None
 yaw_dock = None
 
+true_heading = None
+
 imu_data = None
+gps_data = None
 lat = None
 long = None
 
@@ -63,7 +62,12 @@ def euler_from_quaternion(quat):
 
 def imu_callback(data):
     global imu_data
-    imu_data = euler_from_quaternion(data.quaternion)
+    # imu_data = euler_from_quaternion(data.quaternion)
+    imu_data = (data.angle.x,data.angle.y,data.angle.z)
+
+def hdt_callback(data):
+    global true_heading
+    true_heading = data.true_heading
 
 def gps_callback(data):
     global lat,long
@@ -71,36 +75,33 @@ def gps_callback(data):
     long = data.position.y
     
 def udp_callback(msg):
-    lat_dock = msg.pose.position
+    global lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
+    long_dock = msg.pose.position.x
+    lat_dock = msg.pose.position.y
+    roll_dock = msg.pose.orientation.x
+    pitch_dock = msg.pose.orientation.y
+    yaw_dock = msg.pose.orientation.z
 
 def boat_node():
     global gps_data,imu_data, lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
     # Initialisation du noeud ROS
     rospy.init_node('boat')
 
-    boat_pose_publisher = rospy.Publisher("/boat_pose",PoseStamped, queue_size = 10)
-    dock_pose_publisher = rospy.Publisher("/dock_pose",PoseStamped, queue_size = 10)
+    boat_pose_publisher = rospy.Publisher("/docking/nav/boat_pose",PoseStamped, queue_size = 10)
+    dock_pose_publisher = rospy.Publisher("/docking/nav/dock_pose",PoseStamped, queue_size = 10)
 
-    rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback)
+    # rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback)
+    rospy.Subscriber('/sbg/ekf_euler', SbgEkfEuler, imu_callback)
     rospy.Subscriber('/sbg/gps_pos', SbgGpsPos, gps_callback)
+    rospy.Subscriber('/sbg/gps_hdt', SbgGpsHdt, hdt_callback)
+    rospy.Subscriber('/docking/dock/udp_publisher', PoseStamped, udp_callback)
     
-    rospy.Subscriber('/udp_publisher', PoseStamped, udp_callback)
-    
-    # Configuration du socket UDP pour la communication avec le dock
-    udp_ip = "0.0.0.0"
-    udp_port = 12345  # Port UDP de destination sur le dock
-    # Création du socket UDP
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    udp_socket.bind((udp_ip, udp_port))
-
 
     rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
 
     while not rospy.is_shutdown():
         # Attendez de recevoir des données UDP
-        data, addr = udp_socket.recvfrom(1024)  # Ajustez la taille du tampon si nécessaire
-        lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
-        if lat is not None and long is not None and imu_data is not None:
+        if lat is not None is not None and imu_data is not None:
             x,y = conv_ll2xy(lat,long)
             boat_pose = PoseStamped()
             boat_pose.pose.position.x = x
@@ -110,19 +111,16 @@ def boat_node():
             boat_pose.pose.orientation.z = sawtooth(imu_data[2]-0.038) #TODO peut être décalage
             boat_pose_publisher.publish(boat_pose)
 
-        
-        # xd,yd = conv_ll2xy(48.1994155,-3.0156827)
-        xd,yd = conv_ll2xy(lat_dock,long_dock)
-        dock_pose = PoseStamped()
-        dock_pose.pose.position.x = xd
-        dock_pose.pose.position.y = yd
-        dock_pose.pose.orientation.x = roll_dock
-        dock_pose.pose.orientation.y = pitch_dock
-        dock_pose.pose.orientation.z = sawtooth(yaw_dock -np.pi/2) #TODO peut être a revoir
-        # dock_pose.pose.orientation.x = 0
-        # dock_pose.pose.orientation.y = 0
-        # dock_pose.pose.orientation.z = 0
-        dock_pose_publisher.publish(dock_pose)
+        if lat_dock is not None:
+            # xd,yd = conv_ll2xy(48.1994155,-3.0156827)
+            xd,yd = conv_ll2xy(lat_dock,long_dock)
+            dock_pose = PoseStamped()
+            dock_pose.pose.position.x = xd
+            dock_pose.pose.position.y = yd
+            dock_pose.pose.orientation.x = roll_dock
+            dock_pose.pose.orientation.y = pitch_dock
+            dock_pose.pose.orientation.z = sawtooth(yaw_dock -np.pi/2) #TODO peut être a revoir
+            dock_pose_publisher.publish(dock_pose)
 
         rate.sleep()
     
