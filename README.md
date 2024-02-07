@@ -148,21 +148,24 @@ Puis dans le ssh :
 
 ### RTK Base
 
-Pour installer la base RTK, il suffit de 
-- connecter le module Ardusimple à la Raspberry en branchant les deux ports **GPS+Power** et **Xbee+Power**.
-- relier la carte Ardusimple à l'antenne RTK à l'aide du câble coaxial de l'installation. 
-- alimenter la Raspberry et attendre 2-3 minutes que le module se lance correctement (on peut connecter la Raspberry à un écran pour en avoir le coeur net).
+Pour installer la base RTK, il y a deux choix : 
 
-Normalement, l'acquisition se lance toute seule. Attention, pour obtenir une précision centimétrique, il faut que la base enregistre ses données pendant 24h. Les archivages se lancent à 4h du matin tous les jours donc il faut bien prendre en compte ce paramètre pour avoir un log de 24h complet. Il faut ensuite suivre les [instructions](https://docs.centipede.fr/docs/base/positionnement.html) données par Centipède pour communiquer avec IGN.
+1. utiliser la Raspberry et le module ardusimple-ublox
+2. utiliser seulement le module ardusimple-ublox
 
-Si on veut indépendament vérifier les données GPS, on peut le faire (sous linux) en connectant le module Ardusimple en USB et en suivant ce [tuto](https://www.ardusimple.com/how-to-use-ardusimple-rtk-receivers-and-get-gps-data-in-ros/). Sinon, on peut connecter le module Ardusimple en USB (sous Windows) suivre la section 7 des [indications](https://docs.centipede.fr/docs/base/Installation.html) données par Centipède. L'adresse http://basegnss.local permet d'accéder aux logs (sous Windows) de la base et le mot de passe est _admin_. On peut alors entre autre télécharger les fichiers qui nous intéressent. **Update** : il est possible (sous Windows) d'accéder aux logs de la base. Pour cela, il faut être relié en ethernet à la raspberry et se rendre à l'adresse [http:basegnss.local](http:basegnss.local).
+La première méthode nécessite de flasher la carte SD de la Raspberry en suivant les instructions données par centipède pour l'installation d'une base RTK. Leur tuto est destiné à créer une base qui sera déclarée sur leur réseau mais ce n'est pas ce qu'on cherche ici. Il faut s'arrêter dans le tuto avant la déclaration de la base sur leur réseau. Concrètement, en suivant ces [instructions](https://docs.centipede.fr/docs/base/), on va installer sur la Raspberry un programme donnant accès facilement à une architecture de base RTK et régler le Ublox en mode base. Le programme fournit une interface html qui permet de faire des réglages sur la base et de récupérer ses logs en se connectant à http://basegnss.local (il faut être sur le même réseau que la Raspberry). Il est aussi possible de le faire en ssh avec : 
 
-Autrement, il est possible de se connecter en ssh à la carte Raspberry, lorsque le module Ardusimple y est relié, en tapant : 
+```
+ssh basegnss@basegnss.local
+basegnss! # mot de passe
+```
+L'idée avec cette méthode, c'est de laisser l'installation Raspberry + Ublox acquérir des données sur 24 h (les logs commencent ou finissent à 4h du matin donc il faut garder ça en tête), de récupérer les logs au format RINEX, de les transmettre à IGN qui calcule les coordonnées précises au centimètre de la base. Il n'y a alors plus qu'à les rentrer dans la base ou dans le Ublox si on veut enlever la Raspberry (qui ne devrait plus servir à présent puisque le but n'est pas de faire une base Centipède). Le Ublox en mode base se charge du reste et transmet les corrections via son antenne Xbee.
 
-        ssh basegnss@basegnss.local
-        # mot de passe : basegnss!
+La deuxième méthode diffère car elle ne nécessite pas de Raspberry. L'idée ici est de configure le Ublox base pour qu'il trouve tout seul sa position avec la précision voulue en utilisant les sattelites environnant. L'idéal est de le laisser loger 24 h mais 6 h peuvent suffire pour avoir une précision décimétrique.
 
-Ceci permet d'accéder aux informations de la carte et éventuellement de débugger.
+Pour régler les Ublox, il faut avoir le logiciel U-Center (idéalement sur Windows). Il faudra ensuite suivre les instructions du PDF sur le sujet pour correctement régler le rover et la base. De même pour les Xbee qu'on peut également configurer avec XCTU (toujours sous Windows)..
+
+Pour alimenter l'installation, il faudra brancher la Raspberry pour la méthode 1 ou alors directement le Ublox pour la méthode 2. Il faut garder à l'esprit qu'il faut se connecter en série sur le port Power+GPS du Ublox pour configurer et lire le GPS et sur le port Power+Xbee pour configurer et lire la radio Xbee.
 
 
 ## Utiliser Docker pour ne pas avoir à installer ROS
