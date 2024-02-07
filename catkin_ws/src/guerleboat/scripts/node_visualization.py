@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import rospy
 from classBoat import *
 from geometry_msgs.msg import Twist, PoseStamped
@@ -16,30 +18,6 @@ c21, c22 = 10, 5  # constantes pour les champs de potentiels
 # Xd = np.zeros((5,1),dtype=np.float64)    #Pose du dock   (x,y,roll,pitch,yaw)
 
 Xb,Xd,Xhat = None, None, None
-
-u = np.array([[0.,0.]]).T
-boat = None
-boat_initiated = False
-# boat = boat(np.array([Xb[0],Xb[1],u[0],Xb[-1]]))
-# boat.init_kalman()
-
-def draw_dock(xdock, theta):
-    """_summary_
-
-    Args:
-        xdock (_type_): _description_
-        theta (_type_): _description_
-    """
-    L, l = 1.2, 1
-    P = array([[-L / 3, L, L, 0], [0, 0, l, l]])
-    P[0, :] = P[0, :] + xdock[0, 0] - L / 2
-    P[1, :] = P[1, :] + xdock[1, 0] - l / 2
-    R = np.array([[cos(theta), -sin(theta)],
-                  [sin(theta), cos(theta)]])
-    P = np.dot(R, P)
-    P = P.T
-    draw_polygon(ax, P, None)
-
 
 def boat_pose_cb(msg):
     global Xb
@@ -65,24 +43,15 @@ def boat_kalman_cb(msg):
                     msg.pose.orientation.y,
                     msg.pose.orientation.z]]).T
 
-armed = False
-guided = False
-def state_cb(msg):
-    global armed,guided
-    armed = msg.armed
-    guided = msg.guided
-
 def visualize_node():
-    global boat,boat_initiated
     # Initialisation du noeud ROS
     rospy.init_node('visualization')
-
 
     rospy.Subscriber('/docking/nav/boat_pose', PoseStamped, boat_pose_cb)
     rospy.Subscriber('/docking/nav/dock_pose', PoseStamped, dock_pose_cb)
     rospy.Subscriber('/docking/nav/boat_kalman', PoseStamped, boat_kalman_cb)
 
-    f = 50.
+    f = 2
     dt = 1./f
     rate = rospy.Rate(f)
     
@@ -101,6 +70,10 @@ def visualize_node():
 
             ax.scatter(Xd[0,0],Xd[1,0],label="dock")
             ax.quiver(Xd[0,0],Xd[1,0],cos(Xd[-1,0]),sin(Xd[-1,0]))
+
+            ax.plot([Xd[0]-100*cos(Xd[-1,0]),Xd[0]+100*cos(Xd[-1,0])],[Xd[1]-100*sin(Xd[-1,0]),Xd[1]+100*sin(Xd[-1,0])])
+
+            ax.legend()
 
             plt.pause(dt)
             

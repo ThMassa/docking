@@ -53,8 +53,11 @@
     </node>
 
     <node pkg="rosbag" type="record" name="rosbag_record_boat"
-       args="record -o /home/surcouf/guerlelogs/boat.bag /nav/dock_pose /nav/boat_pose /cmd_vel /nav/boat_kalman /dock/udp_publisher"
+       args="record -o /home/surcouf/guerlelogs/boat.bag docking/nav/dock_pose docking/nav/boat_pose /cmd_vel docking/nav/boat_kalman docking/dock/udp_publisher"
        if="$(arg get_logs)" />
+
+    <node name="visualization_node" pkg="guerleboat" type="node_visualization.py" output="screen">
+    </node>
     
 </launch>
        <!-- args="record -o /home/guerlelogs/boat.bag /cmd_vel /sbg/ekf_quat /sbg/gps_pos" -->
