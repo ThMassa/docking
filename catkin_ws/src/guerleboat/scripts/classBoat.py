@@ -157,12 +157,14 @@ class Boat:
             vbar = c21 * (self.x[:2]-phat)/norm(self.x[:2]-phat)**3 + c22 * unit
             if self.__value == 0:
                 self.__value = 3*self.L
-                self.__scap = 0
         else:
-            if self.__value == 3*self.L:
+            if self.__start:
                 self.__scap = 0
-                self.__value = 0
-            k_ = -sign(np.dot(unit.T, (phat-self.x[:2]))/5)[0, 0]
+                self.__start = False
+            if np.dot(unit.T, self.x[:2] - phat) < -self.__value/3:
+                self.__start = True
+                k_ = 1
+            k_ = -sign(np.dot(unit.T, phat-self.x[:2]))[0, 0]
             nn = np.dot(n, n.T)
             vbar = -c11*np.dot(nn, self.x[:2]-phat) + c12*np.array([[cos(theta+pi)], [sin(theta+pi)]])
 
@@ -186,8 +188,8 @@ class Boat:
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
-        # print(self.u[1, 0])
         # return self.u
+
 
 if __name__=="__main__":
     boat = Boat(np.array([[0], [0], [2], [1]]))

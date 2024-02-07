@@ -11,7 +11,7 @@ def sawtooth(x):
     return (x+pi)%(2*pi)-pi
 
 
-class Rover:
+class Boat:
     """Classe bateau permettant de contrôler un bateau mais également un véhicule à deux roues.
     
     Pour un bon fonctionnement il faut :
@@ -20,11 +20,11 @@ class Rover:
     
     - Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
     """
-    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1, dthetamax = 4.):
+    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1, dthetamax = 100):
         """Initialise l'instance
 
         Args:
-            x (numpy.ndarray): Vecteur d'état (px, py, pz, heading)
+            x (numpy.ndarray): Vecteur d'état (px, py, pz, v, heading)
             u (numpy.ndarray): Commande (v, yaw)
             L (int, optional): Longueur du bateau. Defaults to 1.
             vmax (int, optional): Vitesse maximale du bateau. Defaults to 1.
@@ -42,7 +42,7 @@ class Rover:
         Args:
             Gx (numpy.ndarray, optional): Matrice de covariance liée au vecteur d'état. Defaults to None.
         """
-        if Gx is None:
+        if Gx == None:
             self.Gx = 100*np.identity(len(self.x))
         else:
             self.Gx = Gx
@@ -81,7 +81,7 @@ class Rover:
         K = np.dot(self.Gx, C.T)
         K = np.dot(K, np.linalg.inv(S))
         ytilde = y - np.dot(C, self.x)
-        self.Gx = np.dot(np.eye(len(self.x))-np.dot(K, C), self.Gx)
+        self.Gx = np.dot(np.eye(len(self.x))-np.dot(K, C), self.Gx) 
         self.x = self.x + np.dot(K, ytilde)
         self.__predict = False
     
@@ -95,13 +95,18 @@ class Rover:
         Returns:
             np.ndarray: dx/dy
         """
+        print('u : ', self.u)
+        noise = .05*np.random.randn(2, 1)
+        noise[1, 0] = .1 * np.random.randn()
+        # noise = 0
         psi = self.x[-1, 0]
         B = np.array([[cos(theta)*cos(psi), 0],
                       [cos(theta)*sin(psi), 0],
                       [-sin(theta)        , 0],
                       [0                  , 1]], dtype=np.float64)
-        return np.dot(B, self.u)
-    
+        # self.u[0, 0] += .5
+        return np.dot(B, self.u + noise)
+        
     
     def dead_reckoning(self, theta, dt):
         """Dead reckoning (utilisez plutôt la fonction kalman_predict si possible)
@@ -125,12 +130,12 @@ class Rover:
             R (np.ndarray): Matrice de covariance du bruit de mesure
             dt (float): Période d'une itération dans la boucle principale 
         """
-        if not self.__predict:
+        if self.__predict == False:
             self.kalman_predict(y, A, B, Q,dt)
         else:
             self.kalman_correc(y, C, R, dt)
             self.kalman_predict(y, A, B, Q, dt)
-
+    
     
     def controller(self, phat, theta, marge=.5):
         """Controleur du bateau utilisant les champs de potentiels
@@ -170,7 +175,7 @@ class Rover:
 
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
-        vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2])/5)
+        vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2]))
         vbar = max(min(self.vmax, vbar), -self.vmax)
         if norm(phat - self.x[:2]) < .2*self.L:
             # self.__scap = 0
@@ -188,10 +193,10 @@ class Rover:
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
-        # return self.u
-        
+        # print(self.u[1, 0])
+
 
 if __name__=="__main__":
-    rover = Rover(np.array([[0], [0], [2], [1]]))
-    u = rover.controller(np.array([[2], [2]]), pi/4)
+    boat = Boat(np.array([[0], [0], [2], [1]]))
+    u = boat.controller(np.array([[2], [2]]), pi/4)
     print(u)
