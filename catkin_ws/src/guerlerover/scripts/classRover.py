@@ -3,7 +3,6 @@
 from numpy import cos, sin, array, sign, pi
 import numpy as np
 from numpy.linalg import norm
-from EKF import EKF
 
 #TODO l'IMU du bateau n'est pas bien orienté
 
@@ -21,7 +20,7 @@ class Rover:
     
     - Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
     """
-    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1, dthetamax = 5.):
+    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1, dthetamax = 4.):
         """Initialise l'instance
 
         Args:
@@ -35,8 +34,6 @@ class Rover:
         self.L = L
         self.u = u
         self.dthetamax = dthetamax
-        
-        self.zk = np.array([[0,0.]]).T
         
     
     def init_kalman(self, Gx=None):
@@ -66,6 +63,7 @@ class Rover:
         self.Gx = np.dot(A, self.Gx)
         self.Gx = np.dot(self.Gx, A.T) + Q
         self.x = np.dot(A, self.x) + np.dot(B, self.u)
+        print(self.u)
         self.__predict = True
     
     
@@ -104,12 +102,6 @@ class Rover:
                       [-sin(theta)        , 0],
                       [0                  , 1]], dtype=np.float64)
         return np.dot(B, self.u)
-        
-
-    def fc(self,X,u):
-        x,y,th= X.flatten()
-        u1,u2 = u.flatten()
-        return np.array([[u1*cos(th),u1*sin(th),u2]]).T
     
     
     def dead_reckoning(self, theta, dt):
@@ -137,29 +129,8 @@ class Rover:
         if not self.__predict:
             self.kalman_predict(y, A, B, Q,dt)
         else:
-            self.kalman_correc(y, C, R, 1)
+            self.kalman_correc(y, C, R, dt)
             self.kalman_predict(y, A, B, Q, dt)
-    
-    def extended_kalman(self,u,y,yk_1,dt):
-        X = np.array([[self.x[0,0],self.x[1,0],self.x[-1,0]]]).T
-        Gx = np.zeros((3,3))
-        Gx[0,0] = self.Gx[0,0]
-        Gx[1,1] = self.Gx[1,1]
-        Gx[2,2] = self.Gx[-1,-1]
-        # print(X)
-
-        X, Gx = EKF(X,Gx,y,u,self.fc,dt,yk_1)
-
-        print(X)
-        print("##############")
-        # print(self.x)
-        self.x[:2] = X[:2]
-        self.x[-1,0] = X[2,0]
-
-        self.Gx[0,0] = Gx[0,0]
-        self.Gx[1,1] = Gx[1,1]
-        self.Gx[-1,-1] = Gx[2,2]
-
 
     
     def controller(self, phat, theta, marge=.5):
@@ -199,7 +170,7 @@ class Rover:
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
         vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2]))
-        vbar = min(self.vmax, vbar)
+        vbar = max(min(self.vmax, vbar), -self.vmax)
         if norm(phat - self.x[:2]) < .2*self.L:
             # self.__scap = 0
             self.__start = False
@@ -212,13 +183,12 @@ class Rover:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
         self.u[0,0] = vbar
-        self.u[1,0] = (5*ecap + .0*self.__scap)/20
+        self.u[1,0] = (5*ecap + .02*self.__scap)/20
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
         # print(self.u[1, 0])
         # return self.u
-
 
 if __name__=="__main__":
     rover = Rover(np.array([[0], [0], [2], [1]]))

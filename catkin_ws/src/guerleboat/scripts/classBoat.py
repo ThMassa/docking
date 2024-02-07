@@ -20,7 +20,7 @@ class Boat:
     
     - Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
     """
-    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=0.5, dthetamax = 4):
+    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=.5, dthetamax = 4.):
         """Initialise l'instance
 
         Args:
@@ -128,7 +128,7 @@ class Boat:
         if not self.__predict:
             self.kalman_predict(y, A, B, Q,dt)
         else:
-            self.kalman_correc(y, C, R, 1)
+            self.kalman_correc(y, C, R, dt)
             self.kalman_predict(y, A, B, Q, dt)
     
     
@@ -169,7 +169,7 @@ class Boat:
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
         vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2]))
-        vbar = min(self.vmax, vbar)
+        vbar = max(min(self.vmax, vbar), -self.vmax)
         if norm(phat - self.x[:2]) < .2*self.L:
             # self.__scap = 0
             self.__start = False
@@ -182,7 +182,7 @@ class Boat:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
         self.u[0,0] = vbar/2
-        self.u[1,0] = (5*ecap + .02*self.__scap)/5
+        self.u[1,0] = (5*ecap + .02*self.__scap)/20
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])

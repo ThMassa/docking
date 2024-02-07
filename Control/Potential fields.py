@@ -48,7 +48,7 @@ k_ = 1
 theta = pi/4
 for t in arange(0, 50, dt):
     clear(ax)
-    theta += pi/50*randn()
+    # theta += pi/50*randn()
     unit = array([[cos(theta)], [sin(theta)]])
     phat = array([[0], [0]])
     draw_dock(phat, theta)
@@ -59,23 +59,28 @@ for t in arange(0, 50, dt):
     n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
 
     if unit.T@(x[:2] - phat) < value and start:
+        print('State 1')
         vbar = c21 * (x[:2]-phat)/norm(x[:2]-phat)**3 + c22 * unit 
         draw_field(ax, f2, -s, s, -s, s, 0.8)
         if value == 0:
             value = 3
-            sum = 0
     else:
-        if value == 3:
+        print('State 2')
+        if start:
             sum = 0
-            value = 0
+            start = False
         k_ = -sign(unit.T@(phat-x[:2]))
         print("----")
         vbar = -c11*n@n.T@(x[:2]-phat) + c12*np.array([[cos(theta+pi)], [sin(theta+pi)]])
         draw_field(ax, f1, -s, s, -s, s, 0.8)
-
+        if unit.T@(x[:2] - phat) < -value:
+            start = True
+            k_ = 1
+            
     thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
     # vbar = norm(vbar)
     vbar = min(norm(vbar), k_*norm(phat - x[:2]))
+    vbar = max(min(vmax, vbar), -vmax)
     print(vbar)
     if len(e) < 5:
         e = np.append(e, vbar - x[2, 0])
@@ -87,8 +92,10 @@ for t in arange(0, 50, dt):
         u[0] = e[-1] + 18*(e[-1] - e[-2])
     else:
         u[0] = 0"""
+    print(norm(phat - x[:2]))
     if norm(phat - x[:2]) < .1:
-        start = False
+        x[:2] -= 2*unit
+        print('----------------------------------------------------------------------------------------------')
     sum += e[-1]
     u[0] = 2 * e[-1] + 18 * (e[-1] - e[-2]) + .01*sum
     u[1] = 10*sawtooth(thetabar - x[3, 0])

@@ -62,7 +62,7 @@ def control_node():
 
     vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
-    f = 5.
+    f = 50.
     dt = 1./f
     rate = rospy.Rate(f)
 
