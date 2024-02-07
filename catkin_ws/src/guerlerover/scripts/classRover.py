@@ -63,7 +63,6 @@ class Rover:
         self.Gx = np.dot(A, self.Gx)
         self.Gx = np.dot(self.Gx, A.T) + Q
         self.x = np.dot(A, self.x) + np.dot(B, self.u)
-        print(self.u)
         self.__predict = True
     
     
@@ -158,24 +157,26 @@ class Rover:
             vbar = c21 * (self.x[:2]-phat)/norm(self.x[:2]-phat)**3 + c22 * unit
             if self.__value == 0:
                 self.__value = 3*self.L
-                self.__scap = 0
         else:
-            if self.__value == 3*self.L:
+            if self.__start:
                 self.__scap = 0
-                self.__value = 0
+                self.__start = False
+            if np.dot(unit.T, self.x[:2] - phat) < -self.__value/3:
+                self.__start = True
+                k_ = 1
             k_ = -sign(np.dot(unit.T, phat-self.x[:2]))[0, 0]
             nn = np.dot(n, n.T)
             vbar = -c11*np.dot(nn, self.x[:2]-phat) + c12*np.array([[cos(theta+pi)], [sin(theta+pi)]])
 
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
-        vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2]))
+        vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2])/5)
         vbar = max(min(self.vmax, vbar), -self.vmax)
         if norm(phat - self.x[:2]) < .2*self.L:
             # self.__scap = 0
             self.__start = False
         
-        ecap = sawtooth(thetabar - self.x[-1])
+        ecap = sawtooth(thetabar - self.x[-1, 0])
         self.__scap += ecap
         if len(self.__ecap) < 5:
             self.__ecap = np.append(self.__ecap, ecap)
@@ -183,12 +184,12 @@ class Rover:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
         self.u[0,0] = vbar
-        self.u[1,0] = (5*ecap + .02*self.__scap)/20
+        self.u[1,0] = (5*ecap + .02*self.__scap)/2
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
         # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
-        # print(self.u[1, 0])
         # return self.u
+        
 
 if __name__=="__main__":
     rover = Rover(np.array([[0], [0], [2], [1]]))
