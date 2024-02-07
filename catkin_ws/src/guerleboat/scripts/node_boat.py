@@ -26,6 +26,27 @@ long = None
 
 lambert = prj.Proj(init='EPSG:2154')
 
+
+
+###############################################
+lon0 = -3.014159058896045
+lat0 = 48.19895758214647
+alt0 = 100.
+wgs84_proj = prj.Proj(proj='latlong', ellps='WGS84', datum='WGS84')
+enu_proj = prj.Proj(proj='geocent', ellps='WGS84', datum='WGS84', lat_0=lat0, lon_0=lon0, h_0=alt0)
+###############################################
+
+def projection(lon, lat, alt=100):
+    # Convert (lon, lat, alt) to (x, y, z) in ECEF (Earth-Centered, Earth-Fixed) coordinates
+    x, y, z = prj.transform(wgs84_proj, enu_proj, lon, lat, alt, radians=False)
+
+    # Calculate differences between the point and the origin in ENU coordinates
+    east = x
+    north = y
+
+    return east, north
+
+
 def sawtooth(x):
     return (x+np.pi)%(2*np.pi)-np.pi
 
@@ -43,6 +64,7 @@ def unpack_data(data_string):
 
 def conv_ll2xy(lat,lon):
     return lambert(lon,lat)
+    # return projection(lon, lat)
 
 def euler_from_quaternion(quat):
     """
