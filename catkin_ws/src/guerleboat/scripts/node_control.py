@@ -67,6 +67,8 @@ def control_node():
     rate = rospy.Rate(f)
 
     y = np.array([[0., 0., 0.]]).T
+    
+    target_reached=False
 
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None and armed and guided:
@@ -98,7 +100,7 @@ def control_node():
                 # print(boat.Gx)
             # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
             
-            if np.linalg.norm(boat.x[:2] - Xd[:2])>=2:
+            if np.linalg.norm(boat.x[:2] - Xd[:2])>=3 and not target_reached:
                 boat.controller(Xd[:2],Xd[-1,0])
 
                 vel_msg = Twist()
@@ -115,6 +117,7 @@ def control_node():
                 boat_kalman.pose.orientation.z = boat.x[-1,0]
                 boat_kalman_publisher.publish(boat_kalman)
             else :
+                target_reached = True
                 vel_msg = Twist()
                 vel_msg.linear.x = 0.
                 vel_msg.angular.z = 0.

@@ -74,7 +74,7 @@ def udp_simulator_node():
     roll_dock = 0
     pitch_dock = 0
 
-    rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
+    rate = rospy.Rate(5)  # Par exemple, 1 message par seconde
 
     while not rospy.is_shutdown():
         dock_pose = PoseStamped()

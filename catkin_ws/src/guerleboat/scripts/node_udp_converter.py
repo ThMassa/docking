@@ -71,7 +71,7 @@ def udp_converter_node():
     udp_socket.bind((udp_ip, udp_port))
 
 
-    rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
+    rate = rospy.Rate(5)  # Par exemple, 1 message par seconde
 
     while not rospy.is_shutdown():
         # Attendez de recevoir des données UDP

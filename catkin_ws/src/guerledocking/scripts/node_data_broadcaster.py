@@ -96,7 +96,7 @@ def broadcast_node():
     # Création du socket UDP
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
+    rate = rospy.Rate(5)  # Par exemple, 1 message par seconde
 
     while not rospy.is_shutdown():
         if gps_data is not None and imu_data is not None:

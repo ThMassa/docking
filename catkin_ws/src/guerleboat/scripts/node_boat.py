@@ -120,7 +120,7 @@ def boat_node():
     
     use_true_heading = rospy.get_param("~use_true_heading", "default_use_true_heading")
 
-    rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
+    rate = rospy.Rate(5)  # Par exemple, 1 message par seconde
 
     while not rospy.is_shutdown():
         # Attendez de recevoir des données UDP
@@ -132,10 +132,10 @@ def boat_node():
             boat_pose.pose.orientation.x = imu_data[0]
             boat_pose.pose.orientation.y = imu_data[1]
             # boat_pose.pose.orientation.z = sawtooth(imu_data[2]-0.038)
-            if not use_true_heading:
-                boat_pose.pose.orientation.z = imu_data[2]
+            if use_true_heading:
+                boat_pose.pose.orientation.z = -sawtooth(true_heading*np.pi/180 - np.pi/2)
             else :
-                boat_pose.pose.orientation.z = true_heading
+                boat_pose.pose.orientation.z = imu_data[2]
                 
             boat_pose_publisher.publish(boat_pose)
 
