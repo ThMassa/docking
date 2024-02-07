@@ -64,9 +64,9 @@ def gps_callback(data):
 def udp_simulator_node():
     global lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
     # Initialisation du noeud ROS
-    rospy.init_node('UDP_simulator')
+    rospy.init_node('/dock/UDP_simulator')
 
-    udp_simulator_publisher = rospy.Publisher("/udp_publisher",PoseStamped, queue_size = 10)
+    udp_simulator_publisher = rospy.Publisher("/docking/dock/udp_publisher",PoseStamped, queue_size = 10)
 
     lat_dock = rospy.get_param("~latitude", "default_latitude")
     long_dock = rospy.get_param("~longitude", "default_longitude")

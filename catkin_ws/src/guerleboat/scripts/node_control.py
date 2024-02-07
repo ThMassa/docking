@@ -52,12 +52,12 @@ def state_cb(msg):
 def control_node():
     global boat,boat_initiated
     # Initialisation du noeud ROS
-    rospy.init_node('control')
+    rospy.init_node('/docking/control')
 
-    boat_kalman_publisher = rospy.Publisher("/boat_kalman",PoseStamped, queue_size = 10)
+    boat_kalman_publisher = rospy.Publisher("/docking/nav/boat_kalman",PoseStamped, queue_size = 10)
 
-    rospy.Subscriber('/boat_pose', PoseStamped, boat_pose_cb)
-    rospy.Subscriber('/dock_pose', PoseStamped, dock_pose_cb)
+    rospy.Subscriber('/docking/nav/boat_pose', PoseStamped, boat_pose_cb)
+    rospy.Subscriber('/docking/nav/dock_pose', PoseStamped, dock_pose_cb)
     rospy.Subscriber('/mavros/state', State, state_cb)
 
     vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
@@ -67,8 +67,6 @@ def control_node():
     rate = rospy.Rate(f)
 
     y = np.array([[0., 0., 0.]]).T
-    yk_1 = np.zeros((3,1))
-
 
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None and armed and guided:

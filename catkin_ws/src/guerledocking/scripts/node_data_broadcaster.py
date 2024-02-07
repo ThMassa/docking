@@ -83,12 +83,12 @@ def broadcast_node():
     """
     global gps_data,imu_data
     # Initialisation du noeud ROS
-    rospy.init_node('data_broadcaster')
+    rospy.init_node('/docking/data_broadcaster')
     
     rospy.Subscriber('/ublox/fix', NavSatFix, gps_callback)
     rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback) ## ou (sbg/imu_data, SbgImuData
 
-    mon_publisher = rospy.Publisher('string_data', String, queue_size=10)
+    mon_publisher = rospy.Publisher('/docking/dock/string_data', String, queue_size=10)
     # Configuration du socket UDP pour la communication avec le système distant
     udp_ip = "10.0.11.100"#"192.168.0.10" #TODO mettre bonne adresse
     udp_port = 12345  # Port UDP de destination sur le système distant

@@ -59,13 +59,13 @@ def euler_from_quaternion(quat):
 def udp_converter_node():
     global lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
     # Initialisation du noeud ROS
-    rospy.init_node('UDP_converter')
+    rospy.init_node('/docking/UDP_converter')
 
-    udp_converter_publisher = rospy.Publisher("/udp_publisher",PoseStamped, queue_size = 10)
+    udp_converter_publisher = rospy.Publisher("/docking/dock/udp_publisher",PoseStamped, queue_size = 10)
     
     # Configuration du socket UDP pour la communication avec le dock
     udp_ip = "0.0.0.0"
-    udp_port = 12345  # Port UDP de destination sur le dock
+    udp_port = 5005  # Port UDP de destination sur le dock
     # Création du socket UDP
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_socket.bind((udp_ip, udp_port))
