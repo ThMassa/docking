@@ -90,7 +90,7 @@ def broadcast_node():
 
     mon_publisher = rospy.Publisher('string_data', String, queue_size=10)
     # Configuration du socket UDP pour la communication avec le système distant
-    udp_ip = "192.168.0.10" #TODO mettre bonne adresse
+    udp_ip = "10.0.11.100"#"192.168.0.10" #TODO mettre bonne adresse
     udp_port = 12345  # Port UDP de destination sur le système distant
 
     # Création du socket UDP
