@@ -6,7 +6,7 @@
 
 
 import rospy
-from sbg_driver.msg import SbgEkfQuat
+from sbg_driver.msg import SbgEkfEuler, SbgEkfQuat
 from sensor_msgs.msg import NavSatFix
 from std_msgs.msg import String
 import socket
@@ -32,7 +32,7 @@ def concatenate_data(gps_data, imu_angles):
     angles = imu_angles
     # angle_accuracy = imu_angles.accuracy
 
-    data = "${},{};{},{},{}".format(lat,long,angles[0],angles[1],angles[2]) # $timestamp;lat,long;x,y,z
+    data = "${},{};{},{},{}".format(lat,long,angles.x,angles.y,angles.z) # $timestamp;lat,long;x,y,z
     
     return data
 
@@ -75,7 +75,7 @@ def imu_callback(data):
         data (sbg_driver.msg.SbgEkfQuat): Message contenant l'orientation en quaternion
     """
     global imu_data
-    imu_data = euler_from_quaternion(data.quaternion)
+    imu_data = data.angle
 
 def broadcast_node():
     """Node de diffusion des données sur un socket via une connection UDP.
@@ -86,12 +86,12 @@ def broadcast_node():
     rospy.init_node('data_broadcaster')
     
     rospy.Subscriber('/ublox/fix', NavSatFix, gps_callback)
-    rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback) ## ou (sbg/imu_data, SbgImuData
+    rospy.Subscriber('/sbg/ekf_euler', SbgEkfEuler, imu_callback) ## ou (sbg/imu_data, SbgImuData
 
     mon_publisher = rospy.Publisher('string_data', String, queue_size=10)
     # Configuration du socket UDP pour la communication avec le système distant
     udp_ip = "10.0.11.100"#"192.168.0.10" #TODO mettre bonne adresse
-    udp_port = 12345  # Port UDP de destination sur le système distant
+    udp_port = 5005  # Port UDP de destination sur le système distant
 
     # Création du socket UDP
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
