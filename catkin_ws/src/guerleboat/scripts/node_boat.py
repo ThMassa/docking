@@ -6,7 +6,7 @@ import socket
 import numpy as np
 import pyproj as prj
 
-from sbg_driver.msg import SbgEkfQuat, SbgGpsPos
+from sbg_driver.msg import SbgEkfQuat, SbgGpsPos, SbgEkfEuler, SbgGpsHdt
 
 
 from geometry_msgs.msg import PoseStamped
@@ -16,6 +16,8 @@ long_dock = None
 roll_dock = None
 pitch_dock = None
 yaw_dock = None
+
+true_heading = None
 
 imu_data = None
 gps_data = None
@@ -60,7 +62,12 @@ def euler_from_quaternion(quat):
 
 def imu_callback(data):
     global imu_data
-    imu_data = euler_from_quaternion(data.quaternion)
+    # imu_data = euler_from_quaternion(data.quaternion)
+    imu_data = (data.angle.x,data.angle.y,data.angle.z)
+
+def hdt_callback(data):
+    global true_heading
+    true_heading = data.true_heading
 
 def gps_callback(data):
     global lat,long
@@ -80,12 +87,14 @@ def boat_node():
     # Initialisation du noeud ROS
     rospy.init_node('boat')
 
-    boat_pose_publisher = rospy.Publisher("/boat_pose",PoseStamped, queue_size = 10)
-    dock_pose_publisher = rospy.Publisher("/dock_pose",PoseStamped, queue_size = 10)
+    boat_pose_publisher = rospy.Publisher("/docking/nav/boat_pose",PoseStamped, queue_size = 10)
+    dock_pose_publisher = rospy.Publisher("/docking/nav/dock_pose",PoseStamped, queue_size = 10)
 
-    rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback)
+    # rospy.Subscriber('/sbg/ekf_quat', SbgEkfQuat, imu_callback)
+    rospy.Subscriber('/sbg/ekf_euler', SbgEkfEuler, imu_callback)
     rospy.Subscriber('/sbg/gps_pos', SbgGpsPos, gps_callback)
-    rospy.Subscriber('/udp_publisher', PoseStamped, udp_callback)
+    rospy.Subscriber('/sbg/gps_hdt', SbgGpsHdt, hdt_callback)
+    rospy.Subscriber('/docking/dock/udp_publisher', PoseStamped, udp_callback)
     
 
     rate = rospy.Rate(1)  # Par exemple, 1 message par seconde

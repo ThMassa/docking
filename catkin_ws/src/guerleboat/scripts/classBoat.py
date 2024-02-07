@@ -20,7 +20,7 @@ class Boat:
     
     - Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
     """
-    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1, dthetamax = 100):
+    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=0.5, dthetamax = 4):
         """Initialise l'instance
 
         Args:
@@ -181,7 +181,7 @@ class Boat:
         else:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
-        self.u[0,0] = vbar
+        self.u[0,0] = vbar/2
         self.u[1,0] = (5*ecap + .02*self.__scap)/5
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
