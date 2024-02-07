@@ -105,7 +105,7 @@ def udp_callback(msg):
     yaw_dock = msg.pose.orientation.z
 
 def boat_node():
-    global gps_data,imu_data, lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
+    global gps_data,imu_data, lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock, true_heading
     # Initialisation du noeud ROS
     rospy.init_node('boat')
 
@@ -118,6 +118,7 @@ def boat_node():
     rospy.Subscriber('/sbg/gps_hdt', SbgGpsHdt, hdt_callback)
     rospy.Subscriber('/docking/dock/udp_publisher', PoseStamped, udp_callback)
     
+    use_true_heading = rospy.get_param("~use_true_heading", "default_use_true_heading")
 
     rate = rospy.Rate(1)  # Par exemple, 1 message par seconde
 
@@ -131,7 +132,11 @@ def boat_node():
             boat_pose.pose.orientation.x = imu_data[0]
             boat_pose.pose.orientation.y = imu_data[1]
             # boat_pose.pose.orientation.z = sawtooth(imu_data[2]-0.038)
-            boat_pose.pose.orientation.z = imu_data[2]
+            if not use_true_heading:
+                boat_pose.pose.orientation.z = imu_data[2]
+            else :
+                boat_pose.pose.orientation.z = true_heading
+                
             boat_pose_publisher.publish(boat_pose)
 
         if lat_dock is not None:

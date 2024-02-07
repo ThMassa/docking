@@ -3,6 +3,7 @@
     <arg name="get_logs" default="false" />
     <arg name="simulate_dock" default="false" />
     <arg name="simulate_dock_with_log" default="false" />
+    <arg name="use_true_heading" default="false" />
     <arg name="bag_played" default=""/>
     <arg name="latitude" default="48.19894652483758"/>
     <arg name="longitude" default="-3.0156170343320365"/>
@@ -30,6 +31,7 @@
     <include file="$(find sbg_driver)/launch/examples/sbg_ellipseD.launch"/>
 
     <node name="boat_node" pkg="guerleboat" type="node_boat.py" output="screen">
+        <param name="use_true_heading" type="bool" value="$(arg use_true_heading)"/>
     </node>
 
     <node name="control_node" pkg="guerleboat" type="node_control.py" output="screen">
