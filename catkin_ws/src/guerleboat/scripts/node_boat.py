@@ -101,14 +101,15 @@ def boat_node():
 
     while not rospy.is_shutdown():
         # Attendez de recevoir des données UDP
-        if lat is not None is not None and imu_data is not None:
+        if lat is not None and imu_data is not None:
             x,y = conv_ll2xy(lat,long)
             boat_pose = PoseStamped()
             boat_pose.pose.position.x = x
             boat_pose.pose.position.y = y
             boat_pose.pose.orientation.x = imu_data[0]
             boat_pose.pose.orientation.y = imu_data[1]
-            boat_pose.pose.orientation.z = sawtooth(imu_data[2]-0.038) #TODO peut être décalage
+            # boat_pose.pose.orientation.z = sawtooth(imu_data[2]-0.038)
+            boat_pose.pose.orientation.z = imu_data[2]
             boat_pose_publisher.publish(boat_pose)
 
         if lat_dock is not None:
