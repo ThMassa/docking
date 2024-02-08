@@ -111,12 +111,12 @@ def visualize_node():
             if np.dot(unit.T,(Xb[:2] - phat)) < value and start:
                 draw_field(ax, f2, Xd[0,0]-delta_draw,Xd[0,0]+delta_draw, Xd[1,0]-delta_draw,Xd[1,0]+delta_draw, 5)
                 if value == 0:
-                    value = 3
+                    value = 3*L
             else:
                 if start:
                     start = False
                 draw_field(ax, f1, Xd[0,0]-delta_draw,Xd[0,0]+delta_draw, Xd[1,0]-delta_draw,Xd[1,0]+delta_draw, 5)
-                if np.dot(unit.T,(Xb[:2] - phat)) < -value:
+                if np.dot(unit.T,(Xb[:2] - phat)) < -value/3:
                     start = True
 
 
