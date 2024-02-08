@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import requests
+import pandas as pd
+
+import pyproj as prj
+
+lambert = prj.Proj(init='EPSG:2154')
 
 def load_background_image(extent):
     """Récupère une image (carte) de la zone définie par extent
@@ -70,6 +75,16 @@ def plot_map(map, longitude_bounds, latitude_bounds, title, nro_fig=None):
     return gg
 
 
+def load_csv_log(filename):
+    f = pd.read_csv(filename, sep=",", usecols= ["/ublox/fix/latitude ", "/ublox/fix/longitude "])
+    mat = np.array(f)
+    lat, lon = mat[:,0], mat[:,1]
+    return lat, lon
+
+
+
+
+
 if __name__ == "__main__":
     ## Coordonnées au milieu du lac
     lon_center = -3.0152798088714383
@@ -84,5 +99,19 @@ if __name__ == "__main__":
     background_image = load_background_image(extent)
 
     ## Affichage de la carte
-    plot_map(background_image, [extent[0], extent[2]], [extent[1], extent[3]], "Guerlédan")
+    fig = plot_map(background_image, [extent[0], extent[2]], [extent[1], extent[3]], "Guerlédan")
+
+    file_path = "./logs_rosbag/dock/dock_2024-02-06-17-36-57/test_logs.csv"
+    from tkinter import filedialog
+    file_path = filedialog.askopenfilename(defaultextension=".png",
+                                                   filetypes=[
+                                                              ("All files", "*.*")],
+                                                    initialdir=".")
+    
+    lat, lon = load_csv_log(file_path)
+
+    print("LOG LOADED")
+
+    fig.plot(lon, lat)
+
     plt.show()
