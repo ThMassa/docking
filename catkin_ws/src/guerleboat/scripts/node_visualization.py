@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 
 L, l = 1, 1  # taille Longueur largeur du dock
 marge = 1.5  # marge de securite, plus elle est elevee, plus le bateau s'arretera loin du dock et donc moins il aura de chance de se cogner contre le dock
-c11, c12 = 5, 1  # constantes pour les champs de potentiels
-c21, c22 = 10, 5  # constantes pour les champs de potentiels
+c11, c12 = 5, 200  # constantes pour les champs de potentiels
+c21, c22 = 5, 20  # constantes pour les champs de potentiels
 
 # Xb = np.zeros((5,1),dtype=np.float64)    #Pose du bateau (x,y,roll,pitch,yaw)
 # Xd = np.zeros((5,1),dtype=np.float64)    #Pose du dock   (x,y,roll,pitch,yaw)
@@ -87,7 +87,7 @@ def visualize_node():
 
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None:
-            print("plot")
+            # print("plot")
             ax.clear()
             ax.set_xlim(Xd[0,0]-delta_draw,Xd[0,0]+delta_draw)
             ax.set_ylim(Xd[1,0]-delta_draw,Xd[1,0]+delta_draw)

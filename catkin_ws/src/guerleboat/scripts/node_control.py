@@ -85,12 +85,12 @@ def control_node():
                         [cos(Xb[3,0])*sin(Xb[-1,0]), 0],
                         [-sin(Xb[3,0])        , 0],
                         [0                  , 1]], dtype=np.float64)
-            Q = .05*np.identity(4)
+            Q = .5*np.identity(4)
             C = np.array([[1, 0, 0, 0],
                         [0, 1, 0, 0],
                         [0, 0, 0, 1]])
-            R = 25*np.identity(3)
-            R[2, 2] = .17
+            R = 1*np.identity(3)
+            R[2, 2] = .017
 
             if np.linalg.norm(y1-y) > 0:
                 y = y1
@@ -100,7 +100,7 @@ def control_node():
                 # print(boat.Gx)
             # /!\ Controller avant le predict sinon effet bizarre sur simu; à voir en réalité
             
-            if np.linalg.norm(boat.x[:2] - Xd[:2])>=3 and not target_reached:
+            if np.linalg.norm(boat.x[:2] - Xd[:2])>=1 and not target_reached:
                 boat.controller(Xd[:2],Xd[-1,0])
 
                 vel_msg = Twist()

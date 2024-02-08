@@ -20,7 +20,7 @@ class Boat:
     
     - Un faible gîte de sorte que la dérivée de la position du bateau de dépend pas du gîte
     """
-    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1, dthetamax = 4.):
+    def __init__(self, x, u=np.array([[0.], [0.]]), L = 1,vmax=1.3, dthetamax = 4.):
         """Initialise l'instance
 
         Args:
@@ -147,16 +147,16 @@ class Boat:
             self.__ecap = array([0.])
             self.__scap = 0
             
-        c11, c12 = 5, 2  # constantes pour les champs de potentiels
-        c21, c22 = 10, 5  # constantes pour les champs de potentiels
+        c11, c12 = 15, 20  # constantes pour les champs de potentiels
+        c21, c22 = 15, 20  # constantes pour les champs de potentiels
         k_ = 1
         unit = np.array([[cos(theta)], [sin(theta)]])
         n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
         phat0 = phat + marge*unit
         if np.dot(unit.T, self.x[:2] - phat)[0,0] < self.__value and self.__start:
-            vbar = c21 * (self.x[:2]-phat)/norm(self.x[:2]-phat)**3 + c22 * unit
+            vbar = c21 * (self.x[:2]-phat)/(norm(self.x[:2]-phat))**3 + c22 * unit
             if self.__value == 0:
-                self.__value = 3*self.L
+                self.__value = 10*self.L
         else:
             if self.__start:
                 self.__scap = 0
@@ -170,7 +170,7 @@ class Boat:
 
         thetabar = np.arctan2(vbar[1, 0], vbar[0, 0])
         
-        vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2])/5)
+        vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2])/10)
         vbar = max(min(self.vmax, vbar), -self.vmax)
         if norm(phat - self.x[:2]) < .2*self.L:
             # self.__scap = 0

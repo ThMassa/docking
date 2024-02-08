@@ -31,7 +31,7 @@ def f2(x1, x2):
     x20 = c21*(x2 - phat[1, 0]) / ((x1 - phat[0, 0]) ** 2 + (x2 - phat[1, 0]) ** 2) ** (3 / 2) + c22 * sin(theta)
     return x10, x20
 
-c11, c12 = 5, 2
+c11, c12 = 10, 20
 c21, c22 = 10, 5
 x = array([[-3, -3, 1, 2]]).T  # x,y,v,θ
 dt = 0.05
@@ -63,7 +63,7 @@ for t in arange(0, 50, dt):
         vbar = c21 * (x[:2]-phat)/norm(x[:2]-phat)**3 + c22 * unit 
         draw_field(ax, f2, -s, s, -s, s, 0.8)
         if value == 0:
-            value = 3
+            value = 6
     else:
         print('State 2')
         if start:
