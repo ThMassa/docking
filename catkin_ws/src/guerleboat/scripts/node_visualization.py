@@ -60,13 +60,13 @@ def dock_pose_cb(msg):
                     msg.pose.orientation.y, 
                     msg.pose.orientation.z]]).T
 
-def boat_kalman_cb(msg):
-    global Xhat
-    Xhat = np.array([[msg.pose.position.x,
-                    msg.pose.position.y,
-                    msg.pose.orientation.x,
-                    msg.pose.orientation.y,
-                    msg.pose.orientation.z]]).T
+# def boat_kalman_cb(msg):
+#     global Xhat
+#     Xhat = np.array([[msg.pose.position.x,
+#                     msg.pose.position.y,
+#                     msg.pose.orientation.x,
+#                     msg.pose.orientation.y,
+#                     msg.pose.orientation.z]]).T
 
 def visualize_node():
     # Initialisation du noeud ROS
@@ -74,9 +74,8 @@ def visualize_node():
 
     rospy.Subscriber('/docking/nav/boat_pose', PoseStamped, boat_pose_cb)
     rospy.Subscriber('/docking/nav/dock_pose', PoseStamped, dock_pose_cb)
-    rospy.Subscriber('/docking/nav/boat_kalman', PoseStamped, boat_kalman_cb)
 
-    f = 5
+    f = 1
     dt = 1./f
     rate = rospy.Rate(f)
     
@@ -87,7 +86,8 @@ def visualize_node():
     start = True
 
     while not rospy.is_shutdown():
-        if Xb is not None and Xd is not None and Xhat is not None:
+        if Xb is not None and Xd is not None:
+            print("plot")
             ax.clear()
             ax.set_xlim(Xd[0,0]-delta_draw,Xd[0,0]+delta_draw)
             ax.set_ylim(Xd[1,0]-delta_draw,Xd[1,0]+delta_draw)
