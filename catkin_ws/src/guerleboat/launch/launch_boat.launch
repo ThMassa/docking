@@ -1,5 +1,6 @@
 <launch>
 
+    <arg name="launch_sbg_driver" default="true" />
     <arg name="get_logs" default="false" />
     <arg name="simulate_dock" default="false" />
     <arg name="simulate_dock_with_log" default="false" />
@@ -7,7 +8,7 @@
     <arg name="bag_played" default=""/>
     <arg name="latitude" default="48.19894652483758"/>
     <arg name="longitude" default="-3.0156170343320365"/>
-    <arg name="yaw" default="1.5"/>
+    <arg name="yaw" default="-1.5"/>
 
     <node pkg="mavros" type="mavros_node" name="mavros" clear_params="true" output="log">
         <param name="fcu_url" value="tcp://10.0.11.130:4003" />
@@ -28,7 +29,10 @@
   	    <rosparam command="load" file="$(find sbg_driver)/config/example/ellipse_D_default.yaml" />
     </node> -->
 
-    <include file="$(find sbg_driver)/launch/examples/sbg_ellipseD.launch"/>
+    <include file="$(find sbg_driver)/launch/examples/sbg_ellipseD.launch" if="$(arg launch_sbg_driver)"/>
+
+    <node name="visualization_node" pkg="guerleboat" type="node_visualization.py" output="screen">
+    </node>
 
     <node name="boat_node" pkg="guerleboat" type="node_boat.py" output="screen">
         <param name="use_true_heading" type="bool" value="$(arg use_true_heading)"/>
@@ -53,8 +57,9 @@
     </node>
 
     <node pkg="rosbag" type="record" name="rosbag_record_boat"
-       args="record -o /home/surcouf/guerlelogs/boat.bag /nav/dock_pose /nav/boat_pose /cmd_vel /nav/boat_kalman /dock/udp_publisher"
+       args="record -o /home/surcouf/guerlelogs/boat.bag docking/nav/dock_pose docking/nav/boat_pose /cmd_vel docking/nav/boat_kalman docking/dock/udp_publisher"
        if="$(arg get_logs)" />
+
     
 </launch>
        <!-- args="record -o /home/guerlelogs/boat.bag /cmd_vel /sbg/ekf_quat /sbg/gps_pos" -->

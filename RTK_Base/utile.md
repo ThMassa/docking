@@ -15,5 +15,6 @@
 
 - pour accéder aux informations et aux logs de la raspberry, il faut se connecter sous windows à la raspberry en ethernet. Ensuite, aller sur http://basegnss.local.
 
+- on n'a pas forcément besoin de la raspberry. En fait elle permet de facilement récupérer les logs grâce à son interface(flashée sur la carte sd) mais le ublox tout seul est capable de faire du rtk. Il faut juste garder en tête qu'il faut à peu près 6 heures d'acquisition au ublox pour avoir une précision décimétrique. L'intérêt de la raspberry était juste de pouvoir loger pour obtenir une précision centimétrique grâce à IGN et ensuite rentrer cette position dans le ublox pour qu'il n'ait pas à charcher tout seul et puisse faire du rtk.
 
-
+- sous les modules ardusimple, il y a marqué soit base ou rover. Il faut faire attention à bien les configurer en respectant ce qui est écrit.

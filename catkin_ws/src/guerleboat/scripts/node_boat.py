@@ -133,7 +133,7 @@ def boat_node():
             boat_pose.pose.orientation.y = imu_data[1]
             # boat_pose.pose.orientation.z = sawtooth(imu_data[2]-0.038)
             if use_true_heading:
-                boat_pose.pose.orientation.z = -sawtooth(true_heading*np.pi/180 - np.pi/2)
+                boat_pose.pose.orientation.z = -sawtooth(true_heading*np.pi/180-np.pi/2)
             else :
                 boat_pose.pose.orientation.z = imu_data[2]
                 
