@@ -163,7 +163,7 @@ L'idée avec cette méthode, c'est de laisser l'installation Raspberry + Ublox a
 
 La deuxième méthode diffère car elle ne nécessite pas de Raspberry. L'idée ici est de configure le Ublox base pour qu'il trouve tout seul sa position avec la précision voulue en utilisant les sattelites environnant. L'idéal est de le laisser loger 24 h mais 6 h peuvent suffire pour avoir une précision décimétrique.
 
-Pour régler les Ublox, il faut avoir le logiciel U-Center (idéalement sur Windows). Il faudra ensuite suivre les instructions du PDF sur le sujet pour correctement régler le rover et la base. De même pour les Xbee qu'on peut également configurer avec XCTU (toujours sous Windows)..
+Pour régler les Ublox, il faut avoir le logiciel U-Center (idéalement sur Windows). Il faudra ensuite suivre les [instructions du PDF](RTK_Base/GuideRTKBase.pdf) sur le sujet pour correctement régler le rover et la base. De même pour les Xbee qu'on peut également configurer avec XCTU (toujours sous Windows)..
 
 Pour alimenter l'installation, il faudra brancher la Raspberry pour la méthode 1 ou alors directement le Ublox pour la méthode 2. Il faut garder à l'esprit qu'il faut se connecter en série sur le port Power+GPS du Ublox pour configurer et lire le GPS et sur le port Power+Xbee pour configurer et lire la radio Xbee.
 
