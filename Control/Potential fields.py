@@ -27,25 +27,32 @@ def f1(x1, x2):
 
 
 def f2(x1, x2):
-    x10 = c21*(x1 - phat[0, 0]) / ((x1 - phat[0, 0]) ** 2 + (x2 - phat[1, 0]) ** 2) ** (3 / 2) + c22 * cos(theta)
-    x20 = c21*(x2 - phat[1, 0]) / ((x1 - phat[0, 0]) ** 2 + (x2 - phat[1, 0]) ** 2) ** (3 / 2) + c22 * sin(theta)
+    x10 = c21*(x1 - phat[0, 0]) / (np.sqrt((x1 - phat[0, 0]) ** 2 + (x2 - phat[1, 0]) ** 2)/d_resulsive) ** 3 + c22 * cos(theta)
+    x20 = c21*(x2 - phat[1, 0]) / (np.sqrt((x1 - phat[0, 0]) ** 2 + (x2 - phat[1, 0]) ** 2)/d_resulsive) ** 3 + c22 * sin(theta)
     return x10, x20
 
-c11, c12 = 10, 20
-c21, c22 = 10, 5
-x = array([[-3, -3, 1, 2]]).T  # x,y,v,θ
+c11, c12 = .2, 1  # c11 coefficient d'attractivité de la ligne, c12 n'a pas besoin d'être modifié
+c21, c22 = 4, 1  # c21 coefficient de repulsivité, c22 n'a pas besoin d'être modifié
+kd, ki = 2, .01
+# marge de transition du changement d'état :
+# State 1 : Le robot est dans le demi plan devant le dock
+# State 2 : Le robot est dans le demi plan derrière le dock
+# La valeur initiale est fixée 0 et est à laisser à 0.
+value = 0
+
+d_resulsive = 1  # distance caractéristique de répulsion (obselète)
+x = array([[6, 3, 1, 2]]).T  # x,y,v,θ
 dt = 0.05
 s = 10
 ax = init_figure(-s, s, -s, s)
 vhat = array([[0], [0]])
-value = 0
 u = np.array([[0], [0]])
 e = np.array([0])
 vmax = 5
 start = True
 sum = 0
 k_ = 1
-theta = pi/4
+theta = 0
 for t in arange(0, 50, dt):
     clear(ax)
     # theta += pi/50*randn()
@@ -59,18 +66,19 @@ for t in arange(0, 50, dt):
     n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
 
     if unit.T@(x[:2] - phat) < value and start:
-        print('State 1')
-        vbar = c21 * (x[:2]-phat)/norm(x[:2]-phat)**3 + c22 * unit 
+        print('State 2')
+        # State 2 : Le robot est dans le demi plan derrière le dock
+        vbar = c21 * (x[:2]-phat)/norm((x[:2]-phat)/d_resulsive)**3 + c22 * unit
         draw_field(ax, f2, -s, s, -s, s, 0.8)
         if value == 0:
-            value = 6
+            value = 3
     else:
-        print('State 2')
+        print('State 1')
+        # State 1 : Le robot est dans le demi plan devant le dock
         if start:
             sum = 0
             start = False
         k_ = -sign(unit.T@(phat-x[:2]))
-        print("----")
         vbar = -c11*n@n.T@(x[:2]-phat) + c12*np.array([[cos(theta+pi)], [sin(theta+pi)]])
         draw_field(ax, f1, -s, s, -s, s, 0.8)
         if unit.T@(x[:2] - phat) < -value:
@@ -97,7 +105,7 @@ for t in arange(0, 50, dt):
         x[:2] -= 2*unit
         print('----------------------------------------------------------------------------------------------')
     sum += e[-1]
-    u[0] = 2 * e[-1] + 18 * (e[-1] - e[-2]) + .01*sum
+    u[0] = kd * e[-1] + ki*sum
     u[1] = 10*sawtooth(thetabar - x[3, 0])
     x = x + dt * f(x, u)
     draw_tank(x[[0, 1, 3]], 'red', 0.2)  # x,y,θ

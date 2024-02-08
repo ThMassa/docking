@@ -644,7 +644,7 @@ def draw_field(ax,f,xmin,xmax,ymin,ymax,a):
     My    = arange(ymin,ymax,a)
     X1,X2 = meshgrid(Mx,My)
     VX,VY=f(X1,X2) 
-    R=sqrt(VX**2+VY**2)
+    R=sqrt(VX**2+VY**2)/2
     quiver(Mx,My,VX/R,VY/R)  
     
     

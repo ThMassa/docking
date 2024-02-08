@@ -140,28 +140,39 @@ class Boat:
             theta (float): Cap souhait√©
             marge (float): Marge de securit√©, plus elle est elev√©e, plus le bateau s'arretera loin du dock et donc moins il aura de chance de se cogner contre le dock
         """
-        
+
+        # Les coefficients ci-dessous sont modifiables avec les lignes self.__transition_dist = 5*self.L (vous pouvez modifier le 5
+        # ) et if np.dot(unit.T, self.x[:2] - phat) < -self.__transition_dist/3 (o˘ vous pouvez Ègalement modifier le 3)
+        # Faites un ctrl f pour trouver les lignes correspondantes.
+        # Vous pouvez utiliser le fichier Potential fields.py pour voir l'impact de ces coefficients.
+
+        c11, c12 = 2.5, 1  # c11 coefficient d'attractivitÈ de la ligne, c12 n'a pas besoin d'Ítre modifiÈ (c22 est obsolete)
+        c21, c22 = 2, 1  # c21 coefficient de rÈpulsion, c22 n'a pas besoin d'Ítre modifiÈ (c22 est obsolete)
+        kd, ki = 5, .02  # coefficient pi(d) du rÈgulateur d'angle
+
         if not hasattr(self, "_Boat__start"):
             self.__start = True
-            self.__value = 0
-            self.__ecap = array([0.])
-            self.__scap = 0
-            
-        c11, c12 = 15, 20  # constantes pour les champs de potentiels
-        c21, c22 = 15, 20  # constantes pour les champs de potentiels
+            # self.__transition_dist correspond ‡ la distance ‡ partir de laquelle il y a changement d'Ètat :
+            # State 1 : Le robot est dans le demi plan devant le dock
+            # State 2 : Le robot est dans le demi plan derriËre le dock
+            # La valeur initiale est fixÈe 0 et est ‡ laisser ‡ 0.
+            self.__transition_dist = 0
+            self.__ecap = array([0.])  # Erreur proportionnelle
+            self.__ecapSum = 0  # Erreur intÈgrale du PI(D)
+
         k_ = 1
         unit = np.array([[cos(theta)], [sin(theta)]])
         n = np.array([[cos(theta + pi / 2)], [sin(theta + pi / 2)]])
         phat0 = phat + marge*unit
-        if np.dot(unit.T, self.x[:2] - phat)[0,0] < self.__value and self.__start:
-            vbar = c21 * (self.x[:2]-phat)/(norm(self.x[:2]-phat))**3 + c22 * unit
-            if self.__value == 0:
-                self.__value = 10*self.L
+        if np.dot(unit.T, self.x[:2] - phat)[0,0] < self.__transition_dist and self.__start:
+            vbar = c21 * (self.x[:2]-phat)/norm(self.x[:2]-phat)**3 + c22 * unit
+            if self.__transition_dist == 0:
+                self.__transition_dist = 10*self.L
         else:
             if self.__start:
-                self.__scap = 0
+                self.__ecapSum = 0
                 self.__start = False
-            if np.dot(unit.T, self.x[:2] - phat) < -self.__value/3:
+            if np.dot(unit.T, self.x[:2] - phat) < -self.__transition_dist/3:
                 self.__start = True
                 k_ = 1
             k_ = -sign(np.dot(unit.T, phat-self.x[:2]))[0, 0]
@@ -173,22 +184,21 @@ class Boat:
         vbar = min(norm(vbar), k_*norm(phat0 - self.x[:2])/10)
         vbar = max(min(self.vmax, vbar), -self.vmax)
         if norm(phat - self.x[:2]) < .2*self.L:
-            # self.__scap = 0
+            # self.__ecapSum = 0
             self.__start = False
         
         ecap = sawtooth(thetabar - self.x[-1, 0])
-        self.__scap += ecap
+        self.__ecapSum += ecap
         if len(self.__ecap) < 5:
             self.__ecap = np.append(self.__ecap, ecap)
         else:
             self.__ecap[:-1] = self.__ecap[1:]
             self.__ecap[-1] = ecap
         self.u[0,0] = vbar
-        self.u[1,0] = (5*ecap + .02*self.__scap)/2
+
+        self.u[1,0] = (kd*ecap + ki*self.__ecapSum)/2
         self.u[1,0] = min(self.dthetamax, self.u[1,0])
         self.u[1,0] = max(-self.dthetamax, self.u[1,0])
-        # u[1,0] = 5*sawtooth(thetabar - self.x[4, 0])
-        # return self.u
 
 
 if __name__=="__main__":
