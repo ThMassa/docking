@@ -6,21 +6,15 @@ from PIL import Image
 import requests
 
 # Function to load OpenStreetMap image as background
-def load_background_image(extent, zoom=13):
+def load_background_image(extent):
     # Convert extent to pixel coordinates
     xlim = [extent[0], extent[1]]
     ylim = [extent[2], extent[3]]
-    KEY = "W80eEWQhF5WmSF19oWcmXh113xWTeH4JGfDyf51W"
-    width, height = 640, int(640 * (ylim[1] - ylim[0]) / (xlim[1] - xlim[0]))
-    lonlat = "-3.0152798088714383,48.198741654368305"
-    zoom = 17
 
     # Download OpenStreetMap image using requests
-    url = "https://api.nasa.gov/planetary/earth/imagery?lon=-3.75&lat=48&date=2014-01-01&dim=1&api_key={}"
-    url = "https://maps.geoapify.com/v1/staticmap?center=lonlat:{}&zoom={}&apiKey=43ddc05d66904824999d627ecc27f2c8"
-    xtile = int((xlim[0] + 180) / 360 * 2 ** zoom)
-    ytile = int((1 - np.log(np.tan(np.radians(ylim[0])) + 1 / np.cos(np.radians(ylim[0]))) / np.pi) / 2 * 2 ** zoom)
-    response = requests.get(url.format(lonlat, zoom))
+    url = "https://maps.geoapify.com/v1/staticmap?area=rect:{},{},{},{}&apiKey=43ddc05d66904824999d627ecc27f2c8"
+
+    response = requests.get(url.format(extent[0], extent[1], extent[2], extent[3]))
 
     # Check if the response is valid
     if response.status_code == 200:
@@ -32,16 +26,48 @@ def load_background_image(extent, zoom=13):
         return None, None
 
 
-# Plot the data
-plt.figure(figsize=(10, 8))
-plt.title('Guerlédan')
-background_image, extent = load_background_image([min(longs), max(longs), min(lats), max(lats)])
-# print(background_image.shape)
-plt.imshow(background_image, extent=extent, origin='upper')
-plt.xlabel('Longitude')
-plt.ylabel('Latitude')
-plt.legend()
-plt.show()
+def compute_view_rectangle(center, east_width, north_height):
+    lon, lat = center
+    R = 6480e3
+    dlon, dlat = 180/np.pi * east_width/R, 180/np.pi * north_height/R
 
-# Convert to interactive leaflet map
-# mplleaflet.show()
+    rec = [lon - dlon, lat - dlat, lon + dlon, lat + dlat]
+
+    return rec
+
+
+
+def plot_map(map, longitude_bounds, latitude_bounds,
+             title, nro_fig=None):
+    if nro_fig is None:
+        ff = plt.figure()
+    else:
+        ff = plt.figure(nro_fig)
+    ff.clf()
+    gg = ff.add_subplot(111)
+
+    gg.imshow(map, extent=[longitude_bounds[0], longitude_bounds[1],
+                           latitude_bounds[0], latitude_bounds[1]],
+              aspect="equal")
+
+    gg.set_xlabel("longitude (°)")
+    gg.set_ylabel("latitude (°)")
+    gg.set_title(title)
+    gg.grid(True)
+    #plt.pause(0.01)
+    return gg
+
+lon_center = -3.0152798088714383
+lat_center = 48.198741654368305
+center = [lon_center, lat_center]
+offset = 0.01
+
+east_width = 100
+north_height = 100
+
+extent = [lon_center - offset, lat_center - offset, lon_center + offset, lat_center + offset]
+extent = compute_view_rectangle(center, east_width=east_width, north_height=north_height)
+
+background_image, extent = load_background_image(extent)
+plot_map(background_image, [extent[0], extent[2]], [extent[1], extent[3]], "Guerlédan")
+plt.show()
