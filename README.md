@@ -55,7 +55,7 @@ Sur le dock, le package *guerledocking* sera utilisé, sur le drone ce sera *gue
 ### Dock
 Pour utiliser le dock, il suffit de se connecter sur le même réseau (pour l'instant via les modem SIMPULSE) et de se connecter en ssh:
 
-    ssh nvidia@192.168.0.12 
+    ssh nvidia@10.0.11.72 
     # MDP : nvidia
 
 Une fois connecté en ssh, il suffit de lancer notre [roslaunch](/catkin_ws/src/guerledocking/launch/launch_dock.launch) :
@@ -66,7 +66,7 @@ Cette commande lance notre [node ROS](/catkin_ws/src/guerledocking/scripts/node_
 
 Pour mettre à jour le package il faut faire:
 
-    scp -r catkin_ws/src/guerledocking nvidia@192.168.0.12:~/catkin_ws/src/ 
+    scp -r catkin_ws/src/guerledocking nvidia@10.0.11.72:~/catkin_ws/src/ 
 
 Puis dans le ssh :
 
