@@ -121,6 +121,23 @@ L'installation de la base peut se faire de deux manières différentes.
 
 \section{Communication avec le reste du système}
 
+Pour rappel, le dock doit pouvoir envoyer sa position et son attitude au drone pour que ce dernier puisse planifier son retour, et ce potentiellement à longue distance.  C'est pour cela que dans le cadre de ce projet nous utilisons des modems \textit{Simpulse}. S'il est possible de communiquer entre noeuds ROS, ce n'est pas l'approche qui sera finalement utilisée : outre les difficultés dues à ROS (qui n'existent pas en ROS2), on préfèrera aussi un protocole plus simple et plus universel pour que la communication s'adapte facilement sur d'autres OS ou appareils (par exemple, si le dock et le drone ont des versions différentes de ROS, la communication directe n'est pas possible). La communication se fait donc en UDP (quoi qu'on aurait pu choisir le TCP qui permet une garantie sur la bonne réception, cela n'était pas absolument nécessaire); on veut donc envoyer des trames à intervalle régulier contenant les informations nécessaires que sont la position GPS et l'attitude du dock. On peut donc définir un format simple permettant de véhiculer ces informations :
+
+\verb|${latitude},{longitude};{roll},{pitch},{yaw}|
+
+On précise que l'utilisation des angles d'Euler, faciles à interpréter lors du débuggage, est justifiée par le fait que dans notre cas on ne risque pas le \textit{Gimbal lock} vus les angles relativement faibles sur le pitch et le roll.
+
+La communication se fait donc assez facilement de cette manière, après avoir bien configuré les addresses du dock et du drone.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imgs/UDP_connexion.png}
+    \caption{La communication dock $\rightarrow$ drone}
+\end{figure}
+
+La trame est ensuite interprétée et convertie en messages ROS publiés sur des topics et utilisés par le reste du système.
+
+
 \chapter{Stratégie d'approche de docking}
 
 \section{Modèle cinématique}
