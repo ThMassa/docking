@@ -130,13 +130,14 @@ D'autre part, nous travaillions en parallèle sur la mise en place de la correct
 
 Enfin, une première version simplifiée de l'architecture logicielle a commencée à être implémentée. 
 
+
 La principale problématique de cette semaine, qui est la même que celle rencontrée durant la période séparant cette semaine de la seconde, est l'impossibilité d'expérimenter directement sur l'AUV qui 
 est le drone principal de notre sujet. En effet, l'avancée de notre projet ne nous permettait pas la sécurité de pouvoir tester nos algorithmes de manière sereine sur le drone et nous avons également 
 rencontré quelques difficultés avec l'utilisation de l'interface MAVROS, qui fait le lien entre notre architecture ROS et MAVLink. Le principal problème résidait dans le fait qu'il semblait que MAVLink 
 avait en mémoire des waypoints GPS que le drone tentait de rejoindre en priorité avant de prendre en compte nos commandes. Cela empêchait toute exploitation du drone en mode automatique, ce qui est nécessaire
 au bon fonctionnement de nos algorithmes.
 
-Heureusement ce problème avait tout le temps d'être réglé, étant donné que nous n'utiliserions pas le drone d'içi à la seconde semaine d'expérimentation à Guerlédan, en février 2024. De plus, nous avons 
+Heureusement ce problème avait tout le temps d'être réglé, étant donné que nous n'utiliserions pas le drone d'ici à la seconde semaine d'expérimentation à Guerlédan, en février 2024. De plus, nous avons 
 décidé de concentrer nos efforts à la mise en place et la conversion de nos algorithmes pour la mise en place sur le Rover qui nous sert de remplacement au drone et qui nous sert de moyen d'expérimentations à l'école. 
 
 
@@ -156,7 +157,9 @@ Ce problème reste un point d'amélioration essentiel car il est une des raisons
 
 Cependant, nous avons développé des alternatives permettant tout de même de mettre en oeuvre nos algorithmes en contournant le problème. Lorsque nous lancons le système, nous avons le choix entre
 utiliser le vrai dock ou un dock simulé. Le dock simulé repose soit sur des logs d'essais précédents soit sur une position et orientation désirée précisées au lancement. 
-En faisant cela, nous avons été capable de tester et prouver la robustesse de nos algorithmes, même sans présence d'un vrai
+En faisant cela, nous avons été capable de tester et prouver la robustesse de nos algorithmes, même sans présence du vrai dock.
+
+
 
 \chapter{Conclusion}
 \section{Résultats}
