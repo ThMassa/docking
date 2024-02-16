@@ -2,6 +2,7 @@
 
 import rospy
 from classBoat import *
+from utils import *
 from geometry_msgs.msg import Twist, PoseStamped
 import numpy as np
 from numpy import cos, sin
@@ -60,14 +61,6 @@ def dock_pose_cb(msg):
                     msg.pose.orientation.y, 
                     msg.pose.orientation.z]]).T
 
-# def boat_kalman_cb(msg):
-#     global Xhat
-#     Xhat = np.array([[msg.pose.position.x,
-#                     msg.pose.position.y,
-#                     msg.pose.orientation.x,
-#                     msg.pose.orientation.y,
-#                     msg.pose.orientation.z]]).T
-
 def visualize_node():
     # Initialisation du noeud ROS
     rospy.init_node('visualization')
@@ -79,7 +72,18 @@ def visualize_node():
     dt = 1./f
     rate = rospy.Rate(f)
     
-    fig,ax = plt.subplots(1,1)
+    lon_center = -3.0152798088714383
+    lat_center = 48.198741654368305
+    center = [lon_center, lat_center]
+
+    east_width = 100 #demi largeur de l'image en mètres
+    north_height = 100 #demi hauteur de l'image en mètres
+    extent = compute_view_rectangle(center, east_width=east_width, north_height=north_height)
+    background_image = load_background_image(extent)
+    ax = plot_map(background_image, [extent[0], extent[2]], [extent[1], extent[3]], "Guerlédan")
+
+    
+    # fig,ax = plt.subplots(1,1)
 
     delta_draw = 50
     value = 0
