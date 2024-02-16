@@ -28,6 +28,8 @@ def load_background_image(extent):
     if response.status_code == 200:
         # Open the image using Pillow
         image = Image.open(io.BytesIO(response.content))
+        with open('image_stade.npy','wb') as f:
+            np.save(f,np.array(image))
         return np.array(image)
     else:
         print("Failed to download image:", response.status_code)
@@ -87,8 +89,11 @@ def load_csv_log(filename):
 
 if __name__ == "__main__":
     ## Coordonnées au milieu du lac
-    lon_center = -3.0152798088714383
-    lat_center = 48.198741654368305
+    # lon_center = -3.0152798088714383
+    # lat_center = 48.198741654368305
+    ## Coordonnées du stade
+    lon_center = -4.473938377128839
+    lat_center = 48.41847104937811
     center = [lon_center, lat_center]
 
     east_width = 100 #demi largeur de l'image en mètres
@@ -96,22 +101,24 @@ if __name__ == "__main__":
     extent = compute_view_rectangle(center, east_width=east_width, north_height=north_height)
 
     ## Récupération de la carte de la zone 
-    background_image = load_background_image(extent)
+    # background_image = load_background_image(extent)
+    with open('./image_stade.npy', 'rb') as f:
+        background_image = np.load(f)
 
     ## Affichage de la carte
     fig = plot_map(background_image, [extent[0], extent[2]], [extent[1], extent[3]], "Guerlédan")
 
-    file_path = "./logs_rosbag/dock/dock_2024-02-06-17-36-57/test_logs.csv"
-    from tkinter import filedialog
-    file_path = filedialog.askopenfilename(defaultextension=".png",
-                                                   filetypes=[
-                                                              ("All files", "*.*")],
-                                                    initialdir=".")
+    # file_path = "./logs_rosbag/dock/dock_2024-02-06-17-36-57/test_logs.csv"
+    # from tkinter import filedialog
+    # file_path = filedialog.askopenfilename(defaultextension=".png",
+    #                                                filetypes=[
+    #                                                           ("All files", "*.*")],
+    #                                                 initialdir=".")
     
-    lat, lon = load_csv_log(file_path)
+    # lat, lon = load_csv_log(file_path)
 
-    print("LOG LOADED")
+    # print("LOG LOADED")
 
-    fig.plot(lon, lat)
+    # fig.plot(lon, lat)
 
     plt.show()

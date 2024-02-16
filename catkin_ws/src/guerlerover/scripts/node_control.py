@@ -54,15 +54,15 @@ def control_node():
     # Initialisation du noeud ROS
     rospy.init_node('control')
 
-    rover_kalman_publisher = rospy.Publisher("/rover_kalman",PoseStamped, queue_size = 10)
+    rover_kalman_publisher = rospy.Publisher("/docking/nav/rover_kalman",PoseStamped, queue_size = 10)
 
-    rospy.Subscriber('/rover_pose', PoseStamped, rover_pose_cb)
-    rospy.Subscriber('/dock_pose', PoseStamped, dock_pose_cb)
+    rospy.Subscriber('/docking/nav/rover_pose', PoseStamped, rover_pose_cb)
+    rospy.Subscriber('/docking/nav/dock_pose', PoseStamped, dock_pose_cb)
     rospy.Subscriber('/mavros/state', State, state_cb)
 
     vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
-    f = 20.
+    f = 50.
     dt = 1./f
     rate = rospy.Rate(f)
 

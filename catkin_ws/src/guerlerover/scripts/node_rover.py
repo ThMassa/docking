@@ -83,32 +83,29 @@ def gps_callback(data):
     lat = data.latitude
     long = data.longitude
 
+def udp_callback(msg):
+    global lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
+    long_dock = msg.pose.position.x
+    lat_dock = msg.pose.position.y
+    roll_dock = msg.pose.orientation.x
+    pitch_dock = msg.pose.orientation.y
+    yaw_dock = msg.pose.orientation.z
+
 def rover_node():
     global gps_data,imu_data, lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock
     # Initialisation du noeud ROS
     rospy.init_node('rover')
 
-    rover_pose_publisher = rospy.Publisher("/rover_pose",PoseStamped, queue_size = 10)
-    dock_pose_publisher = rospy.Publisher("/dock_pose",PoseStamped, queue_size = 10)
+    rover_pose_publisher = rospy.Publisher("/docking/nav/rover_pose",PoseStamped, queue_size = 10)
+    dock_pose_publisher = rospy.Publisher("/docking/nav/dock_pose",PoseStamped, queue_size = 10)
 
     rospy.Subscriber('/mavros/imu/data', Imu, imu_callback)
     rospy.Subscriber('/mavros/global_position/raw/fix', NavSatFix, gps_callback)
-    
-    # Configuration du socket UDP pour la communication avec le dock
-    udp_ip = "0.0.0.0"
-    udp_port = 12345  # Port UDP de destination sur le dock
-    # Création du socket UDP
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    udp_socket.bind((udp_ip, udp_port))
+    rospy.Subscriber('/docking/dock/udp_publisher', PoseStamped, udp_callback)
 
-
-    rate = rospy.Rate(1.)  # Par exemple, 1 message par seconde
+    rate = rospy.Rate(5.)  # Par exemple, 1 message par seconde
 
     while not rospy.is_shutdown():
-        # Attendez de recevoir des données UDP
-        # data, addr = udp_socket.recvfrom(1024)
-        # lat_dock,long_dock, roll_dock, pitch_dock, yaw_dock = unpack_data(data)
-        # print(lat,long,imu_data)
         if lat is not None and long is not None and imu_data is not None:
             x,y = conv_ll2xy(lat,long)
             rover_pose = PoseStamped()
@@ -119,18 +116,14 @@ def rover_node():
             rover_pose.pose.orientation.z = sawtooth(imu_data[2]-0.418+0.38)
             rover_pose_publisher.publish(rover_pose)
 
-            lat_dock = 48.1984743
-            long_dock = -3.013011
-            roll_dock = 0
-            pitch_dock = 0
-            yaw_dock = 2.74
-            x_dock,y_dock = conv_ll2xy(lat_dock,long_dock)
+        if lat_dock is not None:
+            xd,yd = conv_ll2xy(lat_dock,long_dock)
             dock_pose = PoseStamped()
-            dock_pose.pose.position.x = x_dock
-            dock_pose.pose.position.y = y_dock
+            dock_pose.pose.position.x = xd
+            dock_pose.pose.position.y = yd
             dock_pose.pose.orientation.x = roll_dock
             dock_pose.pose.orientation.y = pitch_dock
-            dock_pose.pose.orientation.z = sawtooth(yaw_dock)  # -np.pi/2) #TODO peut être a revoir
+            dock_pose.pose.orientation.z = sawtooth(yaw_dock -np.pi/2) #TODO peut être a revoir
             dock_pose_publisher.publish(dock_pose)
 
         rate.sleep()
