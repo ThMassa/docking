@@ -131,7 +131,12 @@ Une fois l'installation terminée, la base RTK diffuse ses corrections de positi
 \end{itemize}
 \subsection{Configuration du dock}
 La configuration du dock est plus courte. Il suffit d'alimenter le module \textit{u-blox} et de le connecter à une antenne. La configuration précise est donnée en annexe. Une fois alimenté, le module va acquérir les signaux satellites et les corrections RTK envoyées par la base. 
-Si jamais aucune correction n'est reçue, le \textit{u-blox} va fournir une position GPS classique.
+Si jamais aucune correction n'est reçue, le \textit{u-blox} va fournir une position GPS classique. Les LEDs fournissent les indications utiles : 
+\begin{itemize}
+    \item GPS FIX : \textbf{OFF} lorsqu'il n'y a pas de fix, \textbf{une impulsion par seconde} lorsque la position est valide.
+    \item NO RTK : \textbf{OFF} lorsque RTK fixe, \textbf{clignotant} lors de la réception de données RTCM, \textbf{ON} lorsqu'aucune correction n'a lieu. 
+    \item XBEE \rightarrowGPS : \textbf{clignotant} lorsque le module GPS reçoit des données de l'antenne radio.
+\end{itemize}
 \subsection{Un mot sur les antennes}
 
 \section{Mise en place du dock}
@@ -184,7 +189,7 @@ rencontré quelques difficultés avec l'utilisation de l'interface MAVROS, qui f
 avait en mémoire des waypoints GPS que le drone tentait de rejoindre en priorité avant de prendre en compte nos commandes. Cela empêchait toute exploitation du drone en mode automatique, ce qui est nécessaire
 au bon fonctionnement de nos algorithmes.
 
-Heureusement ce problème avait tout le temps d'être réglé, étant donné que nous n'utiliserions pas le drone d'ici à la seconde semaine d'expérimentation à Guerlédan, en février 2024. De plus, nous avons 
+Heureusement ce problème avait tout le temps d'être réglé, étant donné que nous n'utiliserions pas le drone d'içi à la seconde semaine d'expérimentation à Guerlédan, en février 2024. De plus, nous avons 
 décidé de concentrer nos efforts à la mise en place et la conversion de nos algorithmes pour la mise en place sur le Rover qui nous sert de remplacement au drone et qui nous sert de moyen d'expérimentations à l'école. 
 
 
