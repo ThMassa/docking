@@ -33,7 +33,13 @@
 
 \section{Présentation du sujet}
 
-Que ce soit dans le monde de la recherche ou dans les différents domaines dans lesquels sont utilisés les drones et tout particulièrement les AUV ou UAV, l'une des grandes difficultés rencontrées est très certainement celle du docking.
+Que ce soit dans le monde de la recherche ou dans les différents domaines dans lesquels sont utilisés les drones et tout particulièrement les AUV ou UAV, l'une des grandes difficultés rencontrées est très certainement celle du docking. En effet, bien qu'il faille tôt ou tard récupérer le drone à la fin de sa mission ou en cas de problème, cela peut se révéler dans le meilleur des cas fastidieux (dans le cas ou la manoeuvre est manuelle par exemple) et dans le pire des cas difficile voire dangereux pour le drone (dans le cas d'une mer agitée par exemple). Dans le cas d'une mission autonome loin du bateau, on comprend qu'il peut être très intéressant de développer une solution de docking autonome, permettant au drone de revenir vers sa base tout seul et avec précision. L'objectif de ce projet Guerlédan sera donc de développer cette solution en s'intéressant au cas d'un AUV sur le lac. Les objectifs seront les suivants:
+
+\begin{enumerate}
+    \item Le drone doit être capable de planifier et réaliser son retour vers le dock
+    \item Le dock doit pouvoir communiquer sa position et son attitude en temps réel et potentiellement à longue distance pour que le drone puisse effectuer son retour peu importe la position (parfois changeante) du dock
+    \item Le docking doit se faire avec une précision suffisante (à la dizaine de centimètres voire mieux) pour que le drone puisse correctement entrer dans la structure
+\end{enumerate}
 
 \section{Matériel à disposition}
 La majorité du matériel nécessaire nous a directement été fournie. En voici une liste (non exhaustive).
@@ -83,13 +89,20 @@ Le drone embarque déjà tous les capteurs nécessaires à la mission comme elle
 Sur le modèle exact qui nous a été fourni, de nombreux autres capteurs tels que des caméras et un LIDAR ont été montés; s'ils n'ont pas été utilisés pendant la mission (dont le plus important était surtout dans un premier temps l'approche du drone vers le dock), ils pourraient en revanche se révéler utiles dans un second temps pour de prochaines expérimentations sur le projet.
 \subsection{Rover}
 
-Puisque le drone n'était disponible que peu de temps et uniquement lors des semaines à Guerlédan, nous avions besoin d'un remplacement pour pouvoir continuer à travailler et tester nos algorithmes à l'ENSTA. C'est pour cela que nous avons pu travailler avec l'\textit{AION R1}, un rover à la structure software équivalente à celle du drone (tournant sous \textit{ROS}, et gérant les commandes moteurs via une carte \textit{Pixhawk}). On peut ainsi commander le rover exactement de la même manière que l'AUV, c'est-à-dire dans notre cas lui envoyer des commandes en vitesses linéaire et angulaire.
+Puisque le drone n'était disponible que peu de temps et uniquement lors des semaines à Guerlédan, nous avions besoin d'un remplacement pour pouvoir continuer à travailler et tester nos algorithmes à l'ENSTA. C'est pour cela que nous avons pu travailler avec l'\textit{AION R1}\ref{fig:rover}, un rover à la structure software équivalente à celle du drone (tournant sous \textit{ROS}, et gérant les commandes moteurs via une carte \textit{Pixhawk}). On peut ainsi commander le rover exactement de la même manière que l'AUV, c'est-à-dire dans notre cas lui envoyer des commandes en vitesses linéaire et angulaire.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{imgs/rover.jpg}
+    \caption{l'\textit{AION Robotics R1}}
+    \label{fig:rover}
+\end{figure}
 
 \chapter{Conception du dock}
 \section{Mise en place d'une base RTK}
 Le positionnement GPS acquis par les capteurs à disposition confère une précision métrique, les signaux GPS étant perturbés par l'atmosphère. Or, il faut de meilleures performances pour espérer docker le drône dans un environnement confiné et restreint. 
 L'idée était donc de mettre en place un système de positionnement plus précis (centimétrique dans l'idéal) en  utilisant le dispositif du \textit{Real Time Kinematic} (RTK).
-Pour cela, il faut installer une base GPS fixe de position connue précisément. Elle servira de garde-fou en diffusant des corrections de positionnement aux systèmes GPS connectés.
+Pour cela, il faut installer une base GPS fixe de position connue précisément. Elle servira de médiateur en diffusant des corrections de positionnement aux systèmes GPS connectés.
 L'installation est donc en deux parties, la première, à terre, l'autre, directement sur le dock.
 \subsection{Capteurs à disposition}
 L'acquisition de signaux GPS se fait grâce à deux modules \textit{ArduSimple} équipés de processeurs \textit{u-blox ZED-F9P}. 
@@ -100,13 +113,55 @@ Il est possible d'utiliser une \textit{Raspberry} pour configurer la base GPS en
 \subsection{Installation de la base}
 L'installation de la base peut se faire de deux manières différentes. 
 \begin{enumerate}
-    \item 
+    \item En utilisant uniquement le module \textit{u-blox}. Il s'agit de la méthode la plus simple. Si la position précise de la base est connue, on configure le module en \textit{Fixed Mode} et les corrections seront directement disponible. 
+    Sinon on le configure en mode \textit{Survey-In} ce qui va lancer l'acquisition de trames GPS provenants de satellites jusqu'à ce que la position soit connue avec une précision suffisante. Cela peut prendre une dizaine d'heures pour une précision centimétrique.
+    La configuration du module se fait avec le logiciel _textit{XCTU} (sous Windows). Dans tous les cas, il faut que la base soit alimentée en permanence pour ne pas perdre la position acquise et que l'antenne soit bien dégagée pour une meilleure réception des signaux.
+    \item En utilisant le module \textit{u-blox} et une \textit{Raspberry}. Cette solution est issue de la documentation fournie par \textit{Centipède} pour la mise en place d'une base RTK déclarée sur leur réseau. 
+    Dans ce cas, aucun \textit{TimeMode} n'est spécifié pour le module GPS. La \textit{Raspberry} est flashée et configurée pour enregistrer les trames GPS reçues par le \textit{u-blox} puis faire une sauvegarde par jour (vers 4h du matin). 
+    L'idée est ensuite de récupérer une sauvegarde de 24 heures, de l'envoyer à \textit{IGN} qui fournit un service de triangulation. \textit{IGN} renvoie ensuite la position précise calculée à partir des données. 
+    A partir d'ici, il n'est plus nécessaire de suivre les instructions de \textit{Centipède}\footnote{Le but n'est pas de déclarer la base sur leur réseau.}. Il faut en revanche passer le module \textit{u-blox} en mode \textit{Fixed Mode} et renseigner la position déterminée précédemment. 
+    Avec la \textit{Raspberry}, on peut accéder aux données directement en se connectant en \textit{ssh} ou alors en se connectant à l'interface web graphique de la carte.
 \end{enumerate}
+
+Une fois l'installation terminée, la base RTK diffuse ses corrections de positionnement à l'aide de l'antenne radio \textit{Xbee}. Le statut de la base est indiqué par les LEDs de la carte \textit{ArduSimple}.
+\begin{itemize}
+    \item GPS FIX : \textbf{OFF} lorsqu'il n'y a pas de fix, \textbf{une impulsion par seconde} lorsque la position est valide.
+    \item NO RTK : \textbf{OFF} lorsque RTK fixe, \textbf{clignotant} lors de la réception de données RTCM, \textbf{ON} lorsqu'aucune correction n'a lieu. 
+    \item GPS\rightarrow XBEE : \textbf{clignotant} lorsque le module GPS envoie des données à l'antenne radio.
+\end{itemize}
 \subsection{Configuration du dock}
+La configuration du dock est plus courte. Il suffit d'alimenter le module \textit{u-blox} et de le connecter à une antenne. La configuration précise est donnée en annexe. Une fois alimenté, le module va acquérir les signaux satellites et les corrections RTK envoyées par la base. 
+Si jamais aucune correction n'est reçue, le \textit{u-blox} va fournir une position GPS classique. Les LEDs fournissent les indications utiles : 
+\begin{itemize}
+    \item GPS FIX : \textbf{OFF} lorsqu'il n'y a pas de fix, \textbf{une impulsion par seconde} lorsque la position est valide.
+    \item NO RTK : \textbf{OFF} lorsque RTK fixe, \textbf{clignotant} lors de la réception de données RTCM, \textbf{ON} lorsqu'aucune correction n'a lieu. 
+    \item XBEE \rightarrow GPS : \textbf{clignotant} lorsque le module GPS reçoit des données de l'antenne radio.
+\end{itemize}
+
+\subsection{Un mot sur les antennes}
+Les antennes de communication des deux modules GPS sont des \textit{XBEE S2C 2,4 GHz}. Elles doivent être correctement paramétrées pour pouvoir échanger. 
+Les spécifications sont données en annexe.
 
 \section{Mise en place du dock}
 
 \section{Communication avec le reste du système}
+
+Pour rappel, le dock doit pouvoir envoyer sa position et son attitude au drone pour que ce dernier puisse planifier son retour, et ce potentiellement à longue distance.  C'est pour cela que dans le cadre de ce projet nous utilisons des modems \textit{Simpulse}. S'il est possible de communiquer entre noeuds ROS, ce n'est pas l'approche qui sera finalement utilisée : outre les difficultés dues à ROS (qui n'existent pas en ROS2), on préfèrera aussi un protocole plus simple et plus universel pour que la communication s'adapte facilement sur d'autres OS ou appareils (par exemple, si le dock et le drone ont des versions différentes de ROS, la communication directe n'est pas possible). La communication se fait donc en UDP (quoi qu'on aurait pu choisir le TCP qui permet une garantie sur la bonne réception, cela n'était pas absolument nécessaire); on veut donc envoyer des trames à intervalle régulier contenant les informations nécessaires que sont la position GPS et l'attitude du dock. On peut donc définir un format simple permettant de véhiculer ces informations :
+
+\verb|${latitude},{longitude};{roll},{pitch},{yaw}|
+
+On précise que l'utilisation des angles d'Euler, faciles à interpréter lors du débuggage, est justifiée par le fait que dans notre cas on ne risque pas le \textit{Gimbal lock} vus les angles relativement faibles sur le pitch et le roll.
+
+La communication se fait donc assez facilement de cette manière, après avoir bien configuré les addresses du dock et du drone.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imgs/UDP_connexion.png}
+    \caption{La communication dock $\rightarrow$ drone}
+\end{figure}
+
+La trame est ensuite interprétée et convertie en messages ROS publiés sur des topics et utilisés par le reste du système.
+
 
 \chapter{Stratégie d'approche de docking}
 
@@ -137,7 +192,7 @@ rencontré quelques difficultés avec l'utilisation de l'interface MAVROS, qui f
 avait en mémoire des waypoints GPS que le drone tentait de rejoindre en priorité avant de prendre en compte nos commandes. Cela empêchait toute exploitation du drone en mode automatique, ce qui est nécessaire
 au bon fonctionnement de nos algorithmes.
 
-Heureusement ce problème avait tout le temps d'être réglé, étant donné que nous n'utiliserions pas le drone d'ici à la seconde semaine d'expérimentation à Guerlédan, en février 2024. De plus, nous avons 
+Heureusement ce problème avait tout le temps d'être réglé, étant donné que nous n'utiliserions pas le drone d'içi à la seconde semaine d'expérimentation à Guerlédan, en février 2024. De plus, nous avons 
 décidé de concentrer nos efforts à la mise en place et la conversion de nos algorithmes pour la mise en place sur le Rover qui nous sert de remplacement au drone et qui nous sert de moyen d'expérimentations à l'école. 
 
 
