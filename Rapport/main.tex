@@ -127,7 +127,7 @@ Une fois l'installation terminée, la base RTK diffuse ses corrections de positi
 \begin{itemize}
     \item GPS FIX : \textbf{OFF} lorsqu'il n'y a pas de fix, \textbf{une impulsion par seconde} lorsque la position est valide.
     \item NO RTK : \textbf{OFF} lorsque RTK fixe, \textbf{clignotant} lors de la réception de données RTCM, \textbf{ON} lorsqu'aucune correction n'a lieu. 
-    \item GPS\rightarrowXBEE : \textbf{clignotant} lorsque le module GPS envoie des données à l'antenne radio.
+    \item GPS\rightarrow XBEE : \textbf{clignotant} lorsque le module GPS envoie des données à l'antenne radio.
 \end{itemize}
 \subsection{Configuration du dock}
 La configuration du dock est plus courte. Il suffit d'alimenter le module \textit{u-blox} et de le connecter à une antenne. La configuration précise est donnée en annexe. Une fois alimenté, le module va acquérir les signaux satellites et les corrections RTK envoyées par la base. 
@@ -135,9 +135,12 @@ Si jamais aucune correction n'est reçue, le \textit{u-blox} va fournir une posi
 \begin{itemize}
     \item GPS FIX : \textbf{OFF} lorsqu'il n'y a pas de fix, \textbf{une impulsion par seconde} lorsque la position est valide.
     \item NO RTK : \textbf{OFF} lorsque RTK fixe, \textbf{clignotant} lors de la réception de données RTCM, \textbf{ON} lorsqu'aucune correction n'a lieu. 
-    \item XBEE \rightarrowGPS : \textbf{clignotant} lorsque le module GPS reçoit des données de l'antenne radio.
+    \item XBEE \rightarrow GPS : \textbf{clignotant} lorsque le module GPS reçoit des données de l'antenne radio.
 \end{itemize}
+
 \subsection{Un mot sur les antennes}
+Les antennes de communication des deux modules GPS sont des \textit{XBEE S2C 2,4 GHz}. Elles doivent être correctement paramétrées pour pouvoir échanger. 
+Les spécifications sont données en annexe.
 
 \section{Mise en place du dock}
 
