@@ -102,7 +102,7 @@ Puisque le drone n'était disponible que peu de temps et uniquement lors des sem
 \section{Mise en place d'une base RTK}
 Le positionnement GPS acquis par les capteurs à disposition confère une précision métrique, les signaux GPS étant perturbés par l'atmosphère. Or, il faut de meilleures performances pour espérer docker le drône dans un environnement confiné et restreint. 
 L'idée était donc de mettre en place un système de positionnement plus précis (centimétrique dans l'idéal) en  utilisant le dispositif du \textit{Real Time Kinematic} (RTK).
-Pour cela, il faut installer une base GPS fixe de position connue précisément. Elle servira de garde-fou en diffusant des corrections de positionnement aux systèmes GPS connectés.
+Pour cela, il faut installer une base GPS fixe de position connue précisément. Elle servira de médiateur en diffusant des corrections de positionnement aux systèmes GPS connectés.
 L'installation est donc en deux parties, la première, à terre, l'autre, directement sur le dock.
 \subsection{Capteurs à disposition}
 L'acquisition de signaux GPS se fait grâce à deux modules \textit{ArduSimple} équipés de processeurs \textit{u-blox ZED-F9P}. 
@@ -113,9 +113,26 @@ Il est possible d'utiliser une \textit{Raspberry} pour configurer la base GPS en
 \subsection{Installation de la base}
 L'installation de la base peut se faire de deux manières différentes. 
 \begin{enumerate}
-    \item 
+    \item En utilisant uniquement le module \textit{u-blox}. Il s'agit de la méthode la plus simple. Si la position précise de la base est connue, on configure le module en \textit{Fixed Mode} et les corrections seront directement disponible. 
+    Sinon on le configure en mode \textit{Survey-In} ce qui va lancer l'acquisition de trames GPS provenants de satellites jusqu'à ce que la position soit connue avec une précision suffisante. Cela peut prendre une dizaine d'heures pour une précision centimétrique.
+    La configuration du module se fait avec le logiciel _textit{XCTU} (sous Windows). Dans tous les cas, il faut que la base soit alimentée en permanence pour ne pas perdre la position acquise et que l'antenne soit bien dégagée pour une meilleure réception des signaux.
+    \item En utilisant le module \textit{u-blox} et une \textit{Raspberry}. Cette solution est issue de la documentation fournie par \textit{Centipède} pour la mise en place d'une base RTK déclarée sur leur réseau. 
+    Dans ce cas, aucun \textit{TimeMode} n'est spécifié pour le module GPS. La \textit{Raspberry} est flashée et configurée pour enregistrer les trames GPS reçues par le \textit{u-blox} puis faire une sauvegarde par jour (vers 4h du matin). 
+    L'idée est ensuite de récupérer une sauvegarde de 24 heures, de l'envoyer à \textit{IGN} qui fournit un service de triangulation. \textit{IGN} renvoie ensuite la position précise calculée à partir des données. 
+    A partir d'ici, il n'est plus nécessaire de suivre les instructions de \textit{Centipède}\footnote{Le but n'est pas de déclarer la base sur leur réseau.}. Il faut en revanche passer le module \textit{u-blox} en mode \textit{Fixed Mode} et renseigner la position déterminée précédemment. 
+    Avec la \textit{Raspberry}, on peut accéder aux données directement en se connectant en \textit{ssh} ou alors en se connectant à l'interface web graphique de la carte.
 \end{enumerate}
+
+Une fois l'installation terminée, la base RTK diffuse ses corrections de positionnement à l'aide de l'antenne radio \textit{Xbee}. Le statut de la base est indiqué par les LEDs de la carte \textit{ArduSimple}.
+\begin{itemize}
+    \item GPS FIX : \textbf{OFF} lorsqu'il n'y a pas de fix, \textbf{une impulsion par seconde} lorsque la position est valide.
+    \item NO RTK : \textbf{OFF} lorsque RTK fixe, \textbf{clignotant} lors de la réception de données RTCM, \textbf{ON} lorsqu'aucune correction n'a lieu. 
+    \item GPS\rightarrowXBEE : \textbf{clignotant} lorsque le module GPS envoie des données à l'antenne radio.
+\end{itemize}
 \subsection{Configuration du dock}
+La configuration du dock est plus courte. Il suffit d'alimenter le module \textit{u-blox} et de le connecter à une antenne. La configuration précise est donnée en annexe. Une fois alimenté, le module va acquérir les signaux satellites et les corrections RTK envoyées par la base. 
+Si jamais aucune correction n'est reçue, le \textit{u-blox} va fournir une position GPS classique.
+\subsection{Un mot sur les antennes}
 
 \section{Mise en place du dock}
 
