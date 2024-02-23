@@ -70,11 +70,13 @@ def control_node():
     yk_1 = np.zeros((3,1))
 
     EKF_kevin = True
+    
+    target_reached=False
 
     while not rospy.is_shutdown():
         if Xb is not None and Xd is not None and armed and guided:
-            print((Xd-Xb).flatten())
-            print('Rover cap : ', Xb[-1, 0])
+            # print((Xd-Xb).flatten())
+            # print('Rover cap : ', Xb[-1, 0])
             if not rover_initiated:
                 rover = Rover(np.array([[Xb[0,0],Xb[1,0], 0, Xb[-1,0]]]).T)
                 # rover = Rover(np.array([Xb[0],Xb[1], 0, Xb[-1]]))
@@ -90,12 +92,12 @@ def control_node():
                             [cos(Xb[3,0])*sin(Xb[-1,0]), 0],
                             [-sin(Xb[3,0])        , 0],
                             [0                  , 1]], dtype=np.float64)
-                Q = .05*np.identity(4)
+                Q = .5*np.identity(4)
                 C = np.array([[1, 0, 0, 0],
                             [0, 1, 0, 0],
                             [0, 0, 0, 1]])
                 R = 1*np.identity(3)
-                R[2, 2] = .1
+                R[2, 2] = .017
 
                 if np.linalg.norm(y1-y) > 0:
                     y = y1
@@ -111,25 +113,33 @@ def control_node():
                 rover.extended_kalman(rover.u,yk,yk_1,dt)
                 yk_1 = yk
 
+            if np.linalg.norm(rover.x[:2] - Xd[:2])>=1 and not target_reached:
             # phat = Xd[:2]
             # theta = Xd[-1,0]
             # rover.controller(phat,theta)
             # rover.x = np.array([[Xb[0,0],Xb[1,0],0.,Xb[-1,0]]]).T
-            rover.controller(Xd[:2],Xd[-1,0])
+                rover.controller(Xd[:2],Xd[-1,0])
 
-            vel_msg = Twist()
-            vel_msg.linear.x = rover.u[0,0]
-            vel_msg.angular.z = rover.u[1,0]
+                vel_msg = Twist()
+                vel_msg.linear.x = rover.u[0,0]
+                vel_msg.angular.z = rover.u[1,0]
 
-            vel_publisher.publish(vel_msg)
+                vel_publisher.publish(vel_msg)
 
-            rover_kalman = PoseStamped()
-            rover_kalman.pose.position.x = rover.x[0,0]
-            rover_kalman.pose.position.y = rover.x[1,0]
-            rover_kalman.pose.orientation.x = 0
-            rover_kalman.pose.orientation.y = 0
-            rover_kalman.pose.orientation.z = rover.x[-1,0]
-            rover_kalman_publisher.publish(rover_kalman)
+                rover_kalman = PoseStamped()
+                rover_kalman.pose.position.x = rover.x[0,0]
+                rover_kalman.pose.position.y = rover.x[1,0]
+                rover_kalman.pose.orientation.x = 0
+                rover_kalman.pose.orientation.y = 0
+                rover_kalman.pose.orientation.z = rover.x[-1,0]
+                rover_kalman_publisher.publish(rover_kalman)
+            
+            else :
+                target_reached = True
+                vel_msg = Twist()
+                vel_msg.linear.x = 0.
+                vel_msg.angular.z = 0.
+                vel_publisher.publish(vel_msg)
 
         rate.sleep()
     

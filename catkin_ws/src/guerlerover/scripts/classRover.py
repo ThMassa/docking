@@ -142,23 +142,23 @@ class Rover:
         """
 
         # Les coefficients ci-dessous sont modifiables avec les lignes self.__transition_dist = 5*self.L (vous pouvez modifier le 5
-        # ) et if np.dot(unit.T, self.x[:2] - phat) < -self.__transition_dist/3 (où vous pouvez également modifier le 3)
+        # ) et if np.dot(unit.T, self.x[:2] - phat) < -self.__transition_dist/3 (oï¿½ vous pouvez ï¿½galement modifier le 3)
         # Faites un ctrl f pour trouver les lignes correspondantes.
         # Vous pouvez utiliser le fichier Potential fields.py pour voir l'impact de ces coefficients.
 
-        c11, c12 = 2.5, 1  # c11 coefficient d'attractivité de la ligne, c12 n'a pas besoin d'être modifié (c22 est obsolete)
-        c21, c22 = 2, 1  # c21 coefficient de répulsion, c22 n'a pas besoin d'être modifié (c22 est obsolete)
-        kd, ki = 5, .02  # coefficient pi(d) du régulateur d'angle
+        c11, c12 = 2.5, 1  # c11 coefficient d'attractivitï¿½ de la ligne, c12 n'a pas besoin d'ï¿½tre modifiï¿½ (c22 est obsolete)
+        c21, c22 = 2, 1  # c21 coefficient de rï¿½pulsion, c22 n'a pas besoin d'ï¿½tre modifiï¿½ (c22 est obsolete)
+        kd, ki = 5, .02  # coefficient pi(d) du rï¿½gulateur d'angle
 
         if not hasattr(self, "_Boat__start"):
             self.__start = True
-            # self.__transition_dist correspond à la distance à partir de laquelle il y a changement d'état :
+            # self.__transition_dist correspond ï¿½ la distance ï¿½ partir de laquelle il y a changement d'ï¿½tat :
             # State 1 : Le robot est dans le demi plan devant le dock
-            # State 2 : Le robot est dans le demi plan derrière le dock
-            # La valeur initiale est fixée 0 et est à laisser à 0.
+            # State 2 : Le robot est dans le demi plan derriï¿½re le dock
+            # La valeur initiale est fixï¿½e 0 et est ï¿½ laisser ï¿½ 0.
             self.__transition_dist = 0
             self.__ecap = array([0.])  # Erreur proportionnelle
-            self.__ecapSum = 0  # Erreur intégrale du PI(D)
+            self.__ecapSum = 0  # Erreur intï¿½grale du PI(D)
 
         k_ = 1
         unit = np.array([[cos(theta)], [sin(theta)]])

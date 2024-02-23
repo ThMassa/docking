@@ -127,7 +127,7 @@
     </node>
 
     <node pkg="rosbag" type="record" name="rosbag_record_boat"
-       args="record -o ~/guerlelogs/rover.bag docking/nav/dock_pose docking/nav/rover_pose /cmd_vel docking/nav/rover_kalman docking/dock/udp_publisher"
+       args="record -o /home/aion/guerlelogs/rover.bag docking/nav/dock_pose docking/nav/rover_pose /cmd_vel docking/nav/rover_kalman docking/dock/udp_publisher"
        if="$(arg get_logs)" />
     
 </launch>
