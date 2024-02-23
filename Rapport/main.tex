@@ -143,6 +143,24 @@ Les spécifications sont données en annexe.
 
 \section{Mise en place du dock}
 
+L'ensemble de l'électronique embarquée du dock tient dans une boîte étanche qui laisse passer le câble de l'IMU. En effet, pour pouvoir s'assurer du bon fonctionnement cette dernière sa calibration a été réalisée grâce au logiciel \textit{SBG Center} tout d'abord en la plaçant à l'intérieur de la boîte avec le reste de l'électronique. Or en observant les valeurs données et en essayant la calibration il apparaissait que les appareils aux alentours produisaient des perturbations magnétiques bien trop importantes pour que le cap mesuré soit cohérent. C'est pour cela qu'il a été décidé de plutôt placer l'IMU en dehors de la boîte pour pouvoir qu'elle fonctionne correctement (cf ~\ref{fig:IMU_exterieur}).
+
+\begin{figure}[H]
+    % \centering
+    \begin{subfigure}{0.54\textwidth}
+        \centering
+        \includegraphics[height=\textwidth,angle=90]{imgs/dock_box_outside.jpg}
+        \caption{Le bloc entier à monter sur la structure (droite : IMU)}
+        \label{fig:IMU_exterieur}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.95\textwidth]{imgs/dock_box_inside.jpg}
+        \caption{Intérieur du dock avec toute l'électronique}
+    \end{subfigure}
+    \caption{Mise en place du dock}
+\end{figure}
+
 \section{Communication avec le reste du système}
 
 Pour rappel, le dock doit pouvoir envoyer sa position et son attitude au drone pour que ce dernier puisse planifier son retour, et ce potentiellement à longue distance.  C'est pour cela que dans le cadre de ce projet nous utilisons des modems \textit{Simpulse}. S'il est possible de communiquer entre noeuds ROS, ce n'est pas l'approche qui sera finalement utilisée : outre les difficultés dues à ROS (qui n'existent pas en ROS2), on préfèrera aussi un protocole plus simple et plus universel pour que la communication s'adapte facilement sur d'autres OS ou appareils (par exemple, si le dock et le drone ont des versions différentes de ROS, la communication directe n'est pas possible). La communication se fait donc en UDP (quoi qu'on aurait pu choisir le TCP qui permet une garantie sur la bonne réception, cela n'était pas absolument nécessaire); on veut donc envoyer des trames à intervalle régulier contenant les informations nécessaires que sont la position GPS et l'attitude du dock. On peut donc définir un format simple permettant de véhiculer ces informations :
