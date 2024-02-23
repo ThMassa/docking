@@ -172,6 +172,47 @@ La trame est ensuite interprétée et convertie en messages ROS publiés sur des
 \section{Algorithme de Kévin}
 
 \chapter{Architecture logicielle}
+\section{ROS}
+Afin d'avoir un système efficace quand plusieurs parties doivent communiquer entre eux, il est essentiel
+d'assurer une architecture logicielle claire et performante. Plusieurs choix s'offraient à nous à ce sujet,
+étant équipés sur la plupart des éléments de ce système de carte NVIDIA Jetson, des cartes permettant moulte
+options à ce sujet. En l'occurence, nous avons opté pour une architecture ROS, middleware très utilisé
+dans notre domaine qui est la robotique.
+
+\subsection{Présentation générale}
+ROS (Robot Operating System) est un framework open source spécialement conçu pour le développement 
+et la gestion de systèmes robotiques. Son architecture modulaire et distribuée offre aux développeurs
+une base flexible et évolutive pour la création de systèmes robotiques sophistiqués.
+
+Suivant un modèle de messagerie publish-subscribe, ROS facilite la communication transparente
+entre les différentes composantes d'un système robotique, favorisant l'échange de données et de
+commandes. Prenant en charge plusieurs langages de programmation, ce framework propose une
+gamme complète d'outils et de bibliothèques qui simplifient le processus de développement.
+
+L'infrastructure de communication dans ROS repose sur deux concepts fondamentaux: les nœuds
+et les topics. Les nœuds sont des modules logiciels individuels, chacun réalisant une tâche spécifique
+au sein du système robotique. Les nœuds, agissant comme les éléments fondamentaux d'une application ROS,
+interagissent en échangeant des messages. D'autre part, les topics servent de canaux de communication
+utilisés par les nœuds pour partager des messages au sein du framework ROS. Suivant
+le modèle de communication publish-subscribe, les nœuds générant des données publient des messages sur
+un topic spécifique, tandis que les nœuds intéressés par ces données souscrivent au topic correspondant
+pour recevoir les messages.
+
+\subsection{Limitations}
+
+Contrairement à son successeur ROS2, ROS connait des limitations quand il s'agit de le mettre en place
+sur un système composé de plusieurs parties. En effet, il est plus difficile de faire transiter les données
+entre chaque machine sur ROS que ROS2. Alors que sur ROS2, être sur le même réseau suffit pour partager
+les données entre les machines, ce n'est pas le cas sur ROS, ce qui complique la gestion de l'architecture
+logicielle.
+
+Malheureusement, les limitations logicielles ne nous permettaient pas de passer sur ROS2, étant équipés de
+cartes NVIDIA Jetson flashées avec un équivalent de Ubuntu18, qui ne supporte pas ROS2.
+
+De plus, tout est codé en \textit{python 2.7}, ce qui est également limitant dans nos capacités.
+
+\section{Architecture du projet}
+
 
 \chapter{Essais à Guerlédan}
 
@@ -221,7 +262,20 @@ En faisant cela, nous avons été capable de tester et prouver la robustesse de 
 
 \section{Perspectives}
 %//TODO mentionner : + de tests avec le vrai dock, approche avec d'autres capteurs (LIDAR, caméra)
-   
+Ce projet contient encore beaucoup d'aspects très intéressants à aborder. Un des premiers aspects à
+approfondir est de faire plus de test avec le dock. Avant ca il faut réussir à calibrer correctement
+la centrale SBG afin d'éviter la dérive qui arrive vite. 
+
+De plus, il peut être intéressant d'enrichir la gamme de capteurs utilisés notamment pour l'étape du
+docking en lui-même qui nécessite de la précision. Une perspective d'évolution serait d'utiliser par
+exemple un LIDAR ou une caméra pour se docker bien plus précisément qu'avec uniquement le GPS et la
+centrale inertielle.
+
+Enfin, il pourrait également être envisageable d'intégrer des algorithmes d'évitement d'obstacles à
+l'aide des nouveaux capteurs utilisés. L'ajout de cette fonctionnalité serait de plus compatible avec la
+facon dont on procède, étant donné que l'on travaille avec des champs de vecteurs pour le contrôle, ce
+qui est avantageux pour l'évitement d'obstacles.
+
 \chapter{Annexes}
 \section{A. Configuration des modules \textit{u-blox} avec \textit{U-Center}}
 
