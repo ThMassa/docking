@@ -49,7 +49,7 @@ def draw_field(ax,f,xmin,xmax,ymin,ymax,a):
     R=np.sqrt(VX**2+VY**2)
     ax.quiver(Mx,My,VX/R,VY/R)
 
-def boat_pose_cb(msg):
+def rover_pose_cb(msg):
     global Xb
     Xb = np.array([[msg.pose.position.x, 
                     msg.pose.position.y, 
@@ -69,7 +69,7 @@ def visualize_node():
     # Initialisation du noeud ROS
     rospy.init_node('visualization')
 
-    rospy.Subscriber('/docking/nav/rover_pose', PoseStamped, boat_pose_cb)
+    rospy.Subscriber('/docking/nav/rover_pose', PoseStamped, rover_pose_cb)
     rospy.Subscriber('/docking/nav/dock_pose', PoseStamped, dock_pose_cb)
 
     f = 1
