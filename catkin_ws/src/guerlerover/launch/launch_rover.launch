@@ -22,8 +22,9 @@
     <arg name="simulate_dock" default="false" />
     <arg name="simulate_dock_with_log" default="false" />
     <arg name="bag_played" default=""/>
-    <arg name="latitude" default="48.19894652483758"/>
-    <arg name="longitude" default="-3.0156170343320365"/>
+    <!-- Point au milieu du stade de l'ENSTA -->
+    <arg name="latitude" default="48.418629445475624"/>
+    <arg name="longitude" default="-4.473992863608893"/>
     <arg name="yaw" default="-1.5"/>
 
     <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
