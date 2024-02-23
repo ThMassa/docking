@@ -109,28 +109,32 @@ def visualize_node():
                                    latitude_bounds[0], latitude_bounds[1]],
                            aspect="equal")
 
+            ax.set_xlim(longitude_bounds[0], longitude_bounds[1])
+            ax.set_ylim(latitude_bounds[0], latitude_bounds[1])
             ax.set_xlabel("longitude (deg)")
             ax.set_ylabel("latitude (deg)")
             
-            phat = Xd[:2]
-            theta = Xd[-1,0]
+            # phat = Xd[:2]
+            # theta = Xd[-1,0]
 
-            unit = np.array([[cos(theta)], [sin(theta)]])
+            # unit = np.array([[cos(theta)], [sin(theta)]])
 
-            if np.dot(unit.T,(Xb[:2] - phat)) < value and start:
-                draw_field(ax, f2, Xd[0,0]-delta_draw,Xd[0,0]+delta_draw, Xd[1,0]-delta_draw,Xd[1,0]+delta_draw, 5)
-                if value == 0:
-                    value = 3*L
-            else:
-                if start:
-                    start = False
-                draw_field(ax, f1, Xd[0,0]-delta_draw,Xd[0,0]+delta_draw, Xd[1,0]-delta_draw,Xd[1,0]+delta_draw, 5)
-                if np.dot(unit.T,(Xb[:2] - phat)) < -value/3:
-                    start = True
+            # if np.dot(unit.T,(Xb[:2] - phat)) < value and start:
+            #     draw_field(ax, f2, Xd[0,0]-delta_draw,Xd[0,0]+delta_draw, Xd[1,0]-delta_draw,Xd[1,0]+delta_draw, 5)
+            #     if value == 0:
+            #         value = 3*L
+            # else:
+            #     if start:
+            #         start = False
+            #     draw_field(ax, f1, Xd[0,0]-delta_draw,Xd[0,0]+delta_draw, Xd[1,0]-delta_draw,Xd[1,0]+delta_draw, 5)
+            #     if np.dot(unit.T,(Xb[:2] - phat)) < -value/3:
+            #         start = True
             
             
             Xb[0,0],Xb[1,0] = lambert(Xb[0,0],Xb[1,0],inverse=True)
+            # print(Xd[:2])
             Xd[0,0],Xd[1,0] = lambert(Xd[0,0],Xd[1,0],inverse=True)
+            # print(Xd[:2].flatten())
 
             ax.scatter(Xb[0,0],Xb[1,0],label="Drone",color='green')
             ax.quiver(Xb[0,0],Xb[1,0],cos(Xb[-1,0]),sin(Xb[-1,0]),color='green')
@@ -138,7 +142,7 @@ def visualize_node():
             ax.scatter(Xd[0,0],Xd[1,0],label="dock",color='red')
             ax.quiver(Xd[0,0],Xd[1,0],cos(Xd[-1,0]),sin(Xd[-1,0]),color='red')
 
-            ax.plot([Xd[0]-100*cos(Xd[-1,0]),Xd[0]+100*cos(Xd[-1,0])],[Xd[1]-100*sin(Xd[-1,0]),Xd[1]+100*sin(Xd[-1,0])])
+            # ax.plot([Xd[0]-100*cos(Xd[-1,0]),Xd[0]+100*cos(Xd[-1,0])],[Xd[1]-100*sin(Xd[-1,0]),Xd[1]+100*sin(Xd[-1,0])])
 
 
 
