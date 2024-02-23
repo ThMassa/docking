@@ -278,8 +278,85 @@ qui est avantageux pour l'évitement d'obstacles.
 
 \chapter{Annexes}
 \section{A. Configuration des modules \textit{u-blox} avec \textit{U-Center}}
+Pour configurer les modules GNSS \textit{u-blox}, il faut utiliser le logiciel \textit{U-Center} sous \textbf{Windows}. La carte doit être connectée par son port série \textbf{Power+GPS} à l'ordinateur.
+\subsection{Configuration de la base}
+Il faut d'abord se connecter au bon port \textit{COM} et choisir le bon \textit{baudrate}, normalement 9600.
+Pour ouvrir la fenêtre de configuration, cliquer sur \textit{Configuration View}. Il faut ensuite renseiner les différents réglages suivants en appuyant bien sur \textbf{Send} à chaque modification : 
+\begin{itemize}
+    \item Onglet \textit{Msg} : cocher la case \textit{USB-On} et \textit{UART1-On} pour les messages suivants : 
+    \begin{itemize}
+        \item F5-05 RTCM3.3 1005
+        \item F5-05 RTCM3.3 1077
+        \item F5-05 RTCM3.3 1087
+        \item F5-05 RTCM3.3 1127
+        \item F5-05 RTCM3.3 1230
+        \item 01-13 NAV-HPPOSECEF
+        \item 01-02 NAV-POSLLH
+        \item 02-15 RXM-RAWX
+        \item 02-13 RXM-SFRBX
+        \item F5-4A RTCM3.3 1074
+        \item F5-4D RTCM3.3 1077
+        \item F5-54 RTCM3.3 1084
+        \item F5-57 RTCM3.3 1087
+        \item F5-5E RTCM3.3 1094
+        \item F5-61 RTCM3.3 1097
+        \item F5-7C RTCM3.3 1124
+        \item F5-7F RTCM3.3 1127
+    \end{itemize}
+    \item Onglet \textit{NMEA} : cocher \textit{High precision mode} pour le réglage \textit{CFG-NMEA(DATA2)}
+    \item Onglet \textit{TIMEMODE3} : choisir le mode \textit{Survey-In} pour avoir un temps d'acquisition de la position et une précision minimale; ou le mode \textit{Fixed Mode} si la position précise est déjà connue. En mode d'acquisition longue, il faut prévoir plusieurs heures avant d'avoir une précision décimétrique.
+    \item Onglet \textit{PRT} : 
+    \begin{itemize}
+        \item \textit{Target : 1-UART1, Protocol in : none, Protocol out : 0+1+5-UBX+NMEA+RTCM3, Baudrate : 115200, Databits : 0, Stopbits : 1, Parity : None, Bit Order : LSB First}
+        \item \textit{Target : 3-USB, Protocol in : 0+1+5-UBX+NMEA+RTCM3, Protocol out : 0+1+5-UBX+NMEA+RTCM3}
+    \end{itemize}
+    \item Onglet \textit{CFG} : sélectionner toute la rubrique \textit{Devices}, s'assurer que \textit{Save current configuration} est coché, cliquer sur \textit{Send}.
+\end{itemize}
+
+\subsection{Configuration du dock}
+Il faut d'abord se connecter au bon port \textit{COM} et choisir le bon \textit{baudrate}, normalement 9600.
+Pour ouvrir la fenêtre de configuration, cliquer sur \textit{Configuration View}. Il faut ensuite renseiner les différents réglages suivants en appuyant bien sur \textbf{Send} à chaque modification : 
+\begin{itemize}
+    \item La configuration des messages du rover est optionnelle. Onglet \textit{Msg} : cocher la case \textit{USB-On} pour les messages : 
+    \begin{itemize}
+        \item \textit{F5-05 RTCM3.3 1005}
+        \item \textit{F1-00 PUBX00}
+        \item \textit{F1-03 PUBX03}
+        \item \textit{F1-04 PUBX04}
+    \end{itemize}
+    Puis cocher aussi la case \textit{UART1-On} pour les messages :
+    \begin{itemize}
+        \item \textit{01-13 NAV-HPPOSECEF}
+        \item \textit{01-02 NAV-POSLLH}
+        \item \textit{F0-0A NMEA GxDTM}
+        \item \textit{F0-00 NMEA GxGGA}
+        \item \textit{F0-01 NMEA GxGLL}
+        \item \textit{F0-02 NMEA GxGSA}
+        \item \textit{F0-03 NMEA GxGSV}
+    \end{itemize}
+    \item Onglet \textit{NMEA} : cocher \textit{High precision mode} pour le réglage \textit{CFG-NMEA(DATA2)}.
+    \item Onglet \textit{TIMEMODE3} : mode \textit{Disabled}.
+    \item Onglet \textit{PRT} : 
+    \begin{itemize}
+        \item \textit{Target : 1-UART1, Protocol in : none, Protocol out : 0+1+5-UBX+NMEA+RTCM3}.
+        \item \textit{Target : 3-USB, Protocol in : 0+1+5-UBX+NMEA+RTCM3, Protocol out : 0+1+5-UBX+NMEA+RTCM3}.
+    \end{itemize}
+    \item Onglet \textit{CFG} : sélectionner toute la rubrique \textit{Devices}, s'assurer que \textit{Save current configuration} est coché, cliquer sur \textit{Send}.
+\end{itemize}
+
+\subsection{Informations sur les LEDs}
+% //TODO : ajouter les infos sur les LEDs
 
 \section{B. Configuration des antennes \textit{XBEE S2C 2,4 GHz} avec \textit{XCTU}}
+La configuration des antennes \textit{XBEE S2C 2,4 GHz} se fait avec le logiciel \textit{XCTU} sous \textbf{Windows}.
+Il faut d'abord connecter le module par son port série \textit{Power+Xbee} à l'ordinateur.
+En cas de problème avec le logiciel (impossibilité de détecter le module ou de lire ses paramètres), il faut court-circuiter les pins \textit{RESET_N} et \textit{GND} du module pendant la configuration. Cela devrait résoudre le problème.
+On clique sur \textit{Add a radio module} puis on choisit le bon port \textit{COM} et le bon \textit{baudrate}, normalement 115200. On clique ensuite sur \textit{Finish} pour valider.
+Une fois que le module est ajouté, on clique sur les paramètres pour le configurer. 
+Pour les deux antennes, on doit choisir le même \textit{PAN ID} et le même \textit{Channel} pour qu'elles puissent communiquer.
+Il faut également faire correspondre les \textit{Destination Address High} et \textit{Destination Address Low} pour que les antennes puissent communiquer entre elles. L'idée est que le \textit{DH} de l'un soit le \textit{SH} de l'autre, et que le \textit{DL} de l'un soit le \textit{SL} de l'autre, et inversement.
+On règle aussi \textit{RP} à 5. La seule chose qui va différer est le \textit{CE} qui doit être \textit{Enabled} pour la base et \textit{Disabled} pour le dock.
+
 
 \bibliographystyle{plain}
 \bibliography{mabiblio}
