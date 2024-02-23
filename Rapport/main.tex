@@ -109,13 +109,12 @@ L'acquisition de signaux GPS se fait grâce à deux modules \textit{ArduSimple} 
 % //TODO : images ?
 Les deux modules communiquent grâce à leur antenne radio \textit{Xbee S2C 2,4 GHz}. La base dispose d'une antenne GPS qui permet une meilleure acquisition des signaux. 
 Il est possible d'utiliser une \textit{Raspberry} pour configurer la base GPS en lui conférant une interface graphique. Un guide de configuration des capteurs est disponible en annexe.
-% //TODO : guide rtk en annexe
+
 \subsection{Installation de la base}
 L'installation de la base peut se faire de deux manières différentes. 
 \begin{enumerate}
-    \item En utilisant uniquement le module \textit{u-blox}. Il s'agit de la méthode la plus simple. Si la position précise de la base est connue, on configure le module en \textit{Fixed Mode} et les corrections seront directement disponible. 
-    Sinon on le configure en mode \textit{Survey-In} ce qui va lancer l'acquisition de trames GPS provenants de satellites jusqu'à ce que la position soit connue avec une précision suffisante. Cela peut prendre une dizaine d'heures pour une précision centimétrique.
-    La configuration du module se fait avec le logiciel \textit{U-Center} (sous Windows). Dans tous les cas, il faut que la base soit alimentée en permanence pour ne pas perdre la position acquise et que l'antenne soit bien dégagée pour une meilleure réception des signaux.
+    \item En utilisant uniquement le module \textit{u-blox}. Il s'agit de la méthode la plus simple. Si la position précise de la base est connue, on configure le module en \textit{Fixed Mode} et les corrections seront directement disponibles. 
+    Sinon on le configure en mode \textit{Survey-In} ce qui va lancer l'acquisition de trames GPS provenants de satellites jusqu'à ce que la position soit connue avec une précision suffisante. Cela peut prendre une dizaine d'heures pour une précision centimétrique. La configuration du module se fait avec le logiciel \textit{XCTU}(sous Windows). Dans tous les cas, il faut que la base soit alimentée en permanence pour ne pas perdre la position acquise et que l'antenne soit bien dégagée pour une meilleure réception des signaux.
     \item En utilisant le module \textit{u-blox} et une \textit{Raspberry}. Cette solution est issue de la documentation fournie par \textit{Centipède} pour la mise en place d'une base RTK déclarée sur leur réseau. 
     Dans ce cas, aucun \textit{TimeMode} n'est spécifié pour le module GPS. La \textit{Raspberry} est flashée et configurée pour enregistrer les trames GPS reçues par le \textit{u-blox} puis faire une sauvegarde par jour (vers 4h du matin). 
     L'idée est ensuite de récupérer une sauvegarde de 24 heures, de l'envoyer à \textit{IGN} qui fournit un service de triangulation. \textit{IGN} renvoie ensuite la position précise calculée à partir des données. 
@@ -127,7 +126,7 @@ Une fois l'installation terminée, la base RTK diffuse ses corrections de positi
 \begin{itemize}
     \item GPS FIX : \textbf{OFF} lorsqu'il n'y a pas de fix, \textbf{une impulsion par seconde} lorsque la position est valide.
     \item NO RTK : \textbf{OFF} lorsque RTK fixe, \textbf{clignotant} lors de la réception de données RTCM, \textbf{ON} lorsqu'aucune correction n'a lieu. 
-    \item GPS $\rightarrow$ XBEE : \textbf{clignotant} lorsque le module GPS envoie des données à l'antenne radio.
+    \item GPS$\rightarrow$ XBEE : \textbf{clignotant} lorsque le module GPS envoie des données à l'antenne radio.
 \end{itemize}
 \subsection{Configuration du dock}
 La configuration du dock est plus courte. Il suffit d'alimenter le module \textit{u-blox} et de le connecter à une antenne. La configuration précise est donnée en annexe. Une fois alimenté, le module va acquérir les signaux satellites et les corrections RTK envoyées par la base. 
@@ -135,7 +134,7 @@ Si jamais aucune correction n'est reçue, le \textit{u-blox} va fournir une posi
 \begin{itemize}
     \item GPS FIX : \textbf{OFF} lorsqu'il n'y a pas de fix, \textbf{une impulsion par seconde} lorsque la position est valide.
     \item NO RTK : \textbf{OFF} lorsque RTK fixe, \textbf{clignotant} lors de la réception de données RTCM, \textbf{ON} lorsqu'aucune correction n'a lieu. 
-    \item XBEE $\rightarrow GPS$ : \textbf{clignotant} lorsque le module GPS reçoit des données de l'antenne radio.
+    \item XBEE $\rightarrow$ GPS : \textbf{clignotant} lorsque le module GPS reçoit des données de l'antenne radio.
 \end{itemize}
 
 \subsection{Un mot sur les antennes}
@@ -213,6 +212,12 @@ De plus, tout est codé en \textit{python 2.7}, ce qui est également limitant d
 
 \section{Architecture du projet}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{imgs/schema_general.png}
+    \caption{Architecture logicielle globale du système de docking}
+    \label{fig:schema_general}
+\end{figure}
 
 \chapter{Essais à Guerlédan}
 
@@ -277,9 +282,88 @@ facon dont on procède, étant donné que l'on travaille avec des champs de vect
 qui est avantageux pour l'évitement d'obstacles.
 
 \chapter{Annexes}
-\section{A. Configuration des modules \textit{u-blox} avec \textit{U-Center}}
+\section{Configuration des modules \textit{u-blox} avec \textit{U-Center}}
+Pour configurer les modules GNSS \textit{u-blox}, il faut utiliser le logiciel \textit{U-Center} sous \textbf{Windows}. La carte doit être connectée par son port série \textbf{Power+GPS} à l'ordinateur.
+\subsection{Configuration de la base}
+Il faut d'abord se connecter au bon port \textit{COM} et choisir le bon \textit{baudrate}, normalement 9600.
+Pour ouvrir la fenêtre de configuration, cliquer sur \textit{Configuration View}. Il faut ensuite renseiner les différents réglages suivants en appuyant bien sur \textbf{Send} à chaque modification : 
+\begin{itemize}
+    \item Onglet \textit{Msg} : cocher la case \textit{USB-On} et \textit{UART1-On} pour les messages suivants : 
+    \begin{itemize}
+        \item F5-05 RTCM3.3 1005
+        \item F5-05 RTCM3.3 1077
+        \item F5-05 RTCM3.3 1087
+        \item F5-05 RTCM3.3 1127
+        \item F5-05 RTCM3.3 1230
+        \item 01-13 NAV-HPPOSECEF
+        \item 01-02 NAV-POSLLH
+        \item 02-15 RXM-RAWX
+        \item 02-13 RXM-SFRBX
+        \item F5-4A RTCM3.3 1074
+        \item F5-4D RTCM3.3 1077
+        \item F5-54 RTCM3.3 1084
+        \item F5-57 RTCM3.3 1087
+        \item F5-5E RTCM3.3 1094
+        \item F5-61 RTCM3.3 1097
+        \item F5-7C RTCM3.3 1124
+        \item F5-7F RTCM3.3 1127
+    \end{itemize}
+    \item Onglet \textit{NMEA} : cocher \textit{High precision mode} pour le réglage \textit{CFG-NMEA(DATA2)}
+    \item Onglet \textit{TIMEMODE3} : choisir le mode \textit{Survey-In} pour avoir un temps d'acquisition de la position et une précision minimale; ou le mode \textit{Fixed Mode} si la position précise est déjà connue. En mode d'acquisition longue, il faut prévoir plusieurs heures avant d'avoir une précision décimétrique.
+    \item Onglet \textit{PRT} : 
+    \begin{itemize}
+        \item \textit{Target : 1-UART1, Protocol in : none, Protocol out : 0+1+5-UBX+NMEA+RTCM3, Baudrate : 115200, Databits : 0, Stopbits : 1, Parity : None, Bit Order : LSB First}
+        \item \textit{Target : 3-USB, Protocol in : 0+1+5-UBX+NMEA+RTCM3, Protocol out : 0+1+5-UBX+NMEA+RTCM3}
+    \end{itemize}
+    \item Onglet \textit{CFG} : sélectionner toute la rubrique \textit{Devices}, s'assurer que \textit{Save current configuration} est coché, cliquer sur \textit{Send}.
+\end{itemize}
 
-\section{B. Configuration des antennes \textit{XBEE S2C 2,4 GHz} avec \textit{XCTU}}
+\subsection{Configuration du dock}
+Il faut d'abord se connecter au bon port \textit{COM} et choisir le bon \textit{baudrate}, normalement 9600.
+Pour ouvrir la fenêtre de configuration, cliquer sur \textit{Configuration View}. Il faut ensuite renseiner les différents réglages suivants en appuyant bien sur \textbf{Send} à chaque modification : 
+\begin{itemize}
+    \item La configuration des messages du rover est optionnelle. Onglet \textit{Msg} : cocher la case \textit{USB-On} pour les messages : 
+    \begin{itemize}
+        \item \textit{F5-05 RTCM3.3 1005}
+        \item \textit{F1-00 PUBX00}
+        \item \textit{F1-03 PUBX03}
+        \item \textit{F1-04 PUBX04}
+    \end{itemize}
+    Puis cocher aussi la case \textit{UART1-On} pour les messages :
+    \begin{itemize}
+        \item \textit{01-13 NAV-HPPOSECEF}
+        \item \textit{01-02 NAV-POSLLH}
+        \item \textit{F0-0A NMEA GxDTM}
+        \item \textit{F0-00 NMEA GxGGA}
+        \item \textit{F0-01 NMEA GxGLL}
+        \item \textit{F0-02 NMEA GxGSA}
+        \item \textit{F0-03 NMEA GxGSV}
+    \end{itemize}
+    \item Onglet \textit{NMEA} : cocher \textit{High precision mode} pour le réglage \textit{CFG-NMEA(DATA2)}.
+    \item Onglet \textit{TIMEMODE3} : mode \textit{Disabled}.
+    \item Onglet \textit{PRT} : 
+    \begin{itemize}
+        \item \textit{Target : 1-UART1, Protocol in : none, Protocol out : 0+1+5-UBX+NMEA+RTCM3}.
+        \item \textit{Target : 3-USB, Protocol in : 0+1+5-UBX+NMEA+RTCM3, Protocol out : 0+1+5-UBX+NMEA+RTCM3}.
+    \end{itemize}
+    \item Onglet \textit{CFG} : sélectionner toute la rubrique \textit{Devices}, s'assurer que \textit{Save current configuration} est coché, cliquer sur \textit{Send}.
+\end{itemize}
+
+\subsection{Informations sur les LEDs}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{imgs/led.png}
+\end{center}
+
+\section{Configuration des antennes \textit{XBEE S2C 2,4 GHz} avec \textit{XCTU}}
+La configuration des antennes \textit{XBEE S2C 2,4 GHz} se fait avec le logiciel \textit{XCTU} sous \textbf{Windows}.
+Il faut d'abord connecter le module par son port série \textit{Power+Xbee} à l'ordinateur.
+En cas de problème avec le logiciel (impossibilité de détecter le module ou de lire ses paramètres), il faut court-circuiter les pins \textit{RESET N} et \textit{GND} du module pendant la configuration. Cela devrait résoudre le problème.
+On clique sur \textit{Add a radio module} puis on choisit le bon port \textit{COM} et le bon \textit{baudrate}, normalement 115200. On clique ensuite sur \textit{Finish} pour valider.
+Une fois que le module est ajouté, on clique sur les paramètres pour le configurer. 
+Pour les deux antennes, on doit choisir le même \textit{PAN ID} et le même \textit{Channel} pour qu'elles puissent communiquer.
+Il faut également faire correspondre les \textit{Destination Address High} et \textit{Destination Address Low} pour que les antennes puissent communiquer entre elles. L'idée est que le \textit{DH} de l'un soit le \textit{SH} de l'autre, et que le \textit{DL} de l'un soit le \textit{SL} de l'autre, et inversement.
+On règle aussi \textit{RP} à 5. La seule chose qui va différer est le \textit{CE} qui doit être \textit{Enabled} pour la base et \textit{Disabled} pour le dock.
+
 
 \bibliographystyle{plain}
 \bibliography{mabiblio}
