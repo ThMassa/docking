@@ -143,6 +143,24 @@ Les spécifications sont données en annexe.
 
 \section{Mise en place du dock}
 
+L'ensemble de l'électronique embarquée du dock tient dans une boîte étanche qui laisse passer le câble de l'IMU. En effet, pour pouvoir s'assurer du bon fonctionnement cette dernière sa calibration a été réalisée grâce au logiciel \textit{SBG Center} tout d'abord en la plaçant à l'intérieur de la boîte avec le reste de l'électronique. Or en observant les valeurs données et en essayant la calibration il apparaissait que les appareils aux alentours produisaient des perturbations magnétiques bien trop importantes pour que le cap mesuré soit cohérent. C'est pour cela qu'il a été décidé de plutôt placer l'IMU en dehors de la boîte pour pouvoir qu'elle fonctionne correctement (cf ~\ref{fig:IMU_exterieur}).
+
+\begin{figure}[H]
+    % \centering
+    \begin{subfigure}{0.54\textwidth}
+        \centering
+        \includegraphics[height=\textwidth,angle=90]{imgs/dock_box_outside.jpg}
+        \caption{Le bloc entier à monter sur la structure (droite : IMU)}
+        \label{fig:IMU_exterieur}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.95\textwidth]{imgs/dock_box_inside.jpg}
+        \caption{Intérieur du dock avec toute l'électronique}
+    \end{subfigure}
+    \caption{Mise en place du dock}
+\end{figure}
+
 \section{Communication avec le reste du système}
 
 Pour rappel, le dock doit pouvoir envoyer sa position et son attitude au drone pour que ce dernier puisse planifier son retour, et ce potentiellement à longue distance.  C'est pour cela que dans le cadre de ce projet nous utilisons des modems \textit{Simpulse}. S'il est possible de communiquer entre noeuds ROS, ce n'est pas l'approche qui sera finalement utilisée : outre les difficultés dues à ROS (qui n'existent pas en ROS2), on préfèrera aussi un protocole plus simple et plus universel pour que la communication s'adapte facilement sur d'autres OS ou appareils (par exemple, si le dock et le drone ont des versions différentes de ROS, la communication directe n'est pas possible). La communication se fait donc en UDP (quoi qu'on aurait pu choisir le TCP qui permet une garantie sur la bonne réception, cela n'était pas absolument nécessaire); on veut donc envoyer des trames à intervalle régulier contenant les informations nécessaires que sont la position GPS et l'attitude du dock. On peut donc définir un format simple permettant de véhiculer ces informations :
@@ -224,12 +242,12 @@ De plus, tout est codé en \textit{python 2.7}, ce qui est également limitant d
 \section{Première semaine}
 
 La première semaine d'expérimentations au lac de Guerlédan, du 9 au 13 octobre 2023, fut davantage une semaine de découverte du projet et permit une première approche à la résolution de notre problème. 
-Durant cette semaine, nous avons rencontré nos encadrants et pris en main le matériel que nous avions à notre disposition, c'est à dire principalement les composants de ce qui sera plus tard notre dock,
+Durant cette semaine, nous avons rencontré nos encadrants et pris en main le matériel que nous avions à notre disposition, c'est-à-dire principalement les composants de ce qui sera plus tard notre dock,
 que nous avons conçu durant cette semaine. Ainsi, à l'aide des composants décrits précédemment, nous avons été capable de créer la boite qui contient les capteurs nécessaires au bon fonctionnement du dock. 
 
 D'autre part, nous travaillions en parallèle sur la mise en place de la correction RTK en configurant les différentes cartes et en prenant des mesures nécessaires au calcul de la correction. 
 
-Enfin, une première version simplifiée de l'architecture logicielle a commencée à être implémentée. 
+Enfin, une première version simplifiée de l'architecture logicielle a commencé à être implémentée. 
 
 
 La principale problématique de cette semaine, qui est la même que celle rencontrée durant la période séparant cette semaine de la seconde, est l'impossibilité d'expérimenter directement sur l'AUV qui 
@@ -238,8 +256,8 @@ rencontré quelques difficultés avec l'utilisation de l'interface MAVROS, qui f
 avait en mémoire des waypoints GPS que le drone tentait de rejoindre en priorité avant de prendre en compte nos commandes. Cela empêchait toute exploitation du drone en mode automatique, ce qui est nécessaire
 au bon fonctionnement de nos algorithmes.
 
-Heureusement ce problème avait tout le temps d'être réglé, étant donné que nous n'utiliserions pas le drone d'içi à la seconde semaine d'expérimentation à Guerlédan, en février 2024. De plus, nous avons 
-décidé de concentrer nos efforts à la mise en place et la conversion de nos algorithmes pour la mise en place sur le Rover qui nous sert de remplacement au drone et qui nous sert de moyen d'expérimentations à l'école. 
+Heureusement ce problème avait tout le temps d'être réglé, étant donné que nous n'utiliserions pas le drone d'ici à la seconde semaine d'expérimentation à Guerlédan, en février 2024. De plus, nous avons 
+décidé de concentrer nos efforts sur la mise en place et la conversion de nos algorithmes pour la mise en place sur le Rover qui nous sert de remplacement au drone et qui nous sert de moyen d'expérimentations à l'école. 
 
 
 \section{Deuxième semaine}
@@ -268,8 +286,7 @@ En faisant cela, nous avons été capable de tester et prouver la robustesse de 
 \section{Perspectives}
 %//TODO mentionner : + de tests avec le vrai dock, approche avec d'autres capteurs (LIDAR, caméra)
 Ce projet contient encore beaucoup d'aspects très intéressants à aborder. Un des premiers aspects à
-approfondir est de faire plus de test avec le dock. Avant ca il faut réussir à calibrer correctement
-la centrale SBG afin d'éviter la dérive qui arrive vite. 
+approfondir est de faire plus de tests avec le dock.
 
 De plus, il peut être intéressant d'enrichir la gamme de capteurs utilisés notamment pour l'étape du
 docking en lui-même qui nécessite de la précision. Une perspective d'évolution serait d'utiliser par
