@@ -407,7 +407,9 @@ La première semaine d'expérimentations au lac de Guerlédan, du 9 au 13 octobr
 Durant cette semaine, nous avons rencontré nos encadrants et pris en main le matériel que nous avions à notre disposition, c'est-à-dire principalement les composants de ce qui sera plus tard notre dock,
 que nous avons conçu durant cette semaine. Ainsi, à l'aide des composants décrits précédemment, nous avons été capable de créer la boite qui contient les capteurs nécessaires au bon fonctionnement du dock. 
 
-D'autre part, nous travaillions en parallèle sur la mise en place de la correction RTK en configurant les différentes cartes et en prenant des mesures nécessaires au calcul de la correction. 
+D'autre part, nous travaillions en parallèle sur la mise en place de la correction RTK en configurant les différentes cartes et en prenant des mesures nécessaires au calcul de la correction.
+Nous avons pour cela commencé à suivre un tutoriel écrit par Centipède pour la mise en place d'une base RTK sur leur réseau. Nous avons réussi à obtenir des logs de données GPS que nous avons envoyé à l'IGN pour obtenir une position précise de notre base.
+Malheureusement, cela a pris plus de temps que prévu et nous n'avons pas pu exploiter ces données.
 
 Enfin, une première version simplifiée de l'architecture logicielle a commencé à être implémentée. 
 
@@ -439,6 +441,12 @@ Ce problème reste un point d'amélioration essentiel car il est une des raisons
 Cependant, nous avons développé des alternatives permettant tout de même de mettre en oeuvre nos algorithmes en contournant le problème. Lorsque nous lancons le système, nous avons le choix entre
 utiliser le vrai dock ou un dock simulé. Le dock simulé repose soit sur des logs d'essais précédents soit sur une position et orientation désirée précisées au lancement. 
 En faisant cela, nous avons été capable de tester et prouver la robustesse de nos algorithmes, même sans présence du vrai dock.
+
+L'obtention de corrections RTK a posé quelques problèmes. Nous avons pris beaucoup de recul sur le sens des tâches effectuées précédemment à cette fin et nous avons réalisé que 
+beaucoup de réglages avaient été faits sans vraiment les comprendre et surtout qui compliquaient la tâche voire n'étaient même pas utiles (l'utilisation de la Raspberry par exemple).
+Nous avons donc repris proprement la configuration en résolvant de nouveaux problèmes un à un mais des problèmes de surtensions liés à l'alimentation de Canopée ont fait sauter plusieurs fois le réseau électrique.
+Ceci a interrompu deux jours de suite l'acquisition des données GPS nécessaires pour obtenir la précision souhaitée. Nous avons donc perdu beaucoup de temps sur une semaine comme cela ce qui ne nous a pas permis de tester notre installation avec le bateau.
+Nous avons quand même pu travailler correctement mais forcément avec une précision moindre que celle que nous aurions pu obtenir avec une correction RTK.
 
 
 
@@ -519,6 +527,9 @@ De plus, il peut être intéressant d'enrichir la gamme de capteurs utilisés no
 docking en lui-même qui nécessite de la précision. Une perspective d'évolution serait d'utiliser par
 exemple un LIDAR ou une caméra pour se docker bien plus précisément qu'avec uniquement le GPS et la
 centrale inertielle.
+
+Surtout, il serait bon de pouvoir finir la mise en place de la correction RTK pour obtenir une précision centimétrique et exploité le plein potentiel de notre travail.
+Maintenant que nous avons une bonne idée des principaux obstacles à surmonter, il serait sûrement plus facile d'avancer en ce sens.
 
 Enfin, il pourrait également être envisageable d'intégrer des algorithmes d'évitement d'obstacles à
 l'aide des nouveaux capteurs utilisés. L'ajout de cette fonctionnalité serait de plus compatible avec la
