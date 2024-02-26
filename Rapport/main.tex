@@ -149,14 +149,17 @@ Si jamais aucune correction n'est reçue, le \textit{u-blox} va fournir une posi
 Les antennes de communication des deux modules GPS sont des \textit{XBEE S2C 2,4 GHz}. Elles doivent être correctement paramétrées pour pouvoir échanger. 
 Les spécifications sont données en annexe.
 
-\subsection{Test et résultats}
+\subsection{Test, difficultés et résultats}
 La mise en place de la base RTK n'a malheureusement pas été fructueuse. Malgré de nombreuses tentatives tout au long de se projet, nous n'avons jamais réussi à obtenir du module de la base qu'il communique les corrections \textit{RTK} sur le canal radio dédié.
 La première difficulté que nous avons rencontrée était que les modules \textit{base} et \textit{dock} avaient été inversés. En effet, le module \textit{dock} était configuré pour être une base RTK et inversement.
 On pourrait penser que cela n'est pas problématique mais \textit{ArduSimple} précise dans sa documentation que les modules sont vendus pré-configurés pour être soit une base soit un rover. De fait, nous avons dû inverser les modules et vérifier leur configuration.
 Il se trouve que les antennes n'étaient pas bien configurées non plus et qu'il nous était impossible de les régler avec \textit{XCTU} jusqu'à ce que nous trouvions l'astuce du court-circuit (cf. annexe sur la configuration des capeurs).
 La bonne configuration des modules a donc pris plus de temps que prévu et de multiples tests soldés par des échecs. Nous avons également suivi un tutoriel fait par l'école pour la configuration des modules, mais celui-ci contenait une petite erreure que nous avons mis beaucoup de temps à repérer (sur la configuration des protocols d'entrée de certains ports qui empêchait de transmettre les corrections).
-
-
+Une fois que nous avons trouvé la bonne configuration des modules, nous avons pu constater que la base était capable de déterminer sa position à 1 mètre près en quelques heures. Cependant, nous n'avons jamais réussi à obtenir des corrections RTK sur le canal radio dédié.
+Même avec un test en mode \textit{Fixed} (où l'on renseigne la position manuellement), il nous a été impossible de faire communiquer les deux modules. 
+Pourtant, nous arrivons bien à faire communiquer les modules manuellement en opérant directement sur les antennes qui peuvent se détecter à plusieurs dizaines de mètres.
+Nous pensons que cela est dû à un réglage trop exigeant du mode d'acquisition et des conditions nécessaires à l'emission des corrections RTK. Toutefois, le module GPS du dock était assez précis, même tout seul, pour que le bateau/rover puisse s'approcher et se positionner dans un rayon de 1,5 mètres autour du dock.
+Une piste d'amélioration serait de mettre à jour les \textit{u-blox} avec \textit{U-Center} pour s'assurer de partir sur de bonnes bases et puis de recommencer la configuration en tenant compte de notre expérience sur le sujet.
 
 \section{Mise en place du dock}
 
