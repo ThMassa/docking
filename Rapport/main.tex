@@ -108,7 +108,13 @@ Pour cela, il faut installer une base GPS fixe de position connue précisément.
 L'installation est donc en deux parties, la première, à terre, l'autre, directement sur le dock.
 \subsection{Capteurs à disposition}
 L'acquisition de signaux GPS se fait grâce à deux modules \textit{ArduSimple} équipés de processeurs \textit{u-blox ZED-F9P}. 
-% //TODO : images ?
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth]{imgs/ardusimple.png}
+  \caption{Module GPS utilisé dans le projet : \textit{ArduSimple + u-blox ZED-F9P + Xbee}}
+  \label{fig:moduleArduSimple}
+\end{figure}
+
 Les deux modules communiquent grâce à leur antenne radio \textit{Xbee S2C 2,4 GHz}. La base dispose d'une antenne GPS qui permet une meilleure acquisition des signaux. 
 Il est possible d'utiliser une \textit{Raspberry} pour configurer la base GPS en lui conférant une interface graphique. Un guide de configuration des capteurs est disponible en annexe.
 
@@ -142,6 +148,15 @@ Si jamais aucune correction n'est reçue, le \textit{u-blox} va fournir une posi
 \subsection{Un mot sur les antennes}
 Les antennes de communication des deux modules GPS sont des \textit{XBEE S2C 2,4 GHz}. Elles doivent être correctement paramétrées pour pouvoir échanger. 
 Les spécifications sont données en annexe.
+
+\subsection{Test et résultats}
+La mise en place de la base RTK n'a malheureusement pas été fructueuse. Malgré de nombreuses tentatives tout au long de se projet, nous n'avons jamais réussi à obtenir du module de la base qu'il communique les corrections \textit{RTK} sur le canal radio dédié.
+La première difficulté que nous avons rencontrée était que les modules \textit{base} et \textit{dock} avaient été inversés. En effet, le module \textit{dock} était configuré pour être une base RTK et inversement.
+On pourrait penser que cela n'est pas problématique mais \textit{ArduSimple} précise dans sa documentation que les modules sont vendus pré-configurés pour être soit une base soit un rover. De fait, nous avons dû inverser les modules et vérifier leur configuration.
+Il se trouve que les antennes n'étaient pas bien configurées non plus et qu'il nous était impossible de les régler avec \textit{XCTU} jusqu'à ce que nous trouvions l'astuce du court-circuit (cf. annexe sur la configuration des capeurs).
+La bonne configuration des modules a donc pris plus de temps que prévu et de multiples tests soldés par des échecs. Nous avons également suivi un tutoriel fait par l'école pour la configuration des modules, mais celui-ci contenait une petite erreure que nous avons mis beaucoup de temps à repérer (sur la configuration des protocols d'entrée de certains ports qui empêchait de transmettre les corrections).
+
+
 
 \section{Mise en place du dock}
 
