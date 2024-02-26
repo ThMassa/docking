@@ -8,3 +8,13 @@ catkin_ws/build
 catkin_ws/devel
 
 Doc_Simpulse_V4_18_4
+
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.gz
+*.toc
