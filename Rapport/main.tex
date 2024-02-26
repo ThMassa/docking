@@ -4,6 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{amstext}
 \usepackage{amssymb}
+\usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage{babel}
@@ -11,10 +12,11 @@
 \usepackage{float}
 \usepackage{subcaption}
 
-
-
 \usepackage[a4paper,top=3cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}  % pour configurer les marges
-
+%%%%%%%%%% Start TeXmacs macros
+\newcommand{\tmmathbf}[1]{\ensuremath{\boldsymbol{#1}}}
+\newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
+%%%%%%%%%% End TeXmacs macros
 
 \makeatletter
 
@@ -182,11 +184,136 @@ La trame est ensuite interprétée et convertie en messages ROS publiés sur des
 
 \chapter{Stratégie d'approche de docking}
 
-\section{Modèle cinématique}
-
 \section{Filtre de Kalman}
 
-\section{Algorithme de Kévin}
+Le modèle cinématique choisi pour le robot est le suivant :
+\begin{eqnarray}
+     \mathbf{\dot{x}} & = & B \mathbf{u} \nonumber\\
+     \label{eq:cinematic} \left( \begin{array}{c}
+       \dot{x}\\
+       \dot{y}\\
+       \dot{z}\\
+       \dot{\psi}
+     \end{array} \right) & = & \left( \begin{array}{cc}
+       \cos (\varphi) \cos (\psi) & 0\\
+       \cos (\varphi) \sin (\psi) & 0\\
+       - \sin (\varphi) & 0\\
+       0 & 1
+     \end{array} \right) \left( \begin{array}{c}
+       v\\
+       \omega
+     \end{array} \right) 
+   \end{eqnarray}
+où $(x, y, z)$ représente les coordonnées du robot dans le repère ENU, $\varphi$ représente l'assiette et $\psi$ le cap.
+
+Ce modèle est issu du modèle de Dubins mais où contrairement à ce dernier, on suppose que le véhicule est commandé en vitesse. Cette décision a été prise parce que le rover et le bateau sont commandés à l'aide d'un message de type cmd\_vel, qui spécifie à la fois la vitesse linéaire et la vitesse angulaire.
+
+Le modèle cinématique étant choisi, le modèle d'observation peut être défini. À l'heure actuelle, seules les données de position GPS $(x, y)$ et de cap $\psi$ sont intégrées par le filtre.
+\begin{eqnarray}
+  \mathbf{y} & = & C \mathbf{x} \nonumber\\
+  \label{eq:obs} \left( \begin{array}{c}
+    x_{GPS}\\
+    y_{GPS}\\
+    \psi_{IMU}
+  \end{array} \right) & = & \left( \begin{array}{cccc}
+    1 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0\\
+    0 & 0 & 0 & 1
+  \end{array} \right) \left( \begin{array}{c}
+    x\\
+    y\\
+    z\\
+    \psi
+  \end{array} \right) 
+\end{eqnarray}
+Les matrices de covariance ont été déterminées à posteriori et sont évidemment à ajuster plus tard. Notons $Q$ la matrice de covariance du bruit d'évolution et $R$ la matrice de covariance du bruit de mesure, nous avons pris :
+\[ \left\{ \begin{array}{c}
+     Q = \left( \begin{array}{ccc}
+       .5 & 0 & 0\\
+       0 & .5 & 0\\
+       0 & 0 & .5
+     \end{array} \right)\\
+     R = \left( \begin{array}{ccc}
+       1 & 0 & 0\\
+       0 & 1 & 0\\
+       0 & 0 & .17
+     \end{array} \right)
+   \end{array} \right. \]
+Le filtre de Kalman s'appliquant sur un système discret, il faut discrétiser \eqref{eq:cinematic}. Ainsi au premier ordre nous avons
+\begin{eqnarray}
+  \mathbf{x} (t + dt) & = & \mathbf{x} (t) + \int_t^{t + dt}
+  \dot{\mathbf{x}} (\tau) d \tau \nonumber\\
+  & = & \mathbf{x} (t) + \int_t^{t + dt} B \mathbf{u} (\tau) d
+  \tau \nonumber\\
+  & = & \mathbf{x} (t) + dt B \mathbf{u} (t) \nonumber
+\end{eqnarray}
+La relation \eqref{eq:obs} peut quant à elle être directement utilisée. Il faut également discrétiser les matrices de covariances. On montre que
+\[ \left\{ \begin{array}{c}
+     \Gamma_{\alpha_k} = dt \Gamma_{\alpha}\\
+     \Gamma_{\beta_k} = \frac{1}{dt} \Gamma_{\beta}
+   \end{array} \right. \]
+
+\section{Guidage par champ de potentiel artificiel}
+
+Le guidage par champ de potentiel artificiel est un principe largement utilisé dans le domaine de la robotique mobile pour la navigation autonome des robots. L'idée fondamentale est de créer un champ de potentiel artificiel dans l'environnement dans lequel se déplace le robot, de telle sorte que le robot soit attiré vers sa destination et repoussé des obstacles.
+
+Soit $\mathbf{v}$ le vecteur vitesse du robot et $M$ sa position. Formellement, le champ de potentiel peut être modélisé par une fonction $U : \mathbb{R}^2 \rightarrow \mathbb{R}$. Le robot devra ensuite être contrôlé de sorte que :
+\[ \mathbf{v} (M) = - \vec{\nabla} U (M) \]
+
+\subsection{Champ de potentiel retenu}
+
+\subsubsection{Idée générale}
+
+L'idée est d'adapter le champ de potentiel suivant la position $M$ du robot. Il y a deux cas possibles :
+\begin{itemize}
+  \item Le robot se trouve dans le demi-plan devant le dock (cas 1)
+  
+  \item Le robot se trouve dans le demi-plan derrière le dock (cas 2)
+\end{itemize}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=12.87cm,height=5.48cm]{imgs/RapportGuerlédan-image-1.png}
+  \caption{La flèche indique la position et l'orientation du dock et le point représente la position du robot (a) À gauche le robot se trouve dans le demi-plan en face du robot (b) À droite le robot se trouve dans le demi-plan derrière le robot}
+\end{figure}
+
+Dans le premier cas le robot va aller sur la droite passant par le dock et dirigé dans le même sens que le dock. Dans le second cas le robot va d'abord aller dans le demi plan en face de robot en suivant un champ de vecteur uniforme tout en faisant attention à pas rentrer dans le dock - ce dernier devenant un point répulsif -. Puis en étant assez éloigné loin du demi plan en face du dock, le robot se retrouvera dans le premier cas et agira en conséquence.
+
+\subsubsection{Mise en équation}
+
+Soit $M$ la position du robot et $M'$ la position du dock. En s'inspirant des champs de potentiels physique comme le champ électrostatique, le champ de potentiel engendré par un point répulsif peut être défini ainsi :
+\[ U_1 (M) = \frac{1}{\| \overrightarrow{M M'} \|^{\alpha}} \]
+où $\alpha \in \mathbb{R}$ est un coefficient déterminant la répulsivité du point.
+
+Le champ de potentiel d'une ligne attractive peut quant à lui être défini par :
+\[ U_2 (M) = \overrightarrow{M' M}^T \cdot \vec{n} \cdot \vec{n}^T \overrightarrow{M' M} \]
+Ce champ permet d'attirer le véhicule sur la ligne. Le véhicule arrive perpendiculairement à cette dernière et s'arrête ce qui signifie que le robot n'est pas bien orienté.
+
+Enfin le champ de potentiel issu d'un champ de vecteur vitesse uniforme $\overrightarrow{v_d}$ peut être défini par :
+\[ U_3 (M) = - \overrightarrow{v_d}^T \overrightarrow{OM} \]
+Les champs de vitesses correspondant à chacun des champs de potentiels sont alors :
+\[ \begin{array}{c}
+     \begin{array}{c}
+       \overrightarrow{v_1} = \frac{\overrightarrow{M' M}}{\| \overrightarrow{M M'} \|^{\alpha + 2}}
+     \end{array}\\
+     \overrightarrow{v_2} = - 2 \vec{n} \cdot \vec{n}^T \cdot \overrightarrow{M' M}\\
+     \overrightarrow{v_3} = \overrightarrow{v_d}
+   \end{array} \]
+
+
+Dans le premier cas, il faut une ligne attractive pour positionner le robot sur la ligne. Cependant, s'il n'y avait que ce champ, le véhicule arriverait perpendiculairement à la ligne et s'arrêterait. Il faut donc un champ uniforme pour l'orienter dans la direction voulue et pour qu'il avance vers le dock. Le champ de potentiel total est alors égal à une somme des deux champs pondérée par des coefficients $\lambda_i^1$ :
+\[ U^1_{\text{tot}} (M) = \sum_{i = 2}^3 \lambda_{1, i} U_i (M) \]
+
+Dans le second cas, on a besoin d'un champ uniforme et d'un champ généré par un point répulsif qui correspond au dock :
+\[ U^2_{\text{tot}} (M) = \lambda_{2, 1} U_1 (M) + \lambda_{2, 3} U_3 (M) \]
+
+En différenciant les potentiels, on obtient les champs de vitesses voulus.
+
+\begin{figure}[H]
+  \resizebox{0.5\columnwidth}{!}{\includegraphics{imgs/ScreenshotCase1.png}}\resizebox{0.5\columnwidth}{!}{\includegraphics{imgs/ScreenshotCase2.png}}
+  \caption{(a) Champ de vecteurs dans le premier cas. (b) Champ de vecteurs dans le second cas.}
+\end{figure}
+
+\section{Algorithme}
 
 \chapter{Architecture logicielle}
 \section{ROS}
