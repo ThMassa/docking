@@ -364,6 +364,23 @@ De plus, tout est codé en \textit{python 2.7}, ce qui est également limitant d
     \label{fig:schema_general}
 \end{figure}
 
+Ici, on peut constater qu'un noeud est dédié à la conversion de coordonnées GPS (latitude,longitude
+en degrés) vers un système de coordonnées x,y (en mètres) qui correspond au repère ENU (East-North-Up).
+Cette conversion est effectué grâce à une projection appelée Lambert93 et la libraire \textit{Pyproj}.
+Ce repère est plus avantageux pour nos algorithmes de contrôle, étant donné qu'il colle plus au contexte
+utilisé lors de la mise en place et des tests des algorithmes.
+
+De plus, le lien entre le contrôle et les commandes actionneurs n'est pas géré directement par nous, mais
+par l'intermédiaire MAVLink via mavros qui sert de pont et d'interpréteur entre les commandes en vitesse
+du véhicule et les commandes moteurs.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=5cm]{imgs/ENU.png}
+  \caption{Repère ENU}
+  \label{fig:schema_ENU}
+\end{figure}
+
 \chapter{Essais à Guerlédan}
 
 \section{Première semaine}
@@ -467,7 +484,7 @@ En faisant cela, nous avons été capable de tester et prouver la robustesse de 
     \caption{}
   \end{subfigure}
 
-  \caption{Essai de docking (avec dock virtuel mais drone réel) sur le lac de Guerlédan}
+  \caption{Essai de docking (avec dock virtuel mais drone réel) sur le lac de Guerlédan avec du courant}
   \label{fig:drone_exp1}
 \end{figure}
 
