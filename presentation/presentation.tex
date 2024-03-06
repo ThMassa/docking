@@ -1,0 +1,93 @@
+\input ifpdf.sty
+
+\ifpdf
+\documentclass[pdftex,beamer,aspectratio=169]{beamer}
+\else
+\documentclass[xcolor=pst,dvips,beamer]{beamer}
+\fi
+
+\usetheme{EnstaB}
+\setbeamercovered{transparent}
+\useoutertheme{infolines}
+\usepackage [frenchb]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage{pgf,tikz}
+\usepackage{amsmath,amssymb,euscript}
+\usepackage{eurosym}
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{algorithm2e}
+\usepackage{subcaption}
+% \usepackage{algorithmic}
+
+\usenavigationsymbolstemplate{}
+
+% \hypersetup{pdftitle={IAMOOC},
+%             pdfsubject={Docking project},
+%             pdfauthor={Olivier Reynet <olivier.reynet at ensta-bretagne.fr>},
+%             pdfkeywords={Interval Analysis, Set Inversion, Contractors},
+%             %pdfpagemode={FullScreen}
+% }
+
+\usepackage{multicol}
+\unitlength 1cm
+% ensembles
+\RequirePackage{dsfont}
+\def\nbR{\mathds{R}}
+\def\nbN{\mathds{N}}
+\def\nbQ{\mathds{Q}}
+\def\nbZ{\mathds{Z}}
+
+
+\theoremstyle{definition}
+\newtheorem{defi}{Définition}
+\theoremstyle{example}
+\newtheorem{remarque}{Remarque}
+\newtheorem{remarques}{Remarques}
+\newtheorem{exemple}{Exemple}
+\theoremstyle{plain}
+\newtheorem{theoreme}{Théorème}
+\newtheorem{propriete}{Propriétés}
+\newtheorem{lemme}{Lemme}
+\newtheorem{corollaire}{Corollaire}
+
+\title[Docking]{Docking}
+\author[]{Théo Massa, Kevin Ren, Guillaume Garde, Hugo Hofmann}
+\date{\today}
+\institute{ENSTA Bretagne}
+
+\newcommand{\ct}{\cos(\theta)}
+\newcommand{\st}{\sin(\theta)}
+\usepackage{amssymb} % for \mathbb
+
+
+\graphicspath{{../Rapport/imgs/}}
+
+%%% Chaque section commence par une slide de rappel de la partie actuelle
+%% Il y a des exemples de slides dans les fichiers .tex/.pdf "exemple"
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+  \tableofcontents
+\end{frame}
+
+\section{Introduction} 
+\begin{frame}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+\section{Deuxième partie}
+\begin{frame}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+\section{Troisième partie}
+\begin{frame}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+\end{document}

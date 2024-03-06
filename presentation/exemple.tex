@@ -1,0 +1,316 @@
+\input ifpdf.sty
+
+\ifpdf
+\documentclass[pdftex,beamer]{beamer}
+\else
+\documentclass[xcolor=pst,dvips,beamer]{beamer}
+\fi
+
+\usetheme{EnstaB}
+\setbeamercovered{transparent}
+\useoutertheme{infolines}
+\usepackage [frenchb]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage{pgf,tikz}
+\usepackage{amsmath,amssymb,euscript}
+\usepackage{eurosym}
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{algorithm2e}
+\usepackage{subcaption}
+% \usepackage{algorithmic}
+
+\usenavigationsymbolstemplate{}
+
+%//TODO
+\hypersetup{pdftitle={IAMOOC},
+            pdfsubject={Interval Analysis},
+            pdfauthor={Olivier Reynet <olivier.reynet at ensta-bretagne.fr>},
+            pdfkeywords={Interval Analysis, Set Inversion, Contractors},
+            %pdfpagemode={FullScreen}
+}
+
+\usepackage{multicol}
+\unitlength 1cm
+% ensembles
+\RequirePackage{dsfont}
+\def\nbR{\mathds{R}}
+\def\nbN{\mathds{N}}
+\def\nbQ{\mathds{Q}}
+\def\nbZ{\mathds{Z}}
+
+
+\theoremstyle{definition}
+\newtheorem{defi}{Définition}
+\theoremstyle{example}
+\newtheorem{remarque}{Remarque}
+\newtheorem{remarques}{Remarques}
+\newtheorem{exemple}{Exemple}
+\theoremstyle{plain}
+\newtheorem{theoreme}{Théorème}
+\newtheorem{propriete}{Propriétés}
+\newtheorem{lemme}{Lemme}
+\newtheorem{corollaire}{Corollaire}
+
+\title[RRT*]{Constrained Path planning with RRT*}
+\author[H. Hofmann]{Hugo Hofmann}
+\date{\today}
+\institute{ENSTA Bretagne}
+
+\newcommand{\ct}{\cos(\theta)}
+\newcommand{\st}{\sin(\theta)}
+\usepackage{amssymb} % for \mathbb
+
+
+\graphicspath{{../RRT-Path-Planning-GUI/imgs/},{../Rapport/}}
+
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section*{Introduction}
+
+\begin{frame}
+  \frametitle{Introduction - Path Planning}
+  % \vspace{-2cm}
+
+  Planning a path within a 2D or 3D space is fundamental in robotics.
+
+  A few major algorithms :
+
+  \begin{itemize}
+    \item Djikstra
+    \item A*
+    \item RRT
+  \end{itemize}
+
+
+  \includegraphics[width=0.2\textwidth]{robot_arm.png}
+  \includegraphics[width=0.2\textwidth]{bezier_curve_map_rviz.png}
+  \includegraphics[width=0.55\textwidth]{autonomous_car.jpeg}
+
+
+
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Introduction - Path planning}
+
+  \begin{alertblock}{Limitations}
+    Issues generally encountered:
+    \begin{itemize}
+      \item No pre-existing graph
+      \item Convergence towards an optimal solution
+      \item Account for complex path constraints
+    \end{itemize}
+  \end{alertblock}
+
+  \begin{exampleblock}{Proposition}
+    A variant of the RRT algorithm, \textit{RRT*}
+  \end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{Table of contents}
+  \tableofcontents
+  % possibilité d'ajouter l'option [pausesections]
+\end{frame}
+
+\section{RRT* algorithm}
+
+
+\begin{frame}
+  \frametitle{RRT* algorithm}
+
+  \begin{algorithm}[H]
+    \caption{RRT* Algorithm}
+    \KwResult{RRT* tree T}
+    
+    Initialization\;
+    
+    \While{Not converged}{
+        Sample random configuration $q_{\text{rand}}$\;
+        Find nearest node $q_{\text{near}}$ to $q_{\text{rand}}$ in $T$\;
+        Steer towards $q_{\text{rand}}$ from $q_{\text{near}}$ to get $q_{\text{new}}$\;
+        \If{$q_{\text{new}}$ is collision-free}{
+            Find nearby nodes $N_{q_{\text{new}}}$ in $T$\;
+            Choose parent $q_{\text{min}}$ from $N_{q_{\text{new}}}$ minimizing cost\;
+            Rewire $T$ to $q_{\text{new}}$ if it improves cost-to-come\;
+            Add $q_{\text{new}}$ to $T$ with $q_{\text{min}}$ as parent\;
+        }
+    }
+    
+    \caption{RRT* Algorithm}
+\end{algorithm}
+
+\end{frame}
+
+\section{Kinematic constraints}
+
+\begin{frame}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Kinematic model}
+  \centering
+  \includegraphics[width=0.5\textwidth]{kinematic_model.png}
+
+  \begin{equation}
+    \begin{bmatrix}
+      \dot{x}\\\dot{y}\\\dot{v}\\\dot{\theta}
+    \end{bmatrix}
+    = \begin{bmatrix}
+      v \ct \\ v \st \\
+      a \\ \frac{v \tan(\delta)}{L}
+      \end{bmatrix}
+    = f(X, u) \quad \text{with } u=[a,\delta]^T
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Control strategy}
+  \begin{minipage}{0.5\textwidth}
+    \begin{figure}[H]
+      \begin{equation*}
+        a_c = \frac{v^2}{R} = \frac{v^2\sin(\delta)}{L}
+      \end{equation*}
+      \begin{equation*}
+        v_R = \min(v_{n+1}, \sqrt{\frac{a_{c_{max}} L}{\sin(\delta)}})
+      \end{equation*}
+    \end{figure}
+    \end{minipage}%
+    \begin{minipage}{0.5\textwidth}
+    \centering
+    \includegraphics[width=0.7\textwidth]{controlV2} % Replace example-image with your image file
+    \end{minipage}
+ 
+
+  \begin{block}{Commands}
+    
+    \begin{equation}
+      \begin{cases}
+        a = {clamp}_{[-a_{m},a_{m}]}(K_p(v_R-v)) \\
+        \delta = {clamp}_{[-\delta_{m},\delta_{m}]}(K_{str} \arctan(K_{ct} e_{ct}) + K_{str} e_{\theta}) 
+      \end{cases}
+    \end{equation}
+    
+  \end{block}
+\end{frame}
+
+\section{Results}
+\subsection{Without kinematic constraints}
+
+\begin{frame}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+
+\begin{frame}{First results}
+  \begin{figure}[H]
+    \begin{subfigure}{0.49\textwidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{urban_map_path.png}
+      \caption{Path found on an urban map}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{sigma_maze_tree.png}
+      \caption{Tree graph (green) and path (red) in an hexagonal maze}
+    \end{subfigure}
+    \caption{Shortest paths using euclidean distance and no kinematic constraints}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{First results}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{silverstone_shortest_path.png}
+    \caption{Shortest (but obviously not fastest) trajectory on the Silverstone racetrack}
+  \end{figure}
+\end{frame}
+
+\subsection{With kinematic constraints}
+
+\begin{frame}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+
+\begin{frame}{Choice of the $C$ \textit{Cost} function}
+  \begin{exampleblock}{Different choices for $C(x,u)$}
+    \begin{enumerate}
+      \item Path length : \quad $C(x,u) = \int_{0}^{t_{end}} |v(t)| {dt}$
+      \item Total time : \quad $C(x,u) = t_{end}$
+      \item Energy consumption, tire fatigue, ...
+    \end{enumerate}
+    
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Finding the fastest path}
+  \begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+      \centering
+      \includegraphics[width=0.95\textwidth]{nice_trajectory_cropped.png}
+      \caption{Simulation of the fastest path with 2114 nodes}
+      \label{fig:corner_constraints}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+      \includegraphics[width=0.95\textwidth]{silverstone_race_line.png}
+      \caption{Reference race line on the Silverstone racetrack}
+      \label{fig:corner_reference}
+    \end{subfigure}
+    \caption{Attempting to find the fastest path on the Silverstone racetrack}
+  \end{figure}
+\end{frame}
+
+\section{Conclusion and perspectives}
+
+\begin{frame}{Conclusion}
+  \begin{minipage}{0.49\textwidth}
+    
+    \begin{alertblock}{Limitations}
+      \begin{itemize}
+        \item Implementation issues
+        \item Optimization (ex: better node sampling)
+      \end{itemize}
+    \end{alertblock}
+    
+    \begin{exampleblock}{Results}
+      \begin{itemize}
+        \item Rather satisfactory results
+        \item Many applications (ex: parking manoeuvers)
+      \end{itemize}
+    \end{exampleblock}
+
+  \end{minipage}
+  \begin{minipage}{0.5\textwidth}
+    \hfill
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.9\textwidth]{node_generation.png}
+      \caption{Proposition of a dynamic generation of nodes}
+      \label{fig:node_generation}
+    \end{figure}
+  \end{minipage}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{References}
+  % Include all entries from the bibliography file
+  \nocite{*}
+  % Specify your bibliography file
+  \bibliography{../Rapport/References}
+  \bibliographystyle{plain}
+\end{frame}
+
+\begin{frame}{Conclusion}
+  \begin{center}
+    \Huge \textbf{End of the presentation}
+  \end{center}
+\end{frame}
+
+
+\end{document}

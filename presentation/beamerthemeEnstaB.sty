@@ -1,0 +1,175 @@
+%\ProvidesPackageRCS $ENSTAB$
+
+\usepackage{helvet}
+
+\usepackage{pgfnodes}
+
+\usetheme{Boadilla}
+
+\DeclareOptionBeamer{compress}{\beamer@compresstrue}
+\ProcessOptionsBeamer
+
+% Declaration des couleurs
+
+\definecolor{enstabGreen}{HTML}{C8D200} 	%vert  	#c8d200 
+\definecolor{enstabLightGreen}{HTML}{E9ED99} 	%vert  	#c8d200 
+\definecolor{enstabLightBlue}{HTML}{009EE0} %bleu clair 	#009ee0
+\definecolor{enstabVeryLightBlue}{HTML}{99D8F3} %bleu clair 	#009ee0
+\definecolor{enstabDarkBlue}{HTML}{005C8F}	%bleu foncé 	#005c8f
+\definecolor{enstabDarkGrey}{HTML}{333333}	%gris fort 	#333333
+\definecolor{enstabLightGrey}{RGB}{48,48,48}	%gris fort 	#333333
+\definecolor{enstabParme}{HTML}{8878B2}		%parme 	#8878b2
+\definecolor{enstabOrange}{HTML}{F18E00} 	%orange 	#f18e00
+
+% TITLE
+\setbeamerfont*{title}{size=\huge,parent=structure}
+\setbeamerfont*{title in head/foot}{size=\tiny}
+\setbeamerfont*{title in sidebar}{size=\tiny}
+\setbeamercolor{title}{fg=enstabDarkBlue}
+
+% Author
+\setbeamerfont*{author}{size=\large}
+\setbeamerfont*{author in head/foot}{size=\tiny}
+\setbeamerfont*{author in sidebar}{size=\tiny}
+\setbeamercolor{author}{fg=enstabDarkBlue}
+
+% Institute 
+\setbeamerfont*{institute}{size=\normalsize}
+\setbeamerfont*{institute in head/foot}{size=\tiny}
+\setbeamerfont*{institute in sidebar}{size=\tiny}
+\setbeamercolor{institute}{fg=enstabDarkBlue}
+
+% Date
+\setbeamerfont*{date}{size=\normalsize}
+\setbeamerfont*{date in head/foot}{size=\tiny}
+\setbeamerfont*{date in sidebar}{size=\tiny}
+\setbeamercolor{date}{fg=enstabDarkBlue}
+
+% TOC
+\setbeamerfont*{section in toc}{size=\normalsize}
+\setbeamercolor{section in toc}{fg=black}
+\setbeamerfont*{section in toc shaded}{size=\normalsize}
+\setbeamercolor{section in toc shaded}{fg=enstabParme}
+\setbeamerfont*{section in head/foot}{size=\tiny}
+\setbeamerfont*{section in sidebar}{size=\tiny}
+\setbeamerfont{section  number projected}{series=\bfseries,size=\small}
+\setbeamercolor{section number projected}{bg=enstabLightBlue,fg=white}
+
+\setbeamerfont*{subsection in toc}{parent=section in toc}
+\setbeamercolor{subsection in toc}{fg=black}
+\setbeamerfont*{subsection in toc shaded}{parent=subsection in toc}
+\setbeamercolor{subsection ienstabOrangen toc shaded}{fg=enstabParme}
+\setbeamerfont*{subsection in head/foot}{}
+\setbeamerfont*{subsection in sidebar}{}
+\setbeamerfont{subsection  number projected}{series=\bfseries,size=\small}
+\setbeamercolor{subsection number projected}{bg=enstabLightBlue,fg=white}
+
+\setbeamerfont*{subsubsection in toc}{parent=subsection in toc, size=\footnotesize}
+\setbeamercolor{subsubsection in toc}{fg=black}
+\setbeamerfont*{subsubsection in toc shaded}{parent=subsubsection in toc}
+\setbeamercolor{subsubsection in toc shaded}{fg=enstabParme}
+\setbeamerfont*{subsubsection in head/foot}{}
+\setbeamerfont*{subsubsection in sidebar}{}
+\setbeamerfont{subsubsection  number projected}{series=\bfseries,size=\small}
+\setbeamercolor{subsubsection number projected}{bg=enstabLightBlue,fg=white}
+
+% Head/Footline
+\setbeamerfont*{headline}{parent={tiny structure}}
+\setbeamerfont*{footline}{parent={tiny structure}}
+
+% Sidebar
+\setbeamerfont*{sidebar}{size=\tiny,parent={tiny structure}}
+\setbeamerfont*{sidebar left}{parent=sidebar}
+\setbeamerfont*{sidebar right}{parent=sidebar}
+
+% Frametitle
+\setbeamertemplate{frametitle}
+{
+  \vspace{5mm}\hspace{2mm}
+  \color{enstabDarkBlue}
+  \insertframetitle
+  \par
+}
+%\setbeamerfont{frametitle}{parent=structure,size=\Large}
+%\setbeamerfont*{framesubtitle}{parent=frametitle,size=\footnotesize}
+%\setbeamercolor{frametitle}{fg=enstabDarkBlue}
+
+% Caption
+\setbeamerfont*{caption}{size=\small}
+\setbeamerfont*{caption name}{parent={structure,caption}}
+\setbeamercolor{caption}{fg=black}
+
+% Block
+\setbeamerfont*{block body}{}
+\setbeamerfont*{block body alerted}{}
+\setbeamerfont*{block body example}{}
+\setbeamerfont*{block title}{size=\large,parent={structure,block body}}
+\setbeamerfont*{block title alerted}{parent={block title,alerted text}}
+\setbeamerfont*{block title example}{parent={block title,example text}}
+\setbeamercolor{block title}{fg=black, bg=enstabLightGreen}
+\setbeamercolor{block body}{bg=white, fg=black}
+
+% Listes
+\setbeamerfont*{itemize/enumerate body}{size=\normalsize}
+\setbeamerfont*{itemize/enumerate subbody}{size=\small}
+\setbeamerfont*{itemize/enumerate subsubbody}{size=\footnotesize}
+\setbeamerfont*{itemize/enumerate item}{size=\normalsize}
+\setbeamerfont*{itemize/enumerate subitem}{size=\small}
+\setbeamerfont*{itemize/enumerate subsubitem}{size=\footnotesize}
+
+\setbeamercolor{item}{fg=enstabLightBlue}
+\setbeamercolor{normal text}{fg=black}
+
+
+%\setbeamercolor{frametitle}{fg=enstabDarkBlue}
+%\setbeamercolor{normal text}{fg=enstabDarkGrey}
+%\setbeamercolor{alerted text}{fg=enstabOrange}
+%\setbeamercolor{example text}{fg=enstabDarkBlue}
+%\setbeamercolor{description item}{fg=enstabDarkBlue}
+%\setbeamercolor{item}{fg=enstabDarkBlue}
+
+
+
+\mode <presentation>
+
+%\setbeamertemplate{navigation symbols}{}
+
+
+
+\setlength{\fboxrule}{.84pt}
+
+%\pgfdeclareimage[height=0.17\paperheight]{LogoEnstaB}{LogoEnstaB.png}
+\pgfdeclareimage[height=1.5cm]{logoEnstaB}{LogoEnstaB.png}
+
+\setbeamertemplate{background canvas}
+{
+  % Dessins de fonds de transparents
+  \begin{pgfpicture}{0cm}{0cm}{\the\paperwidth}{\the\paperheight}
+    \pgfsetxvec{\pgfpoint{1\paperwidth}{0cm}}
+    \pgfsetyvec{\pgfpoint{0cm}{1\paperheight}}
+    \color{enstabGreen}
+    \pgfsetlinewidth{10mm}
+    \pgfrect[fill]{\pgfxy(0.08,0.85)}{\pgfxy(0.75,0.003)}
+    %\color{white}
+    %\pgfrect[fill]{\pgfxy(0.07,0.823)}{\pgfxy(0.75,0.823)}
+    \pgfputat{\pgfxy(0.9,0.84)}{\pgfbox[left,bottom]{\pgfuseimage{logoEnstaB}}}
+  \end{pgfpicture}
+}
+
+
+%\psframe[linewidth=0pt,fillstyle=solid,fillcolor=blue](10.85,-0.55)(11.75,-0.35)
+
+%\newcommand{\ensietaElemSize}{0.047619\paperheight}
+
+
+\setbeamersize{text margin left=2em,text margin right=3em}
+
+% Ancienne version
+%\useoutertheme[footline=institutetitle]{miniframes}
+%\setbeamercolor{separation line}{use=structure,bg=structure.fg!50!bg}
+
+%\let\orig@Frame=\frame%
+%\renewenvironment{frame}[1][]{\begin{orig@Frame}[#1]\textbf{Toto #1}\sf}{\end{orig@Frame}}
+
+\mode <all>
+
