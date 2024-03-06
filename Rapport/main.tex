@@ -293,9 +293,9 @@ Soit $\mathbf{v}$ le vecteur vitesse du robot et $M$ sa position. Formellement, 
 
 L'idée est d'adapter le champ de potentiel suivant la position $M$ du robot. Il y a deux cas possibles :
 \begin{itemize}
-  \item Le robot se trouve dans le demi-plan devant le dock (cas 1)
+  \item Le robot se trouve dans le demi-plan derrière le dock (cas 1)
   
-  \item Le robot se trouve dans le demi-plan derrière le dock (cas 2)
+  \item Le robot se trouve dans le demi-plan devant le dock (cas 2)
 \end{itemize}
 \begin{figure}[!h]
   \centering
@@ -303,7 +303,7 @@ L'idée est d'adapter le champ de potentiel suivant la position $M$ du robot. Il
   \caption{La flèche indique la position et l'orientation du dock et le point représente la position du robot (a) À gauche le robot se trouve dans le demi-plan en face du robot (b) À droite le robot se trouve dans le demi-plan derrière le robot}
 \end{figure}
 
-Dans le premier cas le robot va aller sur la droite passant par le dock et dirigé dans le même sens que le dock. Dans le second cas le robot va d'abord aller dans le demi plan en face du robot en suivant un champ de vecteur uniforme tout en faisant attention à pas rentrer dans le dock - ce dernier devenant un point répulsif -. Puis en étant assez éloigné du demi plan en face du dock, le robot se retrouvera dans le premier cas et agira en conséquence.
+Dans le premier cas, le robot va d'abord aller dans le demi-plan en face de robot en suivant un champ de vecteur uniforme tout en faisant attention à ne pas rentrer dans le dock - ce dernier devenant un point répulsif -. Puis en étant assez éloigné loin du demi-plan en face du dock, le robot se retrouvera dans le premier cas et agira en conséquence. Dans le second cas, le robot va aller sur la droite passant par le dock et dirigé dans le même sens que le dock.
 
 \subsubsection{Mise en équation}
 
@@ -311,7 +311,7 @@ Soit $M$ la position du robot et $M'$ la position du dock. En s'inspirant des ch
 \[ U_1 (M) = \frac{1}{\| \overrightarrow{M M'} \|^{\alpha}} \]
 où $\alpha \in \mathbb{R}$ est un coefficient déterminant la répulsivité du point.
 
-Le champ de potentiel d'une ligne attractive peut quant à lui être défini par :
+Soit $\overrightarrow{n}$ la normale à la ligne. Le champ de potentiel d'une ligne attractive peut quant à lui être défini par :
 \[ U_2 (M) = \overrightarrow{M' M}^T \cdot \vec{n} \cdot \vec{n}^T \overrightarrow{M' M} \]
 Ce champ permet d'attirer le véhicule sur la ligne. Le véhicule arrive perpendiculairement à cette dernière et s'arrête ce qui signifie que le robot n'est pas bien orienté.
 
@@ -327,20 +327,30 @@ Les champs de vitesses correspondant à chacun des champs de potentiels sont alo
    \end{array} \]
 
 
-Dans le premier cas, il faut une ligne attractive pour positionner le robot sur la ligne. Cependant, s'il n'y avait que ce champ, le véhicule arriverait perpendiculairement à la ligne et s'arrêterait. Il faut donc un champ uniforme pour l'orienter dans la direction voulue et pour qu'il avance vers le dock. Le champ de potentiel total est alors égal à une somme des deux champs pondérée par des coefficients $\lambda_{1, i}$ :
-\[ U^1_{\text{tot}} (M) = \sum_{i = 2}^3 \lambda_{1, i} U_i (M) \]
+Dans le premier cas, on a besoin d'un champ uniforme et d'un champ généré par un point répulsif qui correspond au dock. Le champ de potentiel total est alors égal à la somme des deux champs pondérée par des coefficients $\lambda_{1,i}$ ::
+\[ U^1_{\text{tot}} (M) = \lambda_{1, 1} U_1 (M) + \lambda_{1, 3} U_3 (M) \]
 
-Dans le second cas, on a besoin d'un champ uniforme et d'un champ généré par un point répulsif qui correspond au dock :
-\[ U^2_{\text{tot}} (M) = \lambda_{2, 1} U_1 (M) + \lambda_{2, 2} U_3 (M) \]
+Dans le second cas, il faut une ligne attractive pour positionner le robot sur la ligne. Cependant, s'il n'y avait que ce champ, le véhicule arriverait perpendiculairement à la ligne et s'arrêterait. Il faut donc un champ uniforme pour l'orienter dans la direction voulue et pour qu'il avance vers le dock. Le champ de potentiel total est alors :
+\[ U^2_{\text{tot}} (M) = \sum_{i = 2}^3 \lambda_{2, i} U_i (M) \]
 
 En différenciant les potentiels, on obtient les champs de vitesses voulus.
 
 \begin{figure}[H]
-  \resizebox{0.5\columnwidth}{!}{\includegraphics{imgs/ScreenshotCase1.png}}\resizebox{0.5\columnwidth}{!}{\includegraphics{imgs/ScreenshotCase2.png}}
+  \resizebox{0.5\columnwidth}{!}{\includegraphics{imgs/ScreenshotCase2.png}}\resizebox{0.5\columnwidth}{!}{\includegraphics{imgs/ScreenshotCase1.png}}
   \caption{(a) Champ de vecteurs dans le premier cas. (b) Champ de vecteurs dans le second cas.}
 \end{figure}
 
 \section{Algorithme}
+
+Dans cette section on notera $M$ la position du robot estimée par le filtre de Kalman. Comme mentionné dans la section précédente, l'algorithme est composé de deux parties. A l'instant initial, le robot détermine dans quelle partie du demi-plan il est. Ensuite il va calculer le vecteur vitesse $\overrightarrow{v}(M)$ à avoir à partir du champ de potentiel. La vitesse linéaire étant directement régulée via le topic $cmd\_vel$ seule une régulation sur le cap du robot est nécessaire. Ainsi une régulation PI est faite sur la vitesse du rotation du véhicule, une régulation PID pourra évidemment être envisagée par la suite : 
+\[\dot{\theta}_{robot}(t_n)=k_p*e(t_n)+k_i*S(t_n)\]
+avec $e(t_n)=angle(\overrightarrow{v}(t_n)-\theta_{robot}(t_n))$, $S(t_n) = \sum_{k<n}{e(t_k)}$ et $(k_p,k_i)$ les coefficients du régulateur. 
+
+Après l'initialisation les transitions entre les cas 1 et 2 se font différemment. En effet pour éviter toute instabilité au niveau de la commande, le robot passera du cas 1 à 2 s'il se trouve dans le demi-plan en face avec une marge de $L$ qu'on a fixé à trois fois la longueur du véhicule. Si on note $\overrightarrow{t}$ le vecteur unitaire orienté dans le même sens que le dock alors les conditions de transitions peuvent s'écrire : 
+\begin{eqnarray}
+    if \ \overrightarrow{M'M} . \overrightarrow{t}<-L \ and \ cas 1 \Rightarrow  \ cas 2 \\ 
+    if \ \overrightarrow{M'M} . \overrightarrow{t}>L \ and \ cas 2 \Rightarrow  \ cas 1
+\end{eqnarray}
 
 \chapter{Architecture logicielle}
 \section{ROS}
