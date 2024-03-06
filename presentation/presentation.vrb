@@ -1,0 +1,16 @@
+\frametitle{Architecture du projet}
+\centering
+  \begin{minipage}{0.69\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{schema_general.png}
+      \caption{Schéma général de l'architecture du projet}
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}{0.3\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.9\textwidth]{ENU.png}
+      \caption{Repère ENU}
+    \end{figure}
+  \end{minipage}

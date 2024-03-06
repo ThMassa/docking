@@ -53,6 +53,7 @@
 
 
 \renewenvironment{emph}[1]{\textbf{#1}}{}
+\graphicspath{{../Rapport/imgs/}}
 
 \begin{document}
 
@@ -142,7 +143,7 @@
 		mais nous utiliserons seulement sa centrale inertielle \textit{SBG Ellipse D}, ainsi
 		que le GPS à double antenne.
 		\begin{center}
-			\includegraphics*[width=0.75\textwidth]{imgs/monodrone-1800-chenal.jpg}
+			\includegraphics*[width=0.75\textwidth]{monodrone-1800-chenal.jpg}
 		\end{center}
 	\end{minipage}\hfill
 	\begin{minipage}[t]{0.30\textwidth}
@@ -156,7 +157,7 @@
 		sur une carte \textit{ArduSimple},un modem \textit{SIMPULSE} pour la communication avec le drone
 		et une antenne radio \textit{Xbee} pour recevoir les corrections RTK.
 		\begin{center}
-			\includegraphics*[height=0.8\textwidth,angle=90]{imgs/dock_box_outside.jpg}
+			\includegraphics*[height=0.8\textwidth,angle=90]{dock_box_outside.jpg}
 		\end{center}
 	\end{minipage}\hfill
 	\begin{minipage}[t]{0.30\textwidth}
@@ -168,7 +169,7 @@
 		Un rover \textit{AION R1} de \textit{AION Robotics}, fourni pour tester nos algorithmes à l'école,
 		où nous n'avions pas accès au drone.
 		\begin{center}
-			\includegraphics*[width=0.55\textwidth]{imgs/rover.jpg}
+			\includegraphics*[width=0.55\textwidth]{rover.jpg}
 		\end{center}
 	\end{minipage}
 }
@@ -180,6 +181,7 @@
 	\begin{center}
 		\textbf{Filtre de Kalman}
 	\end{center}
+	\vspace{-0.3cm}
 	Afin d'améliorer notre approche et compenser les différentes fréquences capteurs ainsi qu'incertitudes,
 	nous avons décidé d'implémenter un filtre de Kalman en partant du modèle cinématique suivant:
 	\begin{eqnarray*}
@@ -210,11 +212,12 @@
     
     % Séparation verticale
     \vspace{\baselineskip}
-
+	
     % Bloc 2
 	\begin{center}
 		\textbf{Guidage par champ de potentiel}
 	\end{center}
+	\vspace{-0.3cm}
 
 	L'approche se fait en deux phases selon la position initiale. Si il se situe derrière le dock,
 	le drone va vouloir se placer du bon côté puis entamer sa procédure de docking. Dans le premier cas,
@@ -222,30 +225,37 @@
 	alignée sur le dock.
 
 	\begin{center}
-		\includegraphics[width =0.35\textwidth]{imgs/ScreenshotCase2.png}
+		\includegraphics[width=0.25\textwidth]{ScreenshotCase2.png}
 		\hfil
-		\includegraphics[width =0.35\textwidth]{imgs/ScreenshotCase1.png}
+		\includegraphics[width=0.25\textwidth]{ScreenshotCase1.png}
+		
+		A gauche, la phase de mise en place, à droite, la phase de docking
 	\end{center}
-	\centering A gauche, la phase de mise en place, à droite, la phase de docking
 }
 
 \headerbox{architecture logicielle}{name=dynamique,column=3,below=methodologie,span=3}{
-	\setlength{\parindent}{0pt}
+	\setlength{\parindent}{0pt}\small\smallskip
 
 	Pour ce projet, nous avons travaillé sous \textit{ROS Melodic}. Du aux contraintes inhérentes
 	au middleware, nous avons estimé qu'il était plus simple que le dock et le drone communiquent
 	via des trames UDP.
 
 	\begin{center}
-		\includegraphics*[width=0.9\textwidth]{imgs/schema_general.png}
-	\end{center}
+		\includegraphics*[width=0.7\textwidth]{schema_general.png}
+	\end{center}	
 }
 
 \headerbox{Conclusion}{name=conclusion,column=3,below=dynamique, span=3}{
-	Ci-dessous l'algorithme essayé sur le stade de l'ENSTA.
+	Ci-dessous l'algorithme essayé sur le stade de l'ENSTA avec le rover.
 	\begin{center}
-		\includegraphics*[width=0.5\textwidth]{imgs/visu_1.png}
+		\includegraphics*[width=0.5\textwidth]{visu_1.png}
 	\end{center}
+
+	\vspace{-0.1cm}
+	Cependant, il peut être intéressant pour la suite d'améliorer le processus en utilisant d'autres
+	capteurs qu'uniquement la centrale inertielle et le GPS. On pourrait utiliser une caméra et un
+	capteur lidar pour rentrer se docker avec précision.
+
 }
 
 \headerbox{}{name=conclusion,column=3,below=conclusion, span=3}{

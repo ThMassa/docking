@@ -9,16 +9,46 @@
 \headcommand {\beamer@framepages {3}{3}}
 \headcommand {\beamer@sectionpages {3}{3}}
 \headcommand {\beamer@subsectionpages {3}{3}}
-\headcommand {\sectionentry {2}{Deuxième partie}{4}{Deuxième partie}{0}}
+\headcommand {\sectionentry {2}{Conception du dock}{4}{Conception du dock}{0}}
 \headcommand {\slideentry {2}{0}{1}{4/4}{}{0}}
 \headcommand {\beamer@framepages {4}{4}}
-\headcommand {\beamer@sectionpages {4}{4}}
 \headcommand {\beamer@subsectionpages {4}{4}}
-\headcommand {\sectionentry {3}{Troisième partie}{5}{Troisième partie}{0}}
-\headcommand {\slideentry {3}{0}{1}{5/5}{}{0}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{5}{Base RTK}}
+\headcommand {\beamer@subsectionpages {5}{4}}
+\headcommand {\beamer@subsectionentry {0}{2}{2}{5}{Mise en place du dock}}
+\headcommand {\slideentry {2}{2}{1}{5/5}{Mise en place du dock}{0}}
 \headcommand {\beamer@framepages {5}{5}}
-\headcommand {\beamer@partpages {1}{5}}
 \headcommand {\beamer@subsectionpages {5}{5}}
-\headcommand {\beamer@sectionpages {5}{5}}
-\headcommand {\beamer@documentpages {5}}
-\headcommand {\gdef \inserttotalframenumber {5}}
+\headcommand {\beamer@subsectionentry {0}{2}{3}{6}{Communication}}
+\headcommand {\slideentry {2}{3}{1}{6/6}{Communication}{0}}
+\headcommand {\beamer@framepages {6}{6}}
+\headcommand {\beamer@sectionpages {4}{6}}
+\headcommand {\beamer@subsectionpages {6}{6}}
+\headcommand {\sectionentry {3}{Stratégie d'approche de docking}{7}{Stratégie d'approche de docking}{0}}
+\headcommand {\slideentry {3}{0}{1}{7/7}{}{0}}
+\headcommand {\beamer@framepages {7}{7}}
+\headcommand {\beamer@subsectionpages {7}{7}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{8}{Filtre de Kalman}}
+\headcommand {\beamer@sectionpages {7}{7}}
+\headcommand {\beamer@subsectionpages {8}{7}}
+\headcommand {\sectionentry {4}{Architecture logicielle}{8}{Architecture logicielle}{0}}
+\headcommand {\slideentry {4}{0}{1}{8/8}{}{0}}
+\headcommand {\beamer@framepages {8}{8}}
+\headcommand {\beamer@subsectionpages {8}{8}}
+\headcommand {\beamer@subsectionentry {0}{4}{1}{9}{ROS}}
+\headcommand {\slideentry {4}{1}{1}{9/9}{ROS}{0}}
+\headcommand {\beamer@framepages {9}{9}}
+\headcommand {\beamer@subsectionpages {9}{9}}
+\headcommand {\beamer@subsectionentry {0}{4}{2}{10}{Architecture du projet}}
+\headcommand {\slideentry {4}{2}{1}{10/10}{Architecture du projet}{0}}
+\headcommand {\beamer@framepages {10}{10}}
+\headcommand {\beamer@sectionpages {8}{10}}
+\headcommand {\beamer@subsectionpages {10}{10}}
+\headcommand {\sectionentry {5}{Résultats}{11}{Résultats}{0}}
+\headcommand {\slideentry {5}{0}{1}{11/11}{}{0}}
+\headcommand {\beamer@framepages {11}{11}}
+\headcommand {\beamer@partpages {1}{11}}
+\headcommand {\beamer@subsectionpages {11}{11}}
+\headcommand {\beamer@sectionpages {11}{11}}
+\headcommand {\beamer@documentpages {11}}
+\headcommand {\gdef \inserttotalframenumber {11}}
