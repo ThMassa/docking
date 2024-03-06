@@ -64,6 +64,14 @@
 
 \graphicspath{{../Rapport/imgs/}}
 
+
+\AtBeginSection[]
+{
+    \begin{frame}
+    \frametitle{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+    \end{frame}
+}
 %%% Chaque section commence par une slide de rappel de la partie actuelle
 %% Il y a des exemples de slides dans les fichiers .tex/.pdf "exemple"
 
@@ -76,18 +84,18 @@
 \end{frame}
 
 \section{Introduction} 
-\begin{frame}
-  \tableofcontents[currentsection,currentsubsection]
-\end{frame}
 
-\section{Deuxième partie}
-\begin{frame}
-  \tableofcontents[currentsection,currentsubsection]
-\end{frame}
+\section{Conception du dock}
 
-\section{Troisième partie}
-\begin{frame}
-  \tableofcontents[currentsection,currentsubsection]
-\end{frame}
+\section{Stratégie d'approche de docking}
+
+\subsection{Filtre de Kalman}
+
+
+\section{Architecture logicielle}
+
+
+\section{Résultats}
+
 
 \end{document}
