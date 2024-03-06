@@ -19,6 +19,7 @@
 \usepackage{mathtools}
 \usepackage{algorithm2e}
 \usepackage{subcaption}
+\usepackage{multicol}
 % \usepackage{algorithmic}
 
 \usenavigationsymbolstemplate{}
@@ -68,7 +69,7 @@
 \AtBeginSection[]
 {
     \begin{frame}
-    \frametitle{Outline}
+    \frametitle{Plan}
     \tableofcontents[currentsection,currentsubsection]
     \end{frame}
 }
@@ -79,13 +80,58 @@
 
 \frame{\titlepage}
 
-\begin{frame}
+\begin{frame}[allowframebreaks]
   \tableofcontents
 \end{frame}
 
 \section{Introduction} 
 
 \section{Conception du dock}
+
+\subsection{Base RTK}
+
+\subsection{Mise en place du dock}
+
+\begin{frame}{Mise en place du dock}
+  % \vspace{2cm}
+  \begin{minipage}{0.5\textwidth}
+    \begin{itemize}
+      \item Boîte étanche
+      \item IMU en dehors (perturbations électromagnétiques)
+    \end{itemize}
+  \end{minipage}%
+  \begin{minipage}{0.49\textwidth}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\textwidth]{dock_box_inside.jpg}
+      \caption{Mise en place du dock}
+  \end{figure}
+  \end{minipage}
+\end{frame}
+
+\subsection{Communication}
+
+\begin{frame}[fragile]{Communication avec le reste du système}
+  \centering
+  \begin{minipage}{0.3\textwidth}
+    \begin{exampleblock}{Avantages}
+      \begin{itemize}
+        \item Format léger
+        \item Compatible peu importe les versions de ROS
+      \end{itemize}
+    \end{exampleblock}
+  \end{minipage}
+  \begin{minipage}{0.69\textwidth}
+    \verb|${latitude},{longitude};{roll},{pitch},{yaw}|
+  
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.9\textwidth]{UDP_connexion.png}
+      \caption{La communication dock $\rightarrow$ drone}
+  \end{figure}
+
+  \end{minipage}
+\end{frame}
 
 \section{Stratégie d'approche de docking}
 
