@@ -1,16 +1,17 @@
-\frametitle{Architecture du projet}
-\centering
-  \begin{minipage}{0.69\textwidth}
-    \begin{figure}
-      \centering
-      \includegraphics[width=\textwidth]{schema_general.png}
-      \caption{Schéma général de l'architecture du projet}
-    \end{figure}
+\frametitle{Résultats}
+\begin{minipage}{0.49\textwidth}
+    Différents points de validation
+    \begin{itemize}
+      \item Objectif globalement accompli
+      \item Navigation et guidage très efficaces
+      \item Architecture efficace
+    \end{itemize}
   \end{minipage}
-  \begin{minipage}{0.3\textwidth}
-    \begin{figure}
-      \centering
-      \includegraphics[width=0.9\textwidth]{ENU.png}
-      \caption{Repère ENU}
-    \end{figure}
+  \begin{minipage}{0.49\textwidth}
+    Travail restant à effectuer
+    \begin{itemize}
+      \item Calibrer correctement le dock
+      \item Plus d'essais en lac avec vrai dock
+      \item Mise en place de la correction RTK
+    \end{itemize}
   \end{minipage}
