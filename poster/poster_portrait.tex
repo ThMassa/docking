@@ -206,12 +206,25 @@
 
 	Avec $(x,y,z)$ la position du drone dans le repère ENU, $\varphi$ l'assiette et $\psi$ le cap. Ici,
 	le modèle est issu de celui de Dubins, contrôlé en vitesse linéaire et angulaire sur le cap, étant
-	donné que le contrôle du drone se fait aisément comme ca.
-
-	% TODO : image comparaison
-
+	donné que le contrôle du drone se fait de cette manière.
 	
-    
+	\begin{minipage}[t]{0.49\textwidth}
+		\vspace{-0.1cm}
+		\begin{center}
+			\includegraphics[width=0.9\textwidth]{GPSvsKalman.png}
+		\end{center}
+	\end{minipage}\hfill
+	\begin{minipage}[t]{0.49\textwidth}
+		\vspace{-0.1cm}
+		Ici, on peut comparer la position brute renvoyée par le GPS et
+		la position estimée renvoyée par notre filtre de Kalman. Cette comparaison
+		correspond à un docking attenté avec le rover sur le stade de l'ENSTA.\linebreak
+		Les deux positions restent proches, mais l'utilisation de Kalman, notamment la partie
+		prédictive du filtre, permet de compenser la faible fréquence de mise à jour des
+		données GPS.
+	\end{minipage}\hfill
+
+
     % Séparation verticale
     \vspace{\baselineskip}
 	
