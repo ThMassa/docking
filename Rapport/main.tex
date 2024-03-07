@@ -342,7 +342,7 @@ En différenciant les potentiels, on obtient les champs de vitesses voulus.
 
 \section{Algorithme}
 
-Dans cette section on notera $M$ la position du robot estimée par le filtre de Kalman. Comme mentionné dans la section précédente, l'algorithme est composé de deux parties. A l'instant initial, le robot détermine dans quelle partie du demi-plan il est. Ensuite il va calculer le vecteur vitesse $\overrightarrow{v}(M)$ à avoir à partir du champ de potentiel. La vitesse linéaire étant directement régulée via le topic $cmd\_vel$ seule une régulation sur le cap du robot est nécessaire. Ainsi une régulation PI est faite sur la vitesse du rotation du véhicule, une régulation PID pourra évidemment être envisagée par la suite : 
+Dans cette section on notera $M$ la position du robot estimée par le filtre de Kalman. Comme mentionné dans la section précédente, l'algorithme est composé de deux parties. A l'instant initial, le robot détermine dans quelle partie du demi-plan il est. Ensuite il va calculer le vecteur vitesse $\overrightarrow{v}(M)$ à avoir à partir du champ de potentiel pondérée par sa distance au dock. La vitesse linéaire étant directement régulée via le topic $cmd\_vel$ seule une régulation sur le cap du robot est nécessaire. Ainsi une régulation PI est faite sur la vitesse du rotation du véhicule, une régulation PID pourra évidemment être envisagée par la suite : 
 \[\dot{\theta}_{robot}(t_n)=k_p*e(t_n)+k_i*S(t_n)\]
 avec $e(t_n)=angle(\overrightarrow{v}(t_n)-\theta_{robot}(t_n))$, $S(t_n) = \sum_{k<n}{e(t_k)}$ et $(k_p,k_i)$ les coefficients du régulateur. 
 
@@ -351,6 +351,13 @@ Après l'initialisation les transitions entre les cas 1 et 2 se font différemme
     if \ \overrightarrow{M'M} . \overrightarrow{t}<-L \ and \ cas 1 \Rightarrow  \ cas 2 \\ 
     if \ \overrightarrow{M'M} . \overrightarrow{t}>L \ and \ cas 2 \Rightarrow  \ cas 1
 \end{eqnarray}
+La figure \ref{fig:KalmanvsGPS} donne un des résultats obtenus sur le rover. Ce graphe a été fait à partir des logs post mission. La courbe en bleu correspond à la trajectoire déterminée à partir des données brutes. Le point bleu correspond à la position du rover donnée par le GPS. La courbe rouge quant à elle représente la trajectoire du rover estimée par le filtre de Kalman et le point rouge correspond à la position du rover estimée par le filtre de Kalman. La flèche verte indique la position du dock - base de la flèche - et son orientation. Les deux trajectoires sont alors très proches en particulier lors de la deuxième phase. Néanmoins, le filtre permet de prédire la position du rover lorsque les données GPS n'ont pas encore été mise à jour ce qui est particulièrement important lorsque le rover se trouve proche du dock. Les risques de collisions sont ainsi réduits puisque le robot estimera qu'il est proche du dock. 
+\begin{figure}
+  \centering
+  \includegraphics[width=.8\textwidth]{imgs/GPSvsKalman.png}
+  \caption{Comparatif les données du filtre de Kalman et les données brutes}
+  \label{fig:KalmanvsGPS}
+\end{figure}
 
 \chapter{Architecture logicielle}
 \section{ROS}
