@@ -37,32 +37,36 @@
 \headcommand {\beamer@subsectionentry {0}{3}{1}{11}{Filtre de Kalman}}
 \headcommand {\slideentry {3}{1}{1}{11/11}{Filtre de Kalman}{0}}
 \headcommand {\beamer@framepages {11}{11}}
-\headcommand {\beamer@sectionpages {10}{11}}
 \headcommand {\beamer@subsectionpages {11}{11}}
-\headcommand {\sectionentry {4}{Architecture logicielle}{12}{Architecture logicielle}{0}}
-\headcommand {\slideentry {4}{0}{1}{12/12}{}{0}}
+\headcommand {\beamer@subsectionentry {0}{3}{2}{12}{Algorithme}}
+\headcommand {\slideentry {3}{2}{1}{12/12}{Algorithme}{0}}
 \headcommand {\beamer@framepages {12}{12}}
+\headcommand {\beamer@sectionpages {10}{12}}
 \headcommand {\beamer@subsectionpages {12}{12}}
-\headcommand {\beamer@subsectionentry {0}{4}{1}{13}{ROS}}
-\headcommand {\slideentry {4}{1}{1}{13/13}{ROS}{0}}
+\headcommand {\sectionentry {4}{Architecture logicielle}{13}{Architecture logicielle}{0}}
+\headcommand {\slideentry {4}{0}{1}{13/13}{}{0}}
 \headcommand {\beamer@framepages {13}{13}}
 \headcommand {\beamer@subsectionpages {13}{13}}
-\headcommand {\beamer@subsectionentry {0}{4}{2}{14}{Architecture du projet}}
-\headcommand {\slideentry {4}{2}{1}{14/14}{Architecture du projet}{0}}
+\headcommand {\beamer@subsectionentry {0}{4}{1}{14}{ROS}}
+\headcommand {\slideentry {4}{1}{1}{14/14}{ROS}{0}}
 \headcommand {\beamer@framepages {14}{14}}
-\headcommand {\beamer@sectionpages {12}{14}}
 \headcommand {\beamer@subsectionpages {14}{14}}
-\headcommand {\sectionentry {5}{Résultats}{15}{Résultats}{0}}
-\headcommand {\slideentry {5}{0}{1}{15/15}{}{0}}
+\headcommand {\beamer@subsectionentry {0}{4}{2}{15}{Architecture du projet}}
+\headcommand {\slideentry {4}{2}{1}{15/15}{Architecture du projet}{0}}
 \headcommand {\beamer@framepages {15}{15}}
-\headcommand {\slideentry {5}{0}{2}{16/16}{}{0}}
+\headcommand {\beamer@sectionpages {13}{15}}
+\headcommand {\beamer@subsectionpages {15}{15}}
+\headcommand {\sectionentry {5}{Résultats}{16}{Résultats}{0}}
+\headcommand {\slideentry {5}{0}{1}{16/16}{}{0}}
 \headcommand {\beamer@framepages {16}{16}}
-\headcommand {\slideentry {5}{0}{3}{17/17}{}{0}}
+\headcommand {\slideentry {5}{0}{2}{17/17}{}{0}}
 \headcommand {\beamer@framepages {17}{17}}
-\headcommand {\slideentry {5}{0}{4}{18/18}{}{0}}
+\headcommand {\slideentry {5}{0}{3}{18/18}{}{0}}
 \headcommand {\beamer@framepages {18}{18}}
-\headcommand {\beamer@partpages {1}{18}}
-\headcommand {\beamer@subsectionpages {15}{18}}
-\headcommand {\beamer@sectionpages {15}{18}}
-\headcommand {\beamer@documentpages {18}}
-\headcommand {\gdef \inserttotalframenumber {18}}
+\headcommand {\slideentry {5}{0}{4}{19/19}{}{0}}
+\headcommand {\beamer@framepages {19}{19}}
+\headcommand {\beamer@partpages {1}{19}}
+\headcommand {\beamer@subsectionpages {16}{19}}
+\headcommand {\beamer@sectionpages {16}{19}}
+\headcommand {\beamer@documentpages {19}}
+\headcommand {\gdef \inserttotalframenumber {19}}
