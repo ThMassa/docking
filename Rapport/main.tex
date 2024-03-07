@@ -235,13 +235,13 @@ où $(x, y, z)$ représente les coordonnées du robot dans le repère ENU, $\var
 
 Ce modèle est issu du modèle de Dubins mais où contrairement à ce dernier, on suppose que le véhicule est commandé en vitesse. Cette décision a été prise parce que le rover et le bateau sont commandés à l'aide d'un message de type cmd\_vel, qui spécifie à la fois la vitesse linéaire et la vitesse angulaire.
 
-Le modèle cinématique étant choisi, le modèle d'observation peut être défini. À l'heure actuelle, seules les données de position GPS $(x, y)$ et de cap $\psi$ sont intégrées par le filtre.
+Le modèle cinématique étant choisi, le modèle d'observation peut être défini. À l'heure actuelle, seules les données de position GPS $(x, y)$ et de cap $\psi$ sont intégrées par le filtre. Le cap est renvoyé soit par l'IMU pour le rover soit par le dock pour le bateau.
 \begin{eqnarray}
   \mathbf{y} & = & C \mathbf{x} \nonumber\\
   \label{eq:obs} \left( \begin{array}{c}
     x_{GPS}\\
     y_{GPS}\\
-    \psi_{IMU}
+    \psi_{GPS}
   \end{array} \right) & = & \left( \begin{array}{cccc}
     1 & 0 & 0 & 0\\
     0 & 1 & 0 & 0\\
