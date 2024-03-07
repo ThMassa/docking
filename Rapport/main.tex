@@ -44,7 +44,7 @@ Nous avons pris plaisir à travailler pour et avec eux, et leur souhaitons le me
 
 \section{Présentation du sujet}
 
-Que ce soit dans le monde de la recherche ou dans les différents domaines dans lesquels sont utilisés les drones et tout particulièrement les AUV ou UAV, l'une des grandes difficultés rencontrées est très certainement celle du docking. En effet, bien qu'il faille tôt ou tard récupérer le drone à la fin de sa mission ou en cas de problème, cela peut se révéler dans le meilleur des cas fastidieux (dans le cas ou la manoeuvre est manuelle par exemple) et dans le pire des cas difficile voire dangereux pour le drone (dans le cas d'une mer agitée par exemple). Dans le cas d'une mission autonome loin du bateau, on comprend qu'il peut être très intéressant de développer une solution de docking autonome, permettant au drone de revenir vers sa base tout seul et avec précision. L'objectif de ce projet Guerlédan sera donc de développer cette solution en s'intéressant au cas d'un AUV sur le lac. Les objectifs seront les suivants:
+Que ce soit dans le monde de la recherche ou dans les différents domaines dans lesquels sont utilisés les drones et tout particulièrement les AUV ou USV, l'une des grandes difficultés rencontrées est très certainement celle du docking. En effet, bien qu'il faille tôt ou tard récupérer le drone à la fin de sa mission ou en cas de problème, cela peut se révéler dans le meilleur des cas fastidieux (dans le cas ou la manoeuvre est manuelle par exemple) et dans le pire des cas difficile voire dangereux pour le drone (dans le cas d'une mer agitée par exemple). Dans le cas d'une mission autonome loin du bateau, on comprend qu'il peut être très intéressant de développer une solution de docking autonome, permettant au drone de revenir vers sa base tout seul et avec précision. L'objectif de ce projet Guerlédan sera donc de développer cette solution en s'intéressant au cas d'un USV sur le lac. Les objectifs seront les suivants:
 
 \begin{enumerate}
     \item Le drone doit être capable de planifier et réaliser son retour vers le dock
@@ -83,12 +83,12 @@ Puisque la mission nécessite que le dock communique avec le drone, et ce à lon
     \caption{Matériel fourni}
 \end{figure}
 
-\subsection{Drone AUV}
-Pour ce qui est de l'AUV, nous avons pu travailler (seulement le temps des deux semaines sur le lac) avec le \textit{M1800} d'\textit{IMSolutions}.
+\subsection{Drone USV}
+Pour ce qui est de l'USV, nous avons pu travailler (seulement le temps des deux semaines sur le lac) avec le \textit{M1800} d'\textit{IMSolutions}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{imgs/monodrone-1800-chenal.jpg}
-    \caption{L'AUV en question, sans les capteurs supplémentaires}
+    \caption{L'USV en question, sans les capteurs supplémentaires}
 \end{figure}
 Le drone embarque déjà tous les capteurs nécessaires à la mission comme elle a été envisagée :
 
@@ -100,7 +100,7 @@ Le drone embarque déjà tous les capteurs nécessaires à la mission comme elle
 Sur le modèle exact qui nous a été fourni, de nombreux autres capteurs tels que des caméras et un LIDAR ont été montés; s'ils n'ont pas été utilisés pendant la mission (dont le plus important était surtout dans un premier temps l'approche du drone vers le dock), ils pourraient en revanche se révéler utiles dans un second temps pour de prochaines expérimentations sur le projet.
 \subsection{Rover}
 
-Puisque le drone n'était disponible que peu de temps et uniquement lors des semaines à Guerlédan, nous avions besoin d'un remplacement pour pouvoir continuer à travailler et tester nos algorithmes à l'ENSTA. C'est pour cela que nous avons pu travailler avec l'\textit{AION R1}\ref{fig:rover}, un rover à la structure software équivalente à celle du drone (tournant sous \textit{ROS}, et gérant les commandes moteurs via une carte \textit{Pixhawk}). On peut ainsi commander le rover exactement de la même manière que l'AUV, c'est-à-dire dans notre cas lui envoyer des commandes en vitesses linéaire et angulaire.
+Puisque le drone n'était disponible que peu de temps et uniquement lors des semaines à Guerlédan, nous avions besoin d'un remplacement pour pouvoir continuer à travailler et tester nos algorithmes à l'ENSTA. C'est pour cela que nous avons pu travailler avec l'\textit{AION R1}\ref{fig:rover}, un rover à la structure software équivalente à celle du drone (tournant sous \textit{ROS}, et gérant les commandes moteurs via une carte \textit{Pixhawk}). On peut ainsi commander le rover exactement de la même manière que l'USV, c'est-à-dire dans notre cas lui envoyer des commandes en vitesses linéaire et angulaire.
 
 \begin{figure}[H]
     \centering
@@ -440,7 +440,7 @@ Malheureusement, cela a pris plus de temps que prévu et nous n'avons pas pu exp
 Enfin, une première version simplifiée de l'architecture logicielle a commencé à être implémentée. 
 
 
-La principale problématique de cette semaine, qui est la même que celle rencontrée durant la période séparant cette semaine de la seconde, est l'impossibilité d'expérimenter directement sur l'AUV qui 
+La principale problématique de cette semaine, qui est la même que celle rencontrée durant la période séparant cette semaine de la seconde, est l'impossibilité d'expérimenter directement sur l'USV qui 
 est le drone principal de notre sujet. En effet, l'avancée de notre projet ne nous permettait pas la sécurité de pouvoir tester nos algorithmes de manière sereine sur le drone et nous avons également 
 rencontré quelques difficultés avec l'utilisation de l'interface MAVROS, qui fait le lien entre notre architecture ROS et MAVLink. Le principal problème résidait dans le fait qu'il semblait que MAVLink 
 avait en mémoire des waypoints GPS que le drone tentait de rejoindre en priorité avant de prendre en compte nos commandes. Cela empêchait toute exploitation du drone en mode automatique, ce qui est nécessaire
