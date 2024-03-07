@@ -167,12 +167,68 @@
 \section{Stratégie d'approche de docking}
 \subsection{Filtre de Kalman}
 \begin{frame}[fragile]{Filtre de Kalman}
-  Test
+  \begin{minipage}{0.5\textwidth}
+    Modèle de Dubins : 
+    \begin{itemize}
+      \item Vecteur d'état $\textbf{x}=(x, y, z, \psi)^T$
+      \item Mesure $\textbf{y}=(x_{GPS}, y_{GPS}, \psi_{IMU})^T$
+    \end{itemize}
+  \end{minipage}
+  \begin{minipage}{0.49\textwidth}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\textwidth]{rover.jpg}
+      \caption{Rover}
+    \end{figure}
+  \end{minipage}
+\end{frame}
+
+\begin{frame}[fragile]{Filtre de Kalman}
+    \begin{figure}
+      \centering
+      \includegraphics[width=.42\textwidth]{GPSvsKalman.png}
+      \caption{Comparatif les données du filtre de Kalman et les données brutes}
+      \label{fig:KalmanvsGPS}
+    \end{figure}
+\end{frame}
+
+\subsection{Guidage par champ de potentiel artificiel}
+\begin{frame}[fragile]{Guidage par champ de potentiel artificiel}
+  \begin{figure}
+  \centering
+  \includegraphics[width=12.8cm,height=5.4cm]{RapportGuerlédan-image-1.png}
+  \caption{(a) À gauche le robot se trouve dans le demi-plan en face du robot (b) À droite le robot se trouve dans le demi-plan derrière le robot}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}[fragile]{Guidage par champ de potentiel artificiel}
+
+\begin{figure}[H]
+  \resizebox{0.39\columnwidth}{!}{\includegraphics{ScreenshotCase2.png}}\resizebox{0.39\columnwidth}{!}{\includegraphics{ScreenshotCase1.png}}
+  \caption{(a) Champ de vecteurs dans le premier cas. (b) Champ de vecteurs dans le second cas.}
+\end{figure}
+
 \end{frame}
 
 \subsection{Algorithme}
 \begin{frame}[fragile]{Algorithme}
-  Algo
+  \begin{minipage}{0.5\textwidth}
+    Régulation en vitesse fait via cmd\_vel. \\
+    Une régulation en cap via un PI. \\ \\
+    Instabilité au niveau de la ligne séparatrice, conditions de transition ont été adaptées
+    \begin{eqnarray}
+        if \ \overrightarrow{M'M} . \overrightarrow{t}<-L \ and \ cas 1 \Rightarrow  \ cas 2 \\
+        if \ \overrightarrow{M'M} . \overrightarrow{t}>L \ and \ cas 2 \Rightarrow  \ cas 1
+    \end{eqnarray}
+  \end{minipage}
+  \begin{minipage}{0.49\textwidth}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\textwidth]{ligneSep.png}
+      \caption{Ligne séparatrice}
+    \end{figure}
+  \end{minipage}
 \end{frame}
 
 \section{Architecture logicielle}
