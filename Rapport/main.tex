@@ -342,7 +342,7 @@ En différenciant les potentiels, on obtient les champs de vitesses voulus.
 
 \section{Algorithme}
 
-Dans cette section on notera $M$ la position du robot estimée par le filtre de Kalman. Comme mentionné dans la section précédente, l'algorithme est composé de deux parties. A l'instant initial, le robot détermine dans quelle partie du demi-plan il est. Ensuite il va calculer le vecteur vitesse $\overrightarrow{v}(M)$ à avoir à partir du champ de potentiel pondérée par sa distance au dock. La vitesse linéaire étant directement contrôlée via le topic $cmd\_vel$ seule une régulation sur le cap du robot est nécessaire. Ainsi une régulation PI est faite sur la vitesse du rotation du véhicule, une régulation PID pourra évidemment être envisagée par la suite : 
+Dans cette section on notera $M$ la position du robot estimée par le filtre de Kalman. Comme mentionné dans la section précédente, l'algorithme est composé de deux parties. A l'instant initial, le robot détermine dans quelle partie du demi-plan il est. Ensuite il va calculer le vecteur vitesse $\overrightarrow{v}(M)$ à avoir à partir du champ de potentiel pondérée par sa distance au dock. La vitesse linéaire étant directement contrôlée via le topic ROS $cmd\_vel$, seule une régulation sur le cap du robot est nécessaire. Ainsi une régulation PI est faite sur la vitesse du rotation du véhicule, une régulation PID pourra évidemment être envisagée par la suite : 
 \[\dot{\theta}_{robot}(t_n)=k_p*e(t_n)+k_i*S(t_n)\]
 avec $e(t_n)=angle(\overrightarrow{v}(t_n)-\theta_{robot}(t_n))$, $S(t_n) = \sum_{k<n}{e(t_k)}$ et $(k_p,k_i)$ les coefficients du régulateur. 
 
