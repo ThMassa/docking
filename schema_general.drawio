@@ -1,67 +1,120 @@
-<mxfile host="65bd71144e">
-    <diagram id="EIo6NQLRcs3jnjg9FP3r" name="Page-1">
-        <mxGraphModel dx="1386" dy="764" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+<mxfile host="65bd71144e" scale="5" border="0">
+    <diagram id="pr8yTijt011oOfnzvjxU" name="Page-1">
+        <mxGraphModel dx="1155" dy="637" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="1" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="4" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="2" target="3">
+                <mxCell id="11" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=0;connectable=0;allowArrows=0;" vertex="1" parent="1">
+                    <mxGeometry x="160" y="286" width="840" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;sketch=0;fillColor=#d5e8d4;strokeColor=#82b366;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="860" y="296" width="130" height="183" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Conversion &lt;br&gt;lat/lon &amp;nbsp;\(\rightarrow(x,y)\)&amp;nbsp;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="377" y="386" width="140" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Navigation (Kalman)&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;+ Contrôle&lt;/font&gt;" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+                    <mxGeometry x="590" y="386" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="3" target="4">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="5" value="MavLink" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="4">
-                    <mxGeometry x="-0.35" relative="1" as="geometry">
-                        <mxPoint x="-30" y="-14" as="offset"/>
-                    </mxGeometry>
+                <mxCell id="6" value="Mavros" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+                    <mxGeometry x="764" y="386" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="2" value="Dropix V2 (Ardupilot)&lt;br&gt;+ IMU" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="465" y="580" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="7" value="" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;" edge="1" parent="1" source="3" target="6">
+                <mxCell id="7" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="4" target="6">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="8" value="ROS" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="7">
-                    <mxGeometry x="0.2375" y="-1" relative="1" as="geometry">
+                <mxCell id="87" value="\(v,\dot{\theta}\)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontFamily=Helvetica;labelBackgroundColor=none;" vertex="1" connectable="0" parent="7">
+                    <mxGeometry x="-0.5767" relative="1" as="geometry">
                         <mxPoint x="9" y="11" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="3" value="NVIDIA Jetson Xavier&lt;br&gt;(ROS)" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-                    <mxGeometry x="465" y="440" width="120" height="60" as="geometry"/>
+                <mxCell id="10" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Pixhawk&lt;br&gt;+ actionneurs&lt;/font&gt;" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="866" y="386" width="120" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="6" value="Modem&lt;br&gt;Simpulse" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-                    <mxGeometry x="185" y="440" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="9" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" edge="1" parent="1">
-                    <mxGeometry width="100" height="100" relative="1" as="geometry">
-                        <mxPoint x="375" y="500" as="sourcePoint"/>
-                        <mxPoint x="465" y="540" as="targetPoint"/>
-                        <Array as="points">
-                            <mxPoint x="415" y="540"/>
-                        </Array>
+                <mxCell id="9" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.067;entryY=0.513;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="6" target="10">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="870" y="426" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="10" value="MavROS ?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-                    <mxGeometry x="340" y="530" width="75" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="11" value="NVIDIA Jetson Nano&lt;br&gt;(ROS)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="465" y="300" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="13" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;dashed=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=3;" edge="1" parent="1" source="12" target="6">
+                <mxCell id="15" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="13" target="3">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="15" value="ROS" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="13">
-                    <mxGeometry x="-0.1524" y="-1" relative="1" as="geometry">
-                        <mxPoint x="16" y="11" as="offset"/>
+                <mxCell id="13" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Receveur&lt;br&gt;Données UDP&lt;/font&gt;" style="whiteSpace=wrap;html=1;rounded=1;shadow=0;sketch=0;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="386" width="130" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Capteurs&lt;/font&gt;" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;shadow=0;sketch=0;" vertex="1" parent="1">
+                    <mxGeometry x="860" y="296" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" edge="1" parent="1" source="25">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="870" y="335.75757575757575" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="14" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="12" target="11">
+                <mxCell id="25" value="Drivers&lt;br&gt;ROS" style="rhombus;whiteSpace=wrap;html=1;shadow=0;sketch=0;rounded=1;" vertex="1" parent="1">
+                    <mxGeometry x="764" y="296" width="80" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" edge="1" parent="1" source="3" target="25">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="16" value="ROS" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];rotation=0;" vertex="1" connectable="0" parent="14">
-                    <mxGeometry x="0.25" y="2" relative="1" as="geometry">
-                        <mxPoint x="-15" y="-8" as="offset"/>
+                <mxCell id="32" value="&lt;i&gt;Hardware&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;dashed=1;sketch=0;" vertex="1" parent="1">
+                    <mxGeometry x="895" y="371" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="&lt;i&gt;&lt;font size=&quot;1&quot; style=&quot;&quot;&gt;&lt;b style=&quot;font-size: 16px;&quot;&gt;Drone&lt;/b&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;dashed=1;sketch=0;" vertex="1" parent="1">
+                    <mxGeometry x="160" y="286" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;" edge="1" parent="1" source="12" target="13">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="81" value="Trames UDP&lt;br&gt;via modems" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;labelBackgroundColor=none;" vertex="1" connectable="0" parent="14">
+                    <mxGeometry x="0.1693" y="1" relative="1" as="geometry">
+                        <mxPoint x="38" y="1" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="12" value="Modem&lt;br&gt;Simpulse" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-                    <mxGeometry x="185" y="300" width="120" height="60" as="geometry"/>
+                <mxCell id="82" value="&lt;i style=&quot;font-size: 12px;&quot;&gt;Attitude&lt;br&gt;Position&lt;/i&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;labelBackgroundColor=none;" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="339.0028571428571" y="425" as="geometry"/>
+                </mxCell>
+                <mxCell id="83" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="157" y="124" width="533" height="117" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;shadow=0;connectable=0;allowArrows=0;" vertex="1" parent="83">
+                    <mxGeometry x="4" y="1" width="529" height="116" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Emetteur&lt;br&gt;Données UDP&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;sketch=0;" vertex="1" parent="83">
+                    <mxGeometry x="23" y="29" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="&lt;i&gt;&lt;font size=&quot;1&quot; style=&quot;&quot;&gt;&lt;b style=&quot;font-size: 16px;&quot;&gt;Dock&lt;/b&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;dashed=1;sketch=0;" vertex="1" parent="83">
+                    <mxGeometry width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="74" value="" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;sketch=0;fillColor=#d5e8d4;strokeColor=#82b366;dashed=1;" vertex="1" parent="83">
+                    <mxGeometry x="406" y="9" width="120" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="73" value="Capteurs" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;rounded=1;shadow=0;sketch=0;fontSize=16;" vertex="1" parent="83">
+                    <mxGeometry x="403" y="15" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="78" style="edgeStyle=orthogonalEdgeStyle;comic=0;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=16;startArrow=none;startFill=0;endArrow=classic;endFill=1;" edge="1" parent="83" source="75" target="12">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="80" value="&lt;i style=&quot;font-size: 12px;&quot;&gt;Attitude (IMU)&lt;br&gt;Position (GPS)&lt;/i&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;labelBackgroundColor=none;" vertex="1" connectable="0" parent="78">
+                    <mxGeometry x="-0.093" y="-1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="75" value="Drivers&lt;br&gt;ROS" style="rhombus;whiteSpace=wrap;html=1;shadow=0;sketch=0;rounded=1;" vertex="1" parent="83">
+                    <mxGeometry x="302" y="19" width="80" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="77" value="&lt;i&gt;Hardware&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;dashed=1;sketch=0;" vertex="1" parent="83">
+                    <mxGeometry x="436" y="84" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="76" style="edgeStyle=orthogonalEdgeStyle;comic=0;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=16;startArrow=classic;startFill=1;endArrow=none;endFill=0;entryX=0.16;entryY=0.55;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="83" source="75" target="73">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="84" value="&lt;i style=&quot;font-size: 12px;&quot;&gt;Attitude (SBG) (dont cap via double antenne GPS)&lt;br&gt;Position (SBG)&lt;/i&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;labelBackgroundColor=none;" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="610.0028571428571" y="336" as="geometry"/>
+                </mxCell>
+                <mxCell id="85" value="&lt;i style=&quot;font-size: 12px;&quot;&gt;Etat drone&lt;br&gt;Etat dock&lt;/i&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;labelBackgroundColor=none;" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="550.0028571428571" y="426" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
